@@ -4,20 +4,20 @@
   --font-sans: "Manrope", "Inter Fallback", system-ui, sans-serif;
   --font-serif: "Playfair Display", "Georgia", serif;
 
-  --color-background: #fbf8f2;
+  --color-background: #faf7f2;
   --color-foreground: #0d1726;
   --color-primary: #0f2745;
   --color-primary-foreground: #ffffff;
   --color-secondary: #f3ede3;
   --color-secondary-foreground: #0f172a;
   --color-muted: #efe6d8;
-  --color-muted-foreground: #5f6c7b;
-  --color-accent: #c9832b;
+  --color-muted-foreground: #6b7280;
+  --color-accent: #b87333;
   --color-accent-foreground: #ffffff;
   --color-card: #ffffff;
   --color-card-foreground: #0f172a;
-  --color-border: #d9cfbf;
-  --color-input: #d9cfbf;
+  --color-border: #e5ddd0;
+  --color-input: #e5ddd0;
   --color-ring: #0f2745;
 
   --radius: 0;
@@ -28,38 +28,94 @@
   src: local("Arial");
 }
 
-* {
-  border-color: var(--color-border);
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    font-family: var(--font-sans);
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    line-height: 1.6;
+  }
+
+  button,
+  a,
+  input,
+  select,
+  textarea {
+    border-radius: 0;
+  }
 }
 
-html {
-  scroll-behavior: smooth;
-}
+@layer components {
+  .page-shell {
+    @apply max-w-6xl mx-auto px-6 md:px-10;
+  }
 
-body {
-  margin: 0;
-  font-family: var(--font-sans);
-  background-color: var(--color-background);
-  color: var(--color-foreground);
-  line-height: 1.6;
-}
+  .section-shell {
+    @apply py-24 md:py-32;
+  }
 
-button,
-a,
-input,
-select,
-textarea {
-  border-radius: 0;
+  .section-header {
+    @apply mb-16 md:mb-20;
+  }
+
+  .section-kicker {
+    @apply mb-3 text-xs font-medium uppercase tracking-[0.32em] text-accent;
+  }
+
+  .section-title {
+    @apply mb-4 text-3xl font-medium text-foreground md:text-4xl leading-tight;
+  }
+
+  .section-copy {
+    @apply max-w-2xl text-base leading-relaxed text-muted-foreground md:text-lg;
+  }
+
+  .premium-card {
+    @apply rounded-2xl border border-black/5 bg-white p-6 transition-all duration-500 md:p-8;
+  }
+
+  .primary-cta {
+    @apply inline-flex min-h-12 items-center justify-center rounded-xl bg-foreground px-7 py-3 text-sm font-medium text-white transition-all duration-500 ease-out hover:opacity-85;
+  }
+
+  .secondary-cta {
+    @apply inline-flex min-h-12 items-center justify-center rounded-xl border border-white/30 px-7 py-3 text-sm font-medium text-white transition-all duration-500 ease-out hover:bg-white/10;
+  }
+
+  .surface-button {
+    @apply inline-flex min-h-11 items-center justify-center rounded-xl border border-border bg-white px-4 py-3 text-sm font-medium text-foreground transition-all duration-300 hover:border-foreground/30;
+  }
+
+  .field-label {
+    @apply mb-2 block text-xs font-medium uppercase tracking-[0.22em] text-foreground/70;
+  }
+
+  .form-input {
+    @apply min-h-13 w-full rounded-xl border border-border bg-white px-4 py-3 text-foreground transition-all duration-300 placeholder:text-muted-foreground focus:border-foreground/40 focus:outline-none focus:ring-2 focus:ring-foreground/8;
+  }
+
+  .step-card {
+    @apply rounded-2xl border border-black/5 bg-[#faf8f4] p-6 md:p-8;
+  }
 }
 
 .drag-scroll {
   scrollbar-width: thin;
-  scrollbar-color: var(--color-primary) transparent;
+  scrollbar-color: var(--color-border) transparent;
   touch-action: pan-y;
 }
 
 .drag-scroll::-webkit-scrollbar {
-  height: 8px;
+  height: 4px;
 }
 
 .drag-scroll::-webkit-scrollbar-track {
@@ -67,7 +123,8 @@ textarea {
 }
 
 .drag-scroll::-webkit-scrollbar-thumb {
-  background: color-mix(in srgb, var(--color-primary) 75%, white);
+  background: var(--color-border);
+  border-radius: 2px;
 }
 
 input[type="date"]::-webkit-calendar-picker-indicator {

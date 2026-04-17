@@ -1,12 +1,12 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
 
 const navLinks = [
   { name: 'About', href: '#about' },
+  { name: 'Rooms', href: '#accommodation' },
   { name: 'Packages', href: '#packages' },
   { name: 'Gallery', href: '#gallery' },
-  { name: 'Rooms', href: '#accommodation' },
   { name: 'Reviews', href: '#reviews' },
   { name: 'Contact', href: '#contact' },
 ]
@@ -20,6 +20,13 @@ type NavbarProps = {
 
 export function Navbar({ isRoomPage, onNavigateHome, onNavigateToSection, onBookNow }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+
+  useEffect(() => {
+    const handler = () => setScrolled(window.scrollY > 40)
+    window.addEventListener('scroll', handler, { passive: true })
+    return () => window.removeEventListener('scroll', handler)
+  }, [])
 
   const handleLinkClick = (href: string) => {
     setIsOpen(false)
@@ -27,24 +34,36 @@ export function Navbar({ isRoomPage, onNavigateHome, onNavigateToSection, onBook
   }
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
+    <nav
+      className={`fixed left-0 right-0 top-0 z-50 transition-all duration-500 ${
+        scrolled
+          ? 'border-b border-border/60 bg-background/95 backdrop-blur-md'
+          : 'border-b border-white/10 bg-transparent'
+      }`}
+    >
+      <div className="page-shell">
+        <div className="flex min-h-20 items-center justify-between gap-4 py-4">
           <button
             type="button"
             onClick={onNavigateHome}
-            className="font-serif text-2xl font-bold tracking-tight text-primary"
+            className={`font-serif text-xl tracking-widest transition-opacity duration-300 hover:opacity-60 ${
+              scrolled ? 'text-foreground' : 'text-white'
+            }`}
           >
             UKIYO
           </button>
 
-          <div className="hidden md:flex items-center gap-10">
+          <div className="hidden items-center gap-8 md:flex">
             {navLinks.map((link) => (
               <button
                 key={link.name}
                 type="button"
                 onClick={() => handleLinkClick(link.href)}
-                className="text-sm font-medium text-foreground/70 hover:text-foreground transition-colors uppercase tracking-wide"
+                className={`text-xs font-medium uppercase tracking-[0.22em] transition-colors duration-300 ${
+                  scrolled
+                    ? 'text-foreground/50 hover:text-foreground'
+                    : 'text-white/60 hover:text-white'
+                }`}
               >
                 {link.name}
               </button>
@@ -54,18 +73,24 @@ export function Navbar({ isRoomPage, onNavigateHome, onNavigateToSection, onBook
           <button
             type="button"
             onClick={onBookNow}
-            className="hidden md:inline-flex px-6 py-2.5 bg-primary text-primary-foreground text-sm font-semibold uppercase tracking-wide hover:bg-primary/90 transition-colors"
+            className={`hidden text-xs font-medium uppercase tracking-[0.22em] underline underline-offset-4 transition-all duration-300 md:inline-flex ${
+              scrolled
+                ? 'text-foreground hover:text-foreground/60'
+                : 'text-white/80 hover:text-white'
+            }`}
           >
-            {isRoomPage ? 'Reserve Room' : 'Book Now'}
+            {isRoomPage ? 'Reserve Room' : 'Reserve a Stay'}
           </button>
 
           <button
             type="button"
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 text-foreground"
+            className={`p-2 transition-colors duration-300 md:hidden ${
+              scrolled ? 'text-foreground' : 'text-white'
+            }`}
             aria-label="Toggle menu"
           >
-            {isOpen ? <X size={24} /> : <Menu size={24} />}
+            {isOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
       </div>
@@ -76,29 +101,32 @@ export function Navbar({ isRoomPage, onNavigateHome, onNavigateToSection, onBook
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-background border-b border-border"
+            transition={{ duration: 0.3, ease: 'easeOut' }}
+            className="border-b border-border bg-background md:hidden"
           >
-            <div className="px-6 py-4 space-y-4">
+            <div className="page-shell space-y-1 py-6">
               {navLinks.map((link) => (
                 <button
                   key={link.name}
                   type="button"
                   onClick={() => handleLinkClick(link.href)}
-                  className="block text-foreground/70 hover:text-foreground transition-colors uppercase tracking-wide text-sm font-medium"
+                  className="flex min-h-11 items-center text-xs font-medium uppercase tracking-[0.22em] text-foreground/50 transition-colors duration-300 hover:text-foreground"
                 >
                   {link.name}
                 </button>
               ))}
-              <button
-                type="button"
-                onClick={() => {
-                  setIsOpen(false)
-                  onBookNow()
-                }}
-                className="block w-full text-center px-6 py-3 bg-primary text-primary-foreground text-sm font-semibold uppercase tracking-wide"
-              >
-                {isRoomPage ? 'Reserve Room' : 'Book Now'}
-              </button>
+              <div className="pt-4">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsOpen(false)
+                    onBookNow()
+                  }}
+                  className="primary-cta w-full"
+                >
+                  {isRoomPage ? 'Reserve Room' : 'Reserve a Stay'}
+                </button>
+              </div>
             </div>
           </motion.div>
         )}

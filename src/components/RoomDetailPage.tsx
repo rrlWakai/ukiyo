@@ -42,179 +42,190 @@ export function RoomDetailPage({
 }: RoomDetailPageProps) {
   const [isGalleryOpen, setIsGalleryOpen] = useState(false)
   const activeRoom = getRoomByName(room.name)
-  const relatedRooms = rooms.filter((item) => item.slug !== room.slug).slice(0, 2)
+  const relatedRooms = rooms.filter((r) => r.slug !== room.slug).slice(0, 2)
   const roomBooking = bookingState.room
   const roomTotal = calculateRoomTotal(roomBooking)
 
   return (
     <>
-      <main className="pt-28">
-        <section className="px-6 pb-20 pt-10 lg:px-8">
-          <div className="mx-auto max-w-7xl">
+      <main className="pt-20">
+
+        {/* Hero gallery */}
+        <section className="bg-white pt-12 pb-0">
+          <div className="page-shell">
             <button
               type="button"
               onClick={onBackToRooms}
-              className="mb-8 inline-flex items-center gap-2 border border-border px-4 py-2 text-sm font-semibold uppercase tracking-wide text-foreground transition-colors hover:border-primary hover:text-primary"
+              className="mb-10 inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground transition-colors duration-300 hover:text-foreground"
             >
-              <ChevronLeft size={16} />
-              Back to Rooms
+              <ChevronLeft size={14} />
+              All Rooms
             </button>
 
-            <div className="mx-auto max-w-4xl text-center">
-              <p className="text-sm font-semibold uppercase tracking-[0.25em] text-accent">Ukiyo Rooms</p>
-              <h1 className="mt-4 font-serif text-4xl text-foreground md:text-6xl">{room.name}</h1>
-              <p className="mx-auto mt-5 max-w-2xl text-lg text-muted-foreground">{room.subtitle}</p>
+            <div className="mb-10">
+              <p className="section-kicker">Ukiyo Rooms</p>
+              <h1 className="text-5xl font-medium text-foreground md:text-6xl">{room.name}</h1>
+              <p className="mt-3 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">{room.subtitle}</p>
             </div>
 
-            <div className="mt-14 grid gap-6 lg:grid-cols-[2fr_1fr]">
-              <div className="border border-border">
-                <img src={room.gallery[0]} alt={room.name} className="h-full min-h-[460px] w-full object-cover" />
+            <div className="grid gap-3 lg:grid-cols-[2fr_1fr]">
+              <div className="overflow-hidden rounded-2xl">
+                <img
+                  src={room.gallery[0]}
+                  alt={room.name}
+                  className="h-full min-h-105 w-full object-cover"
+                />
               </div>
-              <div className="grid gap-6">
+              <div className="grid gap-3">
                 {room.gallery.slice(1).map((image, index) => (
-                  <div key={image} className="relative border border-border">
-                    <img src={image} alt={`${room.name} gallery ${index + 2}`} className="h-[217px] w-full object-cover" />
+                  <div key={image} className="relative overflow-hidden rounded-2xl">
+                    <img
+                      src={image}
+                      alt={`${room.name} ${index + 2}`}
+                      className="h-52 w-full object-cover"
+                    />
                     {index === room.gallery.slice(1).length - 1 && (
                       <button
                         type="button"
                         onClick={() => setIsGalleryOpen(true)}
-                        className="absolute inset-0 flex items-center justify-center bg-[#08162d]/35 transition-colors hover:bg-[#08162d]/50"
+                        className="absolute inset-0 flex items-center justify-center bg-foreground/30 transition-colors duration-300 hover:bg-foreground/45"
                       >
-                        <div className="border border-white bg-white px-8 py-8 text-center font-semibold uppercase tracking-wide text-foreground">
-                          More Photos
-                        </div>
+                        <span className="rounded-xl border border-white bg-white/90 px-6 py-3 text-xs font-medium uppercase tracking-[0.2em] text-foreground backdrop-blur-sm">
+                          View All Photos
+                        </span>
                       </button>
                     )}
                   </div>
                 ))}
               </div>
             </div>
+          </div>
+        </section>
 
-            <div className="mt-16 grid gap-12 lg:grid-cols-[1.3fr_420px]">
-              <div className="space-y-10">
-                <div className="border-b border-border pb-8">
-                  <p className="text-sm font-semibold uppercase tracking-[0.2em] text-muted-foreground">Capacity</p>
-                  <h2 className="mt-3 font-serif text-3xl text-foreground">Good for {room.capacity} pax</h2>
+        {/* Details + Sidebar */}
+        <section className="section-shell bg-white">
+          <div className="page-shell">
+            <div className="grid gap-12 lg:grid-cols-[1fr_380px] lg:gap-16">
+
+              {/* Detail content */}
+              <div className="space-y-12">
+
+                <div className="border-b border-border pb-10">
+                  <p className="text-xs font-medium uppercase tracking-[0.28em] text-muted-foreground">Capacity</p>
+                  <h2 className="mt-3 text-3xl font-medium text-foreground">Good for {room.capacity} pax</h2>
+                  <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground">
+                    {room.description}
+                  </p>
                 </div>
 
-                <div className="border-b border-border pb-8">
-                  <p className="text-sm font-semibold uppercase tracking-[0.2em] text-muted-foreground">Room Features</p>
-                  <div className="mt-5 grid gap-3 md:grid-cols-2">
+                <div className="border-b border-border pb-10">
+                  <p className="mb-5 text-xs font-medium uppercase tracking-[0.28em] text-muted-foreground">Room Features</p>
+                  <div className="grid gap-3 md:grid-cols-2">
                     {room.features.map((feature) => (
-                      <div key={feature} className="flex items-center gap-3 border border-border px-4 py-3">
-                        <Check size={16} className="text-accent" />
-                        <span>{feature}</span>
+                      <div key={feature} className="flex items-center gap-3 rounded-xl border border-border bg-background px-4 py-3.5">
+                        <Check size={14} className="shrink-0 text-accent" />
+                        <span className="text-sm text-foreground">{feature}</span>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                <div className="border-b border-border pb-8">
-                  <p className="text-sm font-semibold uppercase tracking-[0.2em] text-muted-foreground">Inclusions</p>
-                  <div className="mt-5 grid gap-3 md:grid-cols-3">
+                <div className="border-b border-border pb-10">
+                  <p className="mb-5 text-xs font-medium uppercase tracking-[0.28em] text-muted-foreground">Inclusions</p>
+                  <div className="flex flex-wrap gap-2">
                     {room.inclusions.map((item) => (
-                      <div key={item} className="border border-border px-4 py-4 text-sm text-foreground">
+                      <span key={item} className="rounded-full border border-border bg-white px-4 py-2 text-sm text-foreground">
                         {item}
-                      </div>
+                      </span>
                     ))}
                   </div>
                 </div>
 
-                <div className="border-b border-border pb-8">
-                  <p className="text-sm font-semibold uppercase tracking-[0.2em] text-muted-foreground">Stay Options</p>
-                  <div className="mt-5 grid gap-4 md:grid-cols-3">
+                <div className="border-b border-border pb-10">
+                  <p className="mb-5 text-xs font-medium uppercase tracking-[0.28em] text-muted-foreground">Stay Options</p>
+                  <div className="grid gap-4 md:grid-cols-3">
                     {stayTypeOptions.map((option) => (
-                      <div key={option.id} className="border border-border px-5 py-5">
-                        <p className="font-serif text-2xl text-foreground">{option.label}</p>
+                      <div key={option.id} className="rounded-xl border border-border bg-white p-5">
+                        <p className="text-lg font-medium text-foreground">{option.label}</p>
                         <p className="mt-1 text-sm text-muted-foreground">{option.description}</p>
-                        <p className="mt-4 text-lg font-semibold text-accent">{formatPrice(room.rates[option.id])}</p>
+                        <p className="mt-4 font-serif text-2xl text-accent">{formatPrice(room.rates[option.id])}</p>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                <div className="border-b border-border pb-8">
-                  <p className="text-sm font-semibold uppercase tracking-[0.2em] text-muted-foreground">Add-ons</p>
-                  <div className="mt-5 grid gap-3 md:grid-cols-2">
+                <div className="border-b border-border pb-10">
+                  <p className="mb-5 text-xs font-medium uppercase tracking-[0.28em] text-muted-foreground">Add-ons</p>
+                  <div className="grid gap-3 md:grid-cols-2">
                     {addOns.map((addon) => (
-                      <div key={addon.id} className="border border-border px-4 py-4">
-                        <div className="flex items-center justify-between gap-3">
-                          <span className="font-medium text-foreground">{addon.name}</span>
-                          <span className="text-accent">
-                            {addon.id === 'grill' ? '₱800-₱1,200' : `${formatPrice(addon.price)}${addon.id === 'extension' ? '/hr' : ''}`}
-                          </span>
-                        </div>
+                      <div key={addon.id} className="flex items-center justify-between rounded-xl border border-border bg-white px-4 py-4">
+                        <span className="text-sm text-foreground">{addon.name}</span>
+                        <span className="text-sm text-accent">
+                          {addon.id === 'grill' ? '₱800–₱1,200' : `${formatPrice(addon.price)}${addon.id === 'extension' ? '/hr' : ''}`}
+                        </span>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                <div className="border-b border-border pb-8">
-                  <p className="text-sm font-semibold uppercase tracking-[0.2em] text-muted-foreground">Notes</p>
-                  <div className="mt-5 space-y-3">
+                <div>
+                  <p className="mb-5 text-xs font-medium uppercase tracking-[0.28em] text-muted-foreground">Notes</p>
+                  <ul className="space-y-2">
                     {room.notes.map((note) => (
-                      <div key={note} className="border border-border px-4 py-4 text-sm text-foreground">
+                      <li key={note} className="flex items-start gap-3 text-sm text-muted-foreground">
+                        <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-muted-foreground" />
                         {note}
-                      </div>
+                      </li>
                     ))}
-                  </div>
+                  </ul>
                 </div>
 
-                <div className="max-w-3xl text-lg leading-relaxed text-foreground">
-                  <p>{room.description}</p>
-                </div>
               </div>
 
-              <aside className="lg:sticky lg:top-[100px]">
-                <div className="border border-border bg-secondary p-8">
-                  <p className="text-sm font-semibold uppercase tracking-[0.2em] text-muted-foreground">Book Your Best Room</p>
-                  <h2 className="mt-4 font-serif text-3xl text-foreground">{activeRoom.name}</h2>
-                  <p className="mt-2 text-sm text-muted-foreground">Starting price</p>
+              {/* Sticky booking sidebar */}
+              <aside className="lg:sticky lg:top-24 lg:self-start">
+                <div className="rounded-2xl border border-border bg-background p-6 md:p-7">
+                  <p className="text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground">Book this room</p>
+                  <h2 className="mt-3 text-2xl font-medium text-foreground">{activeRoom.name}</h2>
+                  <p className="mt-1 text-sm text-muted-foreground">Starting price</p>
                   <p className="mt-2 font-serif text-5xl text-accent">{formatPrice(activeRoom.rates[roomBooking.stayType])}</p>
-                  <p className="mt-4 inline-flex items-center gap-2 border border-accent px-3 py-2 text-sm font-semibold text-accent">
-                    <Check size={16} />
-                    Free entrance included
-                  </p>
+                  <span className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-accent/30 px-3 py-1.5 text-xs font-medium text-accent">
+                    <Check size={11} /> Free entrance included
+                  </span>
 
-                  <div className="mt-8 space-y-5">
+                  <div className="mt-7 space-y-5">
                     <div>
-                      <label className="mb-2 block text-sm font-semibold uppercase tracking-wide text-foreground">Date</label>
+                      <label className="field-label">Date</label>
                       <div className="relative">
-                        <input
-                          type="date"
-                          value={roomBooking.date}
-                          onChange={(event) => onSetRoomDate(event.target.value)}
-                          className="w-full border border-border bg-white px-4 py-3 text-foreground focus:border-primary focus:outline-none"
-                        />
-                        <Calendar size={18} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                        <input type="date" value={roomBooking.date} onChange={(e) => onSetRoomDate(e.target.value)} className="form-input" />
+                        <Calendar size={15} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
                       </div>
                     </div>
 
                     <div>
-                      <label className="mb-2 block text-sm font-semibold uppercase tracking-wide text-foreground">Guests</label>
-                      <div className="flex items-center justify-between border border-border bg-white px-4 py-3">
-                        <button type="button" onClick={() => onSetRoomGuests(roomBooking.guests - 1)} className="border border-border p-2 hover:border-primary">
-                          <Minus size={16} />
+                      <label className="field-label">Guests</label>
+                      <div className="flex min-h-13 items-center justify-between rounded-xl border border-border bg-white px-4 py-3">
+                        <button type="button" onClick={() => onSetRoomGuests(roomBooking.guests - 1)} className="surface-button h-9 w-9 px-0">
+                          <Minus size={14} />
                         </button>
-                        <span className="font-medium text-foreground">{roomBooking.guests} guests</span>
-                        <button type="button" onClick={() => onSetRoomGuests(roomBooking.guests + 1)} className="border border-border p-2 hover:border-primary">
-                          <Plus size={16} />
+                        <span className="text-sm font-medium text-foreground">{roomBooking.guests} guests</span>
+                        <button type="button" onClick={() => onSetRoomGuests(roomBooking.guests + 1)} className="surface-button h-9 w-9 px-0">
+                          <Plus size={14} />
                         </button>
                       </div>
                     </div>
 
                     <div>
-                      <label className="mb-2 block text-sm font-semibold uppercase tracking-wide text-foreground">Stay Type</label>
+                      <label className="field-label">Stay Type</label>
                       <div className="grid grid-cols-3 gap-2">
                         {stayTypeOptions.map((option) => (
                           <button
-                            key={option.id}
-                            type="button"
+                            key={option.id} type="button"
                             onClick={() => onSetRoomStayType(option.id)}
-                            className={`border px-3 py-3 text-xs font-semibold uppercase tracking-wide transition-colors ${
+                            className={`min-h-11 rounded-xl border px-2 py-2.5 text-xs font-medium uppercase tracking-wide transition-all duration-300 ${
                               roomBooking.stayType === option.id
-                                ? 'border-primary bg-primary text-primary-foreground'
-                                : 'border-border bg-white text-foreground hover:border-primary'
+                                ? 'border-foreground bg-foreground text-white'
+                                : 'border-border bg-white text-foreground hover:border-foreground/30'
                             }`}
                           >
                             {option.label}
@@ -224,97 +235,123 @@ export function RoomDetailPage({
                     </div>
 
                     <div>
-                      <label className="mb-2 block text-sm font-semibold uppercase tracking-wide text-foreground">Add-ons</label>
+                      <label className="field-label">Add-ons</label>
                       <div className="space-y-2">
                         {addOns.map((addon) => (
                           <button
-                            key={addon.id}
-                            type="button"
+                            key={addon.id} type="button"
                             onClick={() => onToggleRoomAddOn(addon.id)}
-                            className={`flex w-full items-center justify-between border px-4 py-3 text-left text-sm transition-colors ${
+                            className={`flex min-h-11 w-full items-center justify-between rounded-xl border px-4 py-2.5 text-left text-sm transition-all duration-300 ${
                               roomBooking.addOns.includes(addon.id)
-                                ? 'border-primary bg-primary text-primary-foreground'
-                                : 'border-border bg-white text-foreground hover:border-primary'
+                                ? 'border-foreground bg-foreground text-white'
+                                : 'border-border bg-white text-foreground hover:border-foreground/30'
                             }`}
                           >
                             <span>{addon.name}</span>
-                            <span>{addon.id === 'grill' ? '₱800-₱1,200' : formatPrice(addon.price)}</span>
+                            <span className={addon.id !== 'grill' && roomBooking.addOns.includes(addon.id) ? 'text-white/70' : 'text-accent'}>
+                              {addon.id === 'grill' ? '₱800–₱1,200' : formatPrice(addon.price)}
+                            </span>
                           </button>
                         ))}
                       </div>
                     </div>
                   </div>
 
-                  <div className="mt-8 border-t border-border pt-6">
-                    <p className="text-sm uppercase tracking-[0.2em] text-muted-foreground">Estimated Total</p>
-                    <p className="mt-3 font-serif text-4xl text-accent">{formatPrice(roomTotal)}</p>
+                  <div className="mt-7 border-t border-border pt-6">
+                    <p className="text-xs uppercase tracking-[0.22em] text-muted-foreground">Estimated Total</p>
+                    <p className="mt-2 font-serif text-4xl text-accent">{formatPrice(roomTotal)}</p>
                     <button
                       type="button"
                       onClick={() => onReserveRoom(room.name)}
-                      className="mt-6 w-full bg-primary px-6 py-4 font-semibold uppercase tracking-wide text-primary-foreground transition-colors hover:bg-primary/90"
+                      className="primary-cta mt-5 w-full"
                     >
                       Reserve Now
                     </button>
-                    <p className="mt-4 text-center text-sm text-muted-foreground">Continue to the booking page to submit your reservation.</p>
+                    <p className="mt-3 text-center text-xs text-muted-foreground">
+                      Continue to the booking page to confirm.
+                    </p>
                   </div>
                 </div>
               </aside>
+
             </div>
           </div>
         </section>
 
-        <section className="px-6 pb-20 lg:px-8">
-          <div className="mx-auto max-w-7xl">
-            <div className="relative overflow-hidden border border-border">
-              <img src="/images/gallery-6.jpg" alt="Ukiyo testimonial" className="h-[420px] w-full object-cover" />
-              <div className="absolute inset-0 bg-[#08162d]/45" />
-              <div className="absolute inset-0 flex items-end justify-center p-8 text-center text-white">
+        {/* Testimonial */}
+        <section className="section-shell bg-background">
+          <div className="page-shell">
+            <div className="relative overflow-hidden rounded-2xl">
+              <img
+                src="/images/gallery-6.jpg"
+                alt="Resort atmosphere"
+                className="h-96 w-full object-cover"
+              />
+              <div className="absolute inset-0 bg-foreground/50" />
+              <div className="absolute inset-0 flex items-end justify-center p-10 text-center text-white">
                 <div className="max-w-2xl">
-                  <p className="text-sm uppercase tracking-[0.25em] text-white/75">Guest Review</p>
-                  <p className="mt-4 font-serif text-3xl leading-tight md:text-4xl">{room.testimonial}</p>
+                  <p className="text-xs font-medium uppercase tracking-[0.3em] text-white/50">Guest Review</p>
+                  <p className="mt-4 font-serif text-2xl leading-snug md:text-3xl">{room.testimonial}</p>
                 </div>
               </div>
             </div>
           </div>
         </section>
 
-        <section className="px-6 pb-24 lg:px-8">
-          <div className="mx-auto max-w-7xl">
-            <div className="text-center">
-              <p className="text-sm font-semibold uppercase tracking-[0.25em] text-accent">Related Rooms</p>
-              <h2 className="mt-4 font-serif text-4xl text-foreground">You Might Be Interested</h2>
+        {/* Related rooms */}
+        <section className="section-shell bg-white">
+          <div className="page-shell">
+            <div className="section-header">
+              <p className="section-kicker">Explore More</p>
+              <h2 className="section-title">You might also like</h2>
             </div>
-            <div className="mt-12 grid gap-8 md:grid-cols-2">
-              {relatedRooms.map((relatedRoom, index) => (
+            <div className="grid gap-6 md:grid-cols-2 md:gap-8">
+              {relatedRooms.map((related, index) => (
                 <motion.div
-                  key={relatedRoom.slug}
+                  key={related.slug}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-100px' }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="border border-border bg-card"
+                  viewport={{ once: true, margin: '-80px' }}
+                  transition={{ duration: 0.5, ease: 'easeOut', delay: index * 0.1 }}
+                  className="group overflow-hidden rounded-2xl border border-border bg-white transition-all duration-500 hover:shadow-md"
                 >
-                  <img src={relatedRoom.image} alt={relatedRoom.name} className="h-[320px] w-full object-cover" />
-                  <div className="p-8">
-                    <h3 className="font-serif text-3xl text-foreground">{relatedRoom.name}</h3>
-                    <p className="mt-3 text-muted-foreground">{relatedRoom.subtitle}</p>
-                    <p className="mt-5 text-lg font-semibold text-accent">Starting from {formatPrice(relatedRoom.rates.night)}</p>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        onSelectRoom(relatedRoom.name)
-                        onViewRoom(relatedRoom.slug)
-                      }}
-                      className="mt-8 w-full border border-primary bg-secondary px-6 py-4 font-semibold uppercase tracking-wide text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
-                    >
-                      Room Detail
-                    </button>
+                  <div className="overflow-hidden">
+                    <img
+                      src={related.image}
+                      alt={related.name}
+                      className="h-72 w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+                    />
+                  </div>
+                  <div className="p-6 md:p-7">
+                    <div className="flex items-start justify-between gap-4">
+                      <div>
+                        <h3 className="text-xl font-medium text-foreground">{related.name}</h3>
+                        <p className="mt-1 text-sm text-muted-foreground">{related.subtitle}</p>
+                      </div>
+                      <div className="shrink-0 text-right">
+                        <p className="font-serif text-2xl text-accent">{formatPrice(related.rates.night)}</p>
+                        <p className="text-xs text-muted-foreground">/ night</p>
+                      </div>
+                    </div>
+                    <div className="mt-5 border-t border-border pt-5">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          onSelectRoom(related.name)
+                          onViewRoom(related.slug)
+                        }}
+                        className="primary-cta w-full"
+                      >
+                        View Room
+                      </button>
+                    </div>
                   </div>
                 </motion.div>
               ))}
             </div>
           </div>
         </section>
+
       </main>
 
       {isGalleryOpen && (
@@ -324,7 +361,6 @@ export function RoomDetailPage({
           onClose={() => setIsGalleryOpen(false)}
         />
       )}
-
     </>
   )
 }

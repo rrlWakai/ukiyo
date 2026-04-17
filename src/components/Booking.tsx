@@ -1,7 +1,6 @@
-import { motion } from 'framer-motion'
-import { useInView } from 'framer-motion'
+import { motion, useInView } from 'framer-motion'
+import { Calendar, Check, CircleAlert, CircleCheck, Info, LoaderCircle, Minus, Plus } from 'lucide-react'
 import { useRef } from 'react'
-import { Calendar, Minus, Plus, Info, Check, CircleAlert, CircleCheck, LoaderCircle } from 'lucide-react'
 import {
   addOns,
   calculateEntranceTotal,
@@ -10,6 +9,8 @@ import {
   entranceOptions,
   eventPackages,
   formatPrice,
+  getEventPackageByName,
+  getEntranceOptionById,
   getRoomByName,
   rooms,
   stayTypeOptions,
@@ -22,8 +23,8 @@ import {
 } from '@/lib/resort-data'
 
 const bookingTypes: Array<{ id: BookingType; label: string }> = [
-  { id: 'room', label: 'Room Stay' },
-  { id: 'event', label: 'Event Package' },
+  { id: 'room',     label: 'Room Stay' },
+  { id: 'event',    label: 'Event Package' },
   { id: 'entrance', label: 'Entrance' },
 ]
 
@@ -45,6 +46,9 @@ type BookingProps = {
   onSubmitBooking: () => void
 }
 
+const counterBtn =
+  'flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-white transition-all duration-300 hover:border-foreground/30'
+
 export function Booking({
   bookingState,
   submissionState,
@@ -63,8 +67,11 @@ export function Booking({
   onSubmitBooking,
 }: BookingProps) {
   const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: '-100px' })
+  const isInView = useInView(ref, { once: true, margin: '-80px' })
+
   const selectedRoom = getRoomByName(bookingState.room.selectedRoom)
+  const selectedPackage = getEventPackageByName(bookingState.event.selectedPackage)
+  const selectedEntrance = getEntranceOptionById(bookingState.entrance.entranceTime)
   const roomTotal = calculateRoomTotal(bookingState.room)
   const eventTotal = calculateEventTotal(bookingState.event)
   const entranceTotal = calculateEntranceTotal(bookingState.entrance)
@@ -76,382 +83,414 @@ export function Booking({
         : roomTotal
 
   return (
-    <section id="booking" className="relative py-24 lg:py-32">
+    <section id="booking" className="section-shell relative overflow-hidden bg-foreground">
       <div className="absolute inset-0">
-        <img src="/images/gallery-1.jpg" alt="Ukiyo pool view" className="h-full w-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#08162d]/90 via-[#102646]/88 to-[#08162d]/92" />
+        <img src="/images/gallery-1.jpg" alt="" className="h-full w-full object-cover opacity-10" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(8,22,45,0.95),rgba(13,23,38,0.92))]" />
       </div>
 
-      <div className="relative max-w-5xl mx-auto px-6 lg:px-8">
+      <div className="page-shell relative">
         <motion.div
           ref={ref}
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center max-w-2xl mx-auto mb-12"
+          transition={{ duration: 0.7, ease: 'easeOut' }}
+          className="section-header max-w-xl"
         >
-          <p className="text-accent text-sm tracking-[0.2em] uppercase mb-4 font-semibold">Reserve Your Stay</p>
-          <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl text-primary-foreground font-medium text-balance">
-            Book Now
+          <p className="section-kicker text-white/40">Reserve Your Stay</p>
+          <h2 className="section-title text-white">
+            Begin your<br />reservation.
           </h2>
-          <p className="mt-4 text-primary-foreground/70">
-            Secure your perfect getaway in just a few simple steps.
+          <p className="section-copy text-sm text-white/50">
+            Choose your experience, set the details, and we&rsquo;ll confirm everything with you directly.
           </p>
         </motion.div>
 
         {submissionState.status !== 'idle' && (
           <div
-            className={`mb-8 flex items-start gap-3 border p-4 ${
+            className={`mb-8 rounded-2xl border p-5 ${
               submissionState.status === 'success'
                 ? 'border-emerald-200 bg-emerald-50 text-emerald-900'
                 : submissionState.status === 'error'
                   ? 'border-rose-200 bg-rose-50 text-rose-900'
-                  : 'border-primary-foreground/20 bg-primary-foreground/10 text-white'
+                  : 'border-white/15 bg-white/8 text-white backdrop-blur-sm'
             }`}
           >
-            {submissionState.status === 'success' && <CircleCheck size={20} className="mt-0.5 flex-shrink-0" />}
-            {submissionState.status === 'error' && <CircleAlert size={20} className="mt-0.5 flex-shrink-0" />}
-            {submissionState.status === 'submitting' && <LoaderCircle size={20} className="mt-0.5 animate-spin flex-shrink-0" />}
-            <div>
-              <p className="font-semibold uppercase tracking-wide text-sm">
-                {submissionState.status === 'success'
-                  ? 'Reservation Sent'
-                  : submissionState.status === 'error'
-                    ? 'Reservation Error'
+            <div className="flex items-start gap-3">
+              {submissionState.status === 'success'  && <CircleCheck size={18} className="mt-0.5 shrink-0" />}
+              {submissionState.status === 'error'    && <CircleAlert  size={18} className="mt-0.5 shrink-0" />}
+              {submissionState.status === 'submitting' && <LoaderCircle size={18} className="mt-0.5 shrink-0 animate-spin" />}
+              <div>
+                <p className="text-xs font-medium uppercase tracking-[0.2em]">
+                  {submissionState.status === 'success'   ? 'Reservation Sent'
+                    : submissionState.status === 'error'  ? 'Reservation Error'
                     : 'Submitting Reservation'}
-              </p>
-              <p className="mt-1 text-sm">{submissionState.message}</p>
+                </p>
+                <p className="mt-1 text-sm leading-relaxed">{submissionState.message}</p>
+              </div>
             </div>
           </div>
         )}
 
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="bg-primary-foreground/10 border border-primary-foreground/20 p-6 mb-8 backdrop-blur-sm"
-        >
-          <h3 className="text-primary-foreground font-semibold uppercase tracking-wide text-sm mb-4">Entrance Rates</h3>
-          <div className="grid gap-4 md:grid-cols-2">
-            {entranceOptions.map((option) => (
-              <div key={option.id} className="border border-primary-foreground/15 p-4">
-                <p className="text-primary-foreground text-sm font-semibold uppercase tracking-wide">{option.label}</p>
-                <p className="mt-1 text-primary-foreground/70 text-xs uppercase">{option.schedule}</p>
-                <div className="mt-3 grid grid-cols-2 gap-3 text-sm">
-                  <div>
-                    <p className="text-primary-foreground/70">Adults</p>
-                    <p className="text-primary-foreground font-bold">{formatPrice(option.adultPrice)}</p>
-                  </div>
-                  <div>
-                    <p className="text-primary-foreground/70">Kids</p>
-                    <p className="text-primary-foreground font-bold">{formatPrice(option.kidPrice)}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </motion.div>
+        <div className="grid gap-8 xl:grid-cols-[1fr_320px]">
 
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="bg-card border border-border p-6 md:p-10"
-        >
-          <div className="flex flex-wrap gap-2 mb-8">
-            {bookingTypes.map((type) => (
-              <button
-                key={type.id}
-                type="button"
-                onClick={() => onSelectBookingType(type.id)}
-                className={`px-6 py-3 text-sm font-semibold uppercase tracking-wide transition-colors border ${
-                  bookingState.activeType === type.id
-                    ? 'bg-primary text-primary-foreground border-primary'
-                    : 'bg-background text-foreground border-border hover:border-primary'
-                }`}
-              >
-                {type.label}
-              </button>
-            ))}
-          </div>
-
-          <form
-            onSubmit={(event) => {
-              event.preventDefault()
-              void onSubmitBooking()
-            }}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.7, ease: 'easeOut', delay: 0.1 }}
+            className="space-y-6"
           >
-            {bookingState.activeType === 'room' && (
-              <>
-                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-                  <div>
-                    <label className="block text-sm font-semibold text-foreground mb-2 uppercase tracking-wide">Room Type</label>
-                    <select
-                      value={bookingState.room.selectedRoom}
-                      onChange={(event) => onSelectRoom(event.target.value)}
-                      className="w-full border border-border bg-background px-4 py-3 text-foreground transition-colors hover:border-primary focus:border-primary focus:outline-none"
-                    >
-                      {rooms.map((room) => (
-                        <option key={room.slug} value={room.name}>
-                          {room.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-semibold text-foreground mb-2 uppercase tracking-wide">Preferred Date</label>
-                    <div className="relative">
-                      <input
-                        type="date"
-                        value={bookingState.room.date}
-                        onChange={(event) => onSetRoomDate(event.target.value)}
-                        className="w-full border border-border bg-background px-4 py-3 text-foreground transition-colors hover:border-primary focus:border-primary focus:outline-none"
-                      />
-                      <Calendar size={18} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+            {/* Type selector */}
+            <div className="flex gap-1 rounded-2xl border border-white/8 bg-white/5 p-1.5 backdrop-blur-sm">
+              {bookingTypes.map((type) => (
+                <button
+                  key={type.id}
+                  type="button"
+                  onClick={() => onSelectBookingType(type.id)}
+                  className={`flex-1 min-h-11 rounded-xl px-4 py-2.5 text-xs font-medium uppercase tracking-[0.18em] transition-all duration-300 ${
+                    bookingState.activeType === type.id
+                      ? 'bg-white text-foreground shadow-sm'
+                      : 'text-white/55 hover:text-white'
+                  }`}
+                >
+                  {type.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Form */}
+            <form
+              onSubmit={(e) => { e.preventDefault(); void onSubmitBooking() }}
+              className="space-y-6 rounded-2xl bg-white p-6 md:p-8"
+            >
+              {bookingState.activeType === 'room' && (
+                <>
+                  <div className="step-card space-y-6">
+                    <div>
+                      <p className="section-kicker mb-1">Your Stay</p>
+                      <h3 className="text-xl font-medium text-foreground">Choose your room and schedule</h3>
+                    </div>
+                    <div className="grid gap-5 md:grid-cols-2">
+                      <div>
+                        <label className="field-label">Room Type</label>
+                        <select value={bookingState.room.selectedRoom} onChange={(e) => onSelectRoom(e.target.value)} className="form-input">
+                          {rooms.map((room) => (
+                            <option key={room.slug} value={room.name}>{room.name}</option>
+                          ))}
+                        </select>
+                      </div>
+                      <div>
+                        <label className="field-label">Preferred Date</label>
+                        <div className="relative">
+                          <input type="date" value={bookingState.room.date} onChange={(e) => onSetRoomDate(e.target.value)} className="form-input" />
+                          <Calendar size={16} className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="grid gap-5 md:grid-cols-2">
+                      <div>
+                        <label className="field-label">Guests</label>
+                        <div className="flex min-h-13 items-center justify-between rounded-xl border border-border bg-white px-4 py-3">
+                          <button type="button" onClick={() => onSetRoomGuests(bookingState.room.guests - 1)} className={counterBtn}><Minus size={16} /></button>
+                          <span className="text-sm font-medium text-foreground">{bookingState.room.guests} / {selectedRoom.capacity} pax</span>
+                          <button type="button" onClick={() => onSetRoomGuests(bookingState.room.guests + 1)} className={counterBtn}><Plus size={16} /></button>
+                        </div>
+                      </div>
+                      <div>
+                        <label className="field-label">Stay Type</label>
+                        <div className="grid grid-cols-3 gap-2">
+                          {stayTypeOptions.map((option) => (
+                            <button
+                              key={option.id} type="button"
+                              onClick={() => onSetRoomStayType(option.id)}
+                              className={`min-h-13 rounded-xl border px-2 py-3 text-xs font-medium uppercase tracking-[0.14em] transition-all duration-300 ${
+                                bookingState.room.stayType === option.id
+                                  ? 'border-foreground bg-foreground text-white'
+                                  : 'border-border bg-white text-foreground hover:border-foreground/30'
+                              }`}
+                            >
+                              {option.label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <div>
-                    <label className="block text-sm font-semibold text-foreground mb-2 uppercase tracking-wide">Guests</label>
-                    <div className="flex items-center justify-between border border-border bg-background px-4 py-3">
-                      <button type="button" onClick={() => onSetRoomGuests(bookingState.room.guests - 1)} className="p-1 text-foreground transition-colors hover:bg-muted">
-                        <Minus size={18} />
-                      </button>
-                      <span className="font-medium text-foreground">
-                        {bookingState.room.guests} / {selectedRoom.capacity} pax
-                      </span>
-                      <button type="button" onClick={() => onSetRoomGuests(bookingState.room.guests + 1)} className="p-1 text-foreground transition-colors hover:bg-muted">
-                        <Plus size={18} />
-                      </button>
+
+                  <div className="step-card space-y-6">
+                    <div>
+                      <p className="section-kicker mb-1">Add-ons</p>
+                      <h3 className="text-xl font-medium text-foreground">Enhance your stay</h3>
                     </div>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-semibold text-foreground mb-2 uppercase tracking-wide">Stay Type</label>
-                    <div className="grid grid-cols-3 gap-2">
-                      {stayTypeOptions.map((option) => (
+                    <div className="rounded-xl border border-border bg-white p-4">
+                      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                        <div>
+                          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Selected Room</p>
+                          <p className="mt-1.5 text-lg font-medium text-foreground">{selectedRoom.name}</p>
+                          <p className="mt-1 text-sm text-muted-foreground">{selectedRoom.subtitle}</p>
+                        </div>
+                        <div className="sm:text-right">
+                          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Starting at</p>
+                          <p className="mt-1.5 font-serif text-3xl text-accent">{formatPrice(selectedRoom.rates[bookingState.room.stayType])}</p>
+                          <span className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-background px-3 py-1.5 text-xs font-medium text-foreground">
+                            <Check size={12} className="text-accent" /> Free entrance included
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="grid gap-3 md:grid-cols-2">
+                      {addOns.map((addon) => (
                         <button
-                          key={option.id}
-                          type="button"
-                          onClick={() => onSetRoomStayType(option.id)}
-                          className={`border px-3 py-3 text-xs font-semibold uppercase tracking-wide transition-colors ${
-                            bookingState.room.stayType === option.id
-                              ? 'border-primary bg-primary text-primary-foreground'
-                              : 'border-border bg-background text-foreground hover:border-primary'
+                          key={addon.id} type="button"
+                          onClick={() => onToggleRoomAddOn(addon.id)}
+                          className={`flex min-h-16 items-center justify-between rounded-xl border px-5 py-4 text-left transition-all duration-300 ${
+                            bookingState.room.addOns.includes(addon.id)
+                              ? 'border-foreground bg-foreground text-white'
+                              : 'border-border bg-white text-foreground hover:border-foreground/25'
                           }`}
                         >
-                          {option.label}
+                          <span className="text-sm font-medium">{addon.name}</span>
+                          <span className={`text-sm ${bookingState.room.addOns.includes(addon.id) ? 'text-white/70' : 'text-accent'}`}>
+                            {addon.id === 'grill' ? '₱800–₱1,200' : `${formatPrice(addon.price)}${addon.id === 'extension' ? '/hr' : ''}`}
+                          </span>
                         </button>
                       ))}
                     </div>
                   </div>
-                </div>
+                </>
+              )}
 
-                <div className="mt-6 border border-border bg-secondary p-4">
-                  <div className="flex items-center justify-between gap-4">
+              {bookingState.activeType === 'event' && (
+                <>
+                  <div className="step-card space-y-5">
                     <div>
-                      <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Selected Room</p>
-                      <p className="mt-1 font-serif text-2xl text-foreground">{selectedRoom.name}</p>
+                      <p className="section-kicker mb-1">Your Package</p>
+                      <h3 className="text-xl font-medium text-foreground">Choose your event package</h3>
                     </div>
-                    <div className="text-right">
-                      <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Starting Price</p>
-                      <p className="mt-1 font-serif text-2xl text-accent">{formatPrice(selectedRoom.rates[bookingState.room.stayType])}</p>
-                    </div>
-                  </div>
-                  <p className="mt-3 flex items-center gap-2 text-sm text-primary">
-                    <Check size={16} />
-                    Free entrance included
-                  </p>
-                </div>
-
-                <div className="mt-8 border-t border-border pt-6">
-                  <h4 className="mb-4 text-sm font-semibold uppercase tracking-wide text-foreground">Add-ons</h4>
-                  <div className="grid gap-3 md:grid-cols-4">
-                    {addOns.map((addon) => (
-                      <button
-                        key={addon.id}
-                        type="button"
-                        onClick={() => onToggleRoomAddOn(addon.id)}
-                        className={`border px-4 py-3 text-left text-sm transition-colors ${
-                          bookingState.room.addOns.includes(addon.id)
-                            ? 'border-primary bg-primary text-primary-foreground'
-                            : 'border-border bg-background text-foreground hover:border-primary'
-                        }`}
-                      >
-                        <span className="block font-medium">{addon.name}</span>
-                        <span className={`text-xs ${bookingState.room.addOns.includes(addon.id) ? 'opacity-80' : 'text-accent'}`}>
-                          {addon.id === 'grill' ? '₱800-₱1,200' : `${formatPrice(addon.price)}${addon.id === 'extension' ? '/hr' : ''}`}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </>
-            )}
-
-            {bookingState.activeType === 'event' && (
-              <div className="grid gap-6 md:grid-cols-2">
-                <div>
-                  <label className="block text-sm font-semibold text-foreground mb-2 uppercase tracking-wide">Event Package</label>
-                  <div className="grid gap-3">
-                    {eventPackages.map((pkg) => (
-                      <button
-                        key={pkg.id}
-                        type="button"
-                        onClick={() => onSelectPackage(pkg.name)}
-                        className={`border p-4 text-left transition-colors ${
-                          bookingState.event.selectedPackage === pkg.name
-                            ? 'border-primary bg-primary text-primary-foreground'
-                            : 'border-border bg-background hover:border-primary'
-                        }`}
-                      >
-                        <div className="flex items-start justify-between gap-4">
-                          <div>
-                            <p className="font-semibold uppercase tracking-wide">{pkg.name}</p>
-                            <p className={`mt-1 text-sm ${bookingState.event.selectedPackage === pkg.name ? 'opacity-80' : 'text-muted-foreground'}`}>
-                              {pkg.pax}
-                            </p>
+                    <div className="grid gap-3">
+                      {eventPackages.map((pkg) => (
+                        <button
+                          key={pkg.id} type="button"
+                          onClick={() => onSelectPackage(pkg.name)}
+                          className={`rounded-xl border p-5 text-left transition-all duration-300 ${
+                            bookingState.event.selectedPackage === pkg.name
+                              ? 'border-foreground bg-foreground text-white'
+                              : 'border-border bg-white hover:border-foreground/25'
+                          }`}
+                        >
+                          <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                            <div className="space-y-1">
+                              <p className="font-medium">{pkg.name}</p>
+                              <p className={`text-sm ${bookingState.event.selectedPackage === pkg.name ? 'text-white/65' : 'text-muted-foreground'}`}>{pkg.subtitle} · {pkg.pax}</p>
+                            </div>
+                            <span className="font-serif text-2xl">{formatPrice(pkg.price)}</span>
                           </div>
-                          <span className="font-serif text-xl">{formatPrice(pkg.price)}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="step-card space-y-5">
+                    <div>
+                      <p className="section-kicker mb-1">Details</p>
+                      <h3 className="text-xl font-medium text-foreground">Date and guest count</h3>
+                    </div>
+                    <div className="grid gap-5 md:grid-cols-2">
+                      <div>
+                        <label className="field-label">Preferred Date</label>
+                        <div className="relative">
+                          <input type="date" value={bookingState.event.date} onChange={(e) => onSetEventDate(e.target.value)} className="form-input" />
+                          <Calendar size={16} className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground" />
                         </div>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div className="grid gap-6">
-                  <div>
-                    <label className="block text-sm font-semibold text-foreground mb-2 uppercase tracking-wide">Preferred Date</label>
-                    <div className="relative">
-                      <input
-                        type="date"
-                        value={bookingState.event.date}
-                        onChange={(event) => onSetEventDate(event.target.value)}
-                        className="w-full border border-border bg-background px-4 py-3 text-foreground transition-colors hover:border-primary focus:border-primary focus:outline-none"
-                      />
-                      <Calendar size={18} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                      </div>
+                      <div>
+                        <label className="field-label">Expected Guests</label>
+                        <div className="flex min-h-13 items-center justify-between rounded-xl border border-border bg-white px-4 py-3">
+                          <button type="button" onClick={() => onSetEventGuests(bookingState.event.guests - 1)} className={counterBtn}><Minus size={16} /></button>
+                          <span className="text-sm font-medium text-foreground">{bookingState.event.guests} guests</span>
+                          <button type="button" onClick={() => onSetEventGuests(bookingState.event.guests + 1)} className={counterBtn}><Plus size={16} /></button>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <div>
-                    <label className="block text-sm font-semibold text-foreground mb-2 uppercase tracking-wide">Expected Guests</label>
-                    <div className="flex items-center justify-between border border-border bg-background px-4 py-3">
-                      <button type="button" onClick={() => onSetEventGuests(bookingState.event.guests - 1)} className="p-1 text-foreground transition-colors hover:bg-muted">
-                        <Minus size={18} />
-                      </button>
-                      <span className="font-medium text-foreground">{bookingState.event.guests} guests</span>
-                      <button type="button" onClick={() => onSetEventGuests(bookingState.event.guests + 1)} className="p-1 text-foreground transition-colors hover:bg-muted">
-                        <Plus size={18} />
-                      </button>
+                </>
+              )}
+
+              {bookingState.activeType === 'entrance' && (
+                <>
+                  <div className="step-card space-y-5">
+                    <div>
+                      <p className="section-kicker mb-1">Schedule</p>
+                      <h3 className="text-xl font-medium text-foreground">Choose your entrance slot</h3>
+                    </div>
+                    <div className="grid gap-3 md:grid-cols-2">
+                      {entranceOptions.map((option) => (
+                        <button
+                          key={option.id} type="button"
+                          onClick={() => onSetEntranceTime(option.id)}
+                          className={`rounded-xl border p-5 text-left transition-all duration-300 ${
+                            bookingState.entrance.entranceTime === option.id
+                              ? 'border-foreground bg-foreground text-white'
+                              : 'border-border bg-white hover:border-foreground/25'
+                          }`}
+                        >
+                          <span className="block font-medium">{option.label}</span>
+                          <span className={`mt-1 block text-sm ${bookingState.entrance.entranceTime === option.id ? 'text-white/65' : 'text-muted-foreground'}`}>{option.schedule}</span>
+                          <span className="mt-3 block text-xs font-medium">
+                            Adults {formatPrice(option.adultPrice)} · Kids {formatPrice(option.kidPrice)}
+                          </span>
+                        </button>
+                      ))}
                     </div>
                   </div>
-                  <div className="border border-border bg-secondary p-4">
-                    <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Package Total</p>
-                    <p className="mt-2 font-serif text-3xl text-accent">{formatPrice(eventTotal)}</p>
-                    <p className="mt-3 text-sm text-muted-foreground">Event totals are isolated from room add-ons and based only on the selected package.</p>
-                  </div>
-                </div>
-              </div>
-            )}
 
-            {bookingState.activeType === 'entrance' && (
-              <div className="grid gap-6 md:grid-cols-2">
+                  <div className="step-card space-y-5">
+                    <div>
+                      <p className="section-kicker mb-1">Guests</p>
+                      <h3 className="text-xl font-medium text-foreground">Visit date and headcount</h3>
+                    </div>
+                    <div>
+                      <label className="field-label">Visit Date</label>
+                      <div className="relative">
+                        <input type="date" value={bookingState.entrance.date} onChange={(e) => onSetEntranceDate(e.target.value)} className="form-input" />
+                        <Calendar size={16} className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                      </div>
+                    </div>
+                    <div className="grid gap-5 md:grid-cols-2">
+                      {(['adults', 'kids'] as const).map((field) => (
+                        <div key={field} className="rounded-xl border border-border bg-white p-5">
+                          <p className="field-label">{field === 'adults' ? 'Adults' : 'Kids'}</p>
+                          <div className="flex items-center justify-between">
+                            <button type="button" onClick={() => onSetEntranceGuests(field, bookingState.entrance[field] - 1)} className={counterBtn}><Minus size={16} /></button>
+                            <span className="font-serif text-4xl text-foreground">{bookingState.entrance[field]}</span>
+                            <button type="button" onClick={() => onSetEntranceGuests(field, bookingState.entrance[field] + 1)} className={counterBtn}><Plus size={16} /></button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {/* Summary */}
+              <div className="step-card space-y-5">
                 <div>
-                  <label className="block text-sm font-semibold text-foreground mb-2 uppercase tracking-wide">Time Selector</label>
-                  <div className="grid grid-cols-2 gap-2">
-                    {entranceOptions.map((option) => (
-                      <button
-                        key={option.id}
-                        type="button"
-                        onClick={() => onSetEntranceTime(option.id)}
-                        className={`border px-4 py-4 text-left transition-colors ${
-                          bookingState.entrance.entranceTime === option.id
-                            ? 'border-primary bg-primary text-primary-foreground'
-                            : 'border-border bg-background text-foreground hover:border-primary'
-                        }`}
-                      >
-                        <span className="block font-semibold uppercase tracking-wide">{option.label}</span>
-                        <span className={`text-sm ${bookingState.entrance.entranceTime === option.id ? 'opacity-80' : 'text-muted-foreground'}`}>
-                          {option.schedule}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
+                  <p className="section-kicker mb-1">Summary</p>
+                  <h3 className="text-xl font-medium text-foreground">Review your reservation</h3>
                 </div>
+
+                <div className="grid gap-3 md:grid-cols-2">
+                  {bookingState.activeType === 'room' && (
+                    <>
+                      <div className="rounded-xl border border-border bg-white p-4">
+                        <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Room</p>
+                        <p className="mt-2 font-medium text-foreground">{selectedRoom.name}</p>
+                        <p className="mt-1 text-sm text-muted-foreground">{bookingState.room.stayType} stay · {bookingState.room.guests} guests</p>
+                      </div>
+                      <div className="rounded-xl border border-border bg-white p-4">
+                        <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Add-ons</p>
+                        <p className="mt-2 text-sm text-muted-foreground">
+                          {bookingState.room.addOns.length > 0
+                            ? bookingState.room.addOns.map((id) => addOns.find((a) => a.id === id)?.name).filter(Boolean).join(', ')
+                            : 'None selected'}
+                        </p>
+                      </div>
+                    </>
+                  )}
+                  {bookingState.activeType === 'event' && (
+                    <>
+                      <div className="rounded-xl border border-border bg-white p-4">
+                        <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Package</p>
+                        <p className="mt-2 font-medium text-foreground">{selectedPackage.name}</p>
+                        <p className="mt-1 text-sm text-muted-foreground">{selectedPackage.pax}</p>
+                      </div>
+                      <div className="rounded-xl border border-border bg-white p-4">
+                        <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Guests</p>
+                        <p className="mt-2 font-medium text-foreground">{bookingState.event.guests} expected guests</p>
+                      </div>
+                    </>
+                  )}
+                  {bookingState.activeType === 'entrance' && (
+                    <>
+                      <div className="rounded-xl border border-border bg-white p-4">
+                        <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Schedule</p>
+                        <p className="mt-2 font-medium text-foreground">{selectedEntrance.label}</p>
+                        <p className="mt-1 text-sm text-muted-foreground">{selectedEntrance.schedule}</p>
+                      </div>
+                      <div className="rounded-xl border border-border bg-white p-4">
+                        <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Guests</p>
+                        <p className="mt-2 font-medium text-foreground">{bookingState.entrance.adults} adults · {bookingState.entrance.kids} kids</p>
+                      </div>
+                    </>
+                  )}
+                </div>
+
+                <div className="flex flex-col gap-5 rounded-xl bg-foreground px-6 py-5 md:flex-row md:items-center md:justify-between">
+                  <div>
+                    <p className="text-xs uppercase tracking-[0.2em] text-white/45">
+                      {bookingState.activeType === 'entrance' ? 'Total Entrance Fee' : 'Estimated Total'}
+                    </p>
+                    <p className="mt-2 font-serif text-4xl text-white">{formatPrice(total)}</p>
+                  </div>
+                  <button
+                    type="submit"
+                    disabled={submissionState.status === 'submitting'}
+                    className="inline-flex min-h-12 items-center justify-center rounded-xl bg-white px-8 text-sm font-medium text-foreground transition-all duration-300 hover:opacity-90 disabled:opacity-50 md:w-auto"
+                  >
+                    {submissionState.status === 'submitting' ? 'Sending...' : 'Reserve Now'}
+                  </button>
+                </div>
+              </div>
+            </form>
+          </motion.div>
+
+          {/* Sidebar */}
+          <motion.aside
+            initial={{ opacity: 0, y: 24 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.7, ease: 'easeOut', delay: 0.2 }}
+            className="space-y-5"
+          >
+            <div className="rounded-2xl border border-white/8 bg-white/5 p-6 backdrop-blur-sm">
+              <p className="section-kicker mb-1 text-white/35">Quick Reference</p>
+              <h3 className="mb-5 text-base font-medium text-white">Entrance Rates</h3>
+              <div className="space-y-3">
+                {entranceOptions.map((option) => (
+                  <div key={option.id} className="rounded-xl border border-white/8 bg-white/4 p-4">
+                    <p className="text-xs font-medium uppercase tracking-[0.18em] text-white">{option.label}</p>
+                    <p className="mt-0.5 text-xs text-white/45">{option.schedule}</p>
+                    <div className="mt-3 flex gap-6 text-sm">
+                      <div>
+                        <p className="text-xs text-white/40">Adults</p>
+                        <p className="mt-0.5 font-medium text-white">{formatPrice(option.adultPrice)}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-white/40">Kids</p>
+                        <p className="mt-0.5 font-medium text-white">{formatPrice(option.kidPrice)}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-white/8 bg-white/5 p-6 backdrop-blur-sm">
+              <div className="flex items-start gap-3">
+                <Info size={16} className="mt-0.5 shrink-0 text-white/40" />
                 <div>
-                  <label className="block text-sm font-semibold text-foreground mb-2 uppercase tracking-wide">Visit Date</label>
-                  <div className="relative">
-                    <input
-                      type="date"
-                      value={bookingState.entrance.date}
-                      onChange={(event) => onSetEntranceDate(event.target.value)}
-                      className="w-full border border-border bg-background px-4 py-3 text-foreground transition-colors hover:border-primary focus:border-primary focus:outline-none"
-                    />
-                    <Calendar size={18} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-                  </div>
-                </div>
-
-                <div className="border border-border p-5">
-                  <p className="text-sm font-semibold uppercase tracking-wide text-foreground">Adults</p>
-                  <div className="mt-3 flex items-center justify-between">
-                    <button type="button" onClick={() => onSetEntranceGuests('adults', bookingState.entrance.adults - 1)} className="border border-border p-2 hover:border-primary">
-                      <Minus size={18} />
-                    </button>
-                    <span className="font-serif text-3xl text-foreground">{bookingState.entrance.adults}</span>
-                    <button type="button" onClick={() => onSetEntranceGuests('adults', bookingState.entrance.adults + 1)} className="border border-border p-2 hover:border-primary">
-                      <Plus size={18} />
-                    </button>
-                  </div>
-                </div>
-
-                <div className="border border-border p-5">
-                  <p className="text-sm font-semibold uppercase tracking-wide text-foreground">Kids</p>
-                  <div className="mt-3 flex items-center justify-between">
-                    <button type="button" onClick={() => onSetEntranceGuests('kids', bookingState.entrance.kids - 1)} className="border border-border p-2 hover:border-primary">
-                      <Minus size={18} />
-                    </button>
-                    <span className="font-serif text-3xl text-foreground">{bookingState.entrance.kids}</span>
-                    <button type="button" onClick={() => onSetEntranceGuests('kids', bookingState.entrance.kids + 1)} className="border border-border p-2 hover:border-primary">
-                      <Plus size={18} />
-                    </button>
-                  </div>
+                  <h4 className="mb-3 text-xs font-medium uppercase tracking-[0.2em] text-white">Booking Notes</h4>
+                  <ul className="space-y-2 text-xs leading-relaxed text-white/50">
+                    <li>Free entrance for all room guests</li>
+                    <li>50% downpayment required for peak dates</li>
+                    <li>Extra guest charges apply beyond capacity</li>
+                    <li>Day 9AM–5PM · Night 7PM–7AM · 22 Hours</li>
+                  </ul>
                 </div>
               </div>
-            )}
-
-            <div className="mt-8 flex flex-col gap-6 border-t border-border pt-8 md:flex-row md:items-center md:justify-between">
-              <div>
-                <p className="text-sm uppercase tracking-wide text-muted-foreground">
-                  {bookingState.activeType === 'entrance' ? 'Total Entrance Fee' : 'Estimated Total'}
-                </p>
-                <p className="font-serif text-3xl font-bold text-accent">{formatPrice(total)}</p>
-              </div>
-              <button
-                type="submit"
-                disabled={submissionState.status === 'submitting'}
-                className="w-full bg-accent px-12 py-4 font-semibold uppercase tracking-wide text-accent-foreground transition-colors hover:bg-accent/90 disabled:cursor-not-allowed disabled:opacity-70 md:w-auto"
-              >
-                {submissionState.status === 'submitting' ? 'Sending...' : 'Reserve Now'}
-              </button>
             </div>
-          </form>
-        </motion.div>
+          </motion.aside>
 
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="mt-8 bg-primary-foreground/5 border border-primary-foreground/20 p-6"
-        >
-          <div className="flex items-start gap-3">
-            <Info size={20} className="text-accent flex-shrink-0 mt-0.5" />
-            <div>
-              <h4 className="text-primary-foreground font-semibold text-sm uppercase tracking-wide mb-3">Booking Notes</h4>
-              <ul className="space-y-2 text-primary-foreground/80 text-sm">
-                <li>Free entrance for all room guests</li>
-                <li>50% downpayment required for peak dates</li>
-                <li>Extra guest charges apply beyond room capacity</li>
-                <li>Stay options are Day (9AM-5PM), Night (7PM-7AM), and 22 Hours</li>
-              </ul>
-            </div>
-          </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   )

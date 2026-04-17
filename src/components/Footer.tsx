@@ -8,77 +8,82 @@ type FooterProps = {
 
 const socialLinks = [
   { name: 'Instagram', icon: Instagram, href: 'https://www.instagram.com/' },
-  { name: 'Facebook', icon: Facebook, href: 'https://www.facebook.com/' },
-  { name: 'Twitter', icon: Twitter, href: 'https://x.com/' },
+  { name: 'Facebook',  icon: Facebook,  href: 'https://www.facebook.com/' },
+  { name: 'Twitter',   icon: Twitter,   href: 'https://x.com/' },
 ]
 
 export function Footer({ onNavigateHome, onNavigateToSection, onNavigateToBooking }: FooterProps) {
   return (
     <footer className="bg-foreground text-white">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
-        <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-12">
-          <div className="lg:col-span-2">
-            <button type="button" onClick={onNavigateHome} className="font-serif text-3xl font-bold tracking-tight">
+      <div className="page-shell py-16 md:py-24">
+
+        <div className="mb-16 flex flex-col gap-8 border-b border-white/10 pb-16 md:flex-row md:items-end md:justify-between">
+          <div>
+            <button
+              type="button"
+              onClick={onNavigateHome}
+              className="font-serif text-3xl tracking-widest transition-opacity duration-300 hover:opacity-60"
+            >
               UKIYO
             </button>
-            <p className="mt-4 text-white/70 max-w-sm leading-relaxed">
-              Booking-focused resort stays, entrance passes, and event packages with a cleaner path from browsing to reservation.
+            <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/45">
+              A resort built for real rest — rooms, events, and entrance passes in one clear booking flow.
             </p>
-            <div className="mt-6 flex gap-3">
-              {socialLinks.map((social) => (
-                <a
-                  key={social.name}
-                  href={social.href}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="w-10 h-10 bg-white/10 flex items-center justify-center hover:bg-accent hover:text-accent-foreground transition-colors"
-                  aria-label={social.name}
-                >
-                  <social.icon size={20} />
-                </a>
-              ))}
-            </div>
           </div>
 
+          <div className="flex gap-2">
+            {socialLinks.map((social) => (
+              <a
+                key={social.name}
+                href={social.href}
+                target="_blank"
+                rel="noreferrer"
+                className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 text-white/50 transition-all duration-300 hover:border-white/30 hover:text-white"
+                aria-label={social.name}
+              >
+                <social.icon size={16} />
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <div className="grid gap-10 sm:grid-cols-3">
           <div>
-            <h4 className="font-semibold mb-4 uppercase tracking-wide text-sm">Resort</h4>
+            <h4 className="mb-5 text-xs font-medium uppercase tracking-[0.28em] text-white/35">Resort</h4>
             <ul className="space-y-3">
-              <li><button type="button" onClick={() => onNavigateToSection('about')} className="text-white/70 hover:text-white transition-colors text-sm">About Us</button></li>
-              <li><button type="button" onClick={() => onNavigateToSection('accommodation')} className="text-white/70 hover:text-white transition-colors text-sm">Accommodation</button></li>
-              <li><button type="button" onClick={() => onNavigateToSection('gallery')} className="text-white/70 hover:text-white transition-colors text-sm">Gallery</button></li>
-              <li><button type="button" onClick={() => onNavigateToSection('packages')} className="text-white/70 hover:text-white transition-colors text-sm">Packages</button></li>
+              <li><button type="button" onClick={() => onNavigateToSection('about')} className="text-sm text-white/60 transition-colors duration-300 hover:text-white">About Us</button></li>
+              <li><button type="button" onClick={() => onNavigateToSection('accommodation')} className="text-sm text-white/60 transition-colors duration-300 hover:text-white">Accommodation</button></li>
+              <li><button type="button" onClick={() => onNavigateToSection('gallery')} className="text-sm text-white/60 transition-colors duration-300 hover:text-white">Gallery</button></li>
+              <li><button type="button" onClick={() => onNavigateToSection('packages')} className="text-sm text-white/60 transition-colors duration-300 hover:text-white">Packages</button></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="font-semibold mb-4 uppercase tracking-wide text-sm">Services</h4>
+            <h4 className="mb-5 text-xs font-medium uppercase tracking-[0.28em] text-white/35">Services</h4>
             <ul className="space-y-3">
-              <li><button type="button" onClick={onNavigateToBooking} className="text-white/70 hover:text-white transition-colors text-sm">Room Stays</button></li>
-              <li><button type="button" onClick={onNavigateToBooking} className="text-white/70 hover:text-white transition-colors text-sm">Entrance Passes</button></li>
-              <li><button type="button" onClick={() => onNavigateToSection('packages')} className="text-white/70 hover:text-white transition-colors text-sm">Events</button></li>
-              <li><button type="button" onClick={() => onNavigateToSection('gallery')} className="text-white/70 hover:text-white transition-colors text-sm">Activities</button></li>
+              <li><button type="button" onClick={onNavigateToBooking} className="text-sm text-white/60 transition-colors duration-300 hover:text-white">Room Stays</button></li>
+              <li><button type="button" onClick={onNavigateToBooking} className="text-sm text-white/60 transition-colors duration-300 hover:text-white">Entrance Passes</button></li>
+              <li><button type="button" onClick={() => onNavigateToSection('packages')} className="text-sm text-white/60 transition-colors duration-300 hover:text-white">Events</button></li>
+              <li><button type="button" onClick={() => onNavigateToSection('gallery')} className="text-sm text-white/60 transition-colors duration-300 hover:text-white">Activities</button></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="font-semibold mb-4 uppercase tracking-wide text-sm">Support</h4>
+            <h4 className="mb-5 text-xs font-medium uppercase tracking-[0.28em] text-white/35">Support</h4>
             <ul className="space-y-3">
-              <li><button type="button" onClick={() => onNavigateToSection('contact')} className="text-white/70 hover:text-white transition-colors text-sm">Contact Us</button></li>
-              <li><button type="button" onClick={() => onNavigateToSection('contact')} className="text-white/70 hover:text-white transition-colors text-sm">FAQs</button></li>
-              <li><span className="text-white/50 text-sm">Privacy Policy</span></li>
-              <li><span className="text-white/50 text-sm">Terms of Service</span></li>
+              <li><button type="button" onClick={() => onNavigateToSection('contact')} className="text-sm text-white/60 transition-colors duration-300 hover:text-white">Contact Us</button></li>
+              <li><button type="button" onClick={() => onNavigateToSection('contact')} className="text-sm text-white/60 transition-colors duration-300 hover:text-white">FAQs</button></li>
+              <li><span className="text-sm text-white/30">Privacy Policy</span></li>
+              <li><span className="text-sm text-white/30">Terms of Service</span></li>
             </ul>
           </div>
         </div>
 
-        <div className="mt-16 pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-white/50 text-sm">
-            &copy; {new Date().getFullYear()} Ukiyo Resort. All rights reserved.
-          </p>
-          <p className="text-white/50 text-sm">
-            Designed with care for your perfect getaway.
-          </p>
+        <div className="mt-16 flex flex-col gap-2 border-t border-white/10 pt-8 md:flex-row md:items-center md:justify-between">
+          <p className="text-xs text-white/30">&copy; {new Date().getFullYear()} Ukiyo Resort. All rights reserved.</p>
+          <p className="text-xs text-white/30">Designed for your perfect getaway.</p>
         </div>
+
       </div>
     </footer>
   )
