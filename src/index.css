@@ -1,0 +1,75 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: "Manrope", "Inter Fallback", system-ui, sans-serif;
+  --font-serif: "Playfair Display", "Georgia", serif;
+
+  --color-background: #fbf8f2;
+  --color-foreground: #0d1726;
+  --color-primary: #0f2745;
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #f3ede3;
+  --color-secondary-foreground: #0f172a;
+  --color-muted: #efe6d8;
+  --color-muted-foreground: #5f6c7b;
+  --color-accent: #c9832b;
+  --color-accent-foreground: #ffffff;
+  --color-card: #ffffff;
+  --color-card-foreground: #0f172a;
+  --color-border: #d9cfbf;
+  --color-input: #d9cfbf;
+  --color-ring: #0f2745;
+
+  --radius: 0;
+}
+
+@font-face {
+  font-family: "Inter Fallback";
+  src: local("Arial");
+}
+
+* {
+  border-color: var(--color-border);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  line-height: 1.6;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  border-radius: 0;
+}
+
+.drag-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-primary) transparent;
+  touch-action: pan-y;
+}
+
+.drag-scroll::-webkit-scrollbar {
+  height: 8px;
+}
+
+.drag-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.drag-scroll::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--color-primary) 75%, white);
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0;
+}
