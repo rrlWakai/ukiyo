@@ -54,29 +54,17 @@ function getToday() {
 
 function HomePage(props: {
   bookingState: BookingState
-  submissionState: BookingSubmissionState
-  onSelectBookingType: (type: BookingType) => void
   onHeroBookNow: () => void
   onExploreAbout: () => void
   onSelectPackage: (packageName: string) => void
   onSelectRoom: (roomName: string) => void
   onViewRoomDetails: (slug: string) => void
-  onSetRoomDate: (date: string) => void
-  onSetEventDate: (date: string) => void
-  onSetEntranceDate: (date: string) => void
-  onSetRoomGuests: (guests: number) => void
-  onSetEventGuests: (guests: number) => void
-  onSetRoomStayType: (stayType: StayType) => void
-  onToggleRoomAddOn: (addOn: AddOnId) => void
-  onSetEntranceTime: (time: EntranceTime) => void
-  onSetEntranceGuests: (field: 'adults' | 'kids', value: number) => void
-  onSubmitBooking: () => void
 }) {
   return (
     <main>
       <Hero
         bookingType={props.bookingState.activeType}
-        onSelectBookingType={props.onSelectBookingType}
+        onSelectBookingType={() => {}}
         onBookNow={props.onHeroBookNow}
         onExploreMore={props.onExploreAbout}
       />
@@ -90,23 +78,6 @@ function HomePage(props: {
         selectedRoom={props.bookingState.room.selectedRoom}
         onSelectRoom={props.onSelectRoom}
         onViewDetails={props.onViewRoomDetails}
-      />
-      <Booking
-        bookingState={props.bookingState}
-        submissionState={props.submissionState}
-        onSelectBookingType={props.onSelectBookingType}
-        onSelectRoom={props.onSelectRoom}
-        onSelectPackage={props.onSelectPackage}
-        onSetRoomDate={props.onSetRoomDate}
-        onSetEventDate={props.onSetEventDate}
-        onSetEntranceDate={props.onSetEntranceDate}
-        onSetRoomGuests={props.onSetRoomGuests}
-        onSetEventGuests={props.onSetEventGuests}
-        onSetRoomStayType={props.onSetRoomStayType}
-        onToggleRoomAddOn={props.onToggleRoomAddOn}
-        onSetEntranceTime={props.onSetEntranceTime}
-        onSetEntranceGuests={props.onSetEntranceGuests}
-        onSubmitBooking={props.onSubmitBooking}
       />
       <Reviews />
       <Contact />
@@ -447,8 +418,6 @@ function App() {
             <>
               <HomePage
                 bookingState={bookingState}
-                submissionState={submissionState}
-                onSelectBookingType={setActiveType}
                 onHeroBookNow={() => navigate('/booking')}
                 onExploreAbout={() => navigateToSection('about')}
                 onSelectPackage={(packageName) => {
@@ -460,16 +429,6 @@ function App() {
                   navigate('/booking')
                 }}
                 onViewRoomDetails={viewRoomDetails}
-                onSetRoomDate={setRoomDate}
-                onSetEventDate={setEventDate}
-                onSetEntranceDate={setEntranceDate}
-                onSetRoomGuests={setRoomGuests}
-                onSetEventGuests={setEventGuests}
-                onSetRoomStayType={setRoomStayType}
-                onToggleRoomAddOn={toggleRoomAddOn}
-                onSetEntranceTime={setEntranceTime}
-                onSetEntranceGuests={setEntranceGuests}
-                onSubmitBooking={handleSubmitBooking}
               />
               {footer}
             </>

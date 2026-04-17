@@ -21,6 +21,7 @@ type NavbarProps = {
 export function Navbar({ isRoomPage, onNavigateHome, onNavigateToSection, onBookNow }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [logoError, setLogoError] = useState(false)
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 40)
@@ -46,11 +47,22 @@ export function Navbar({ isRoomPage, onNavigateHome, onNavigateToSection, onBook
           <button
             type="button"
             onClick={onNavigateHome}
-            className={`font-serif text-xl tracking-widest transition-opacity duration-300 hover:opacity-60 ${
-              scrolled ? 'text-foreground' : 'text-white'
-            }`}
+            className="transition-opacity duration-300 hover:opacity-70"
           >
-            UKIYO
+            {logoError ? (
+              <span className={`font-serif text-xl tracking-widest ${scrolled ? 'text-foreground' : 'text-white'}`}>
+                UKIYO
+              </span>
+            ) : (
+              <img
+                src="/logo.jpg"
+                alt="Ukiyo Resort"
+                className={`h-10 w-10 rounded-full object-cover transition-all duration-500 ${
+                  scrolled ? '' : 'ring-2 ring-white/20'
+                }`}
+                onError={() => setLogoError(true)}
+              />
+            )}
           </button>
 
           <div className="hidden items-center gap-8 md:flex">

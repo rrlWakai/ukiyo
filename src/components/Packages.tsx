@@ -85,10 +85,12 @@ export function Packages({ selectedPackage, onSelectPackage }: PackagesProps) {
               <button
                 type="button"
                 onClick={() => onSelectPackage(pkg.name)}
-                className={`mt-8 inline-flex min-h-11 items-center justify-center rounded-xl border px-6 py-2.5 text-xs font-medium uppercase tracking-[0.18em] transition-all duration-300 ${
-                  pkg.featured || selectedPackage === pkg.name
+                className={`mt-8 inline-flex min-h-11 items-center justify-center rounded-xl border-2 px-6 py-2.5 text-xs font-medium uppercase tracking-[0.18em] transition-all duration-300 ${
+                  pkg.featured
                     ? 'border-white bg-white text-foreground hover:bg-white/90'
-                    : 'border-foreground bg-foreground text-white hover:opacity-80'
+                    : selectedPackage === pkg.name
+                      ? 'border-foreground bg-foreground text-white'
+                      : 'border-foreground/70 bg-transparent text-foreground hover:bg-foreground hover:text-white'
                 }`}
               >
                 Select Package

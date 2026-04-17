@@ -1,33 +1,51 @@
-import { Instagram, Facebook, Twitter } from 'lucide-react'
+import { useState } from "react";
+import { Instagram, Facebook, Twitter } from "lucide-react";
 
 type FooterProps = {
-  onNavigateHome: () => void
-  onNavigateToSection: (sectionId: string) => void
-  onNavigateToBooking: () => void
-}
+  onNavigateHome: () => void;
+  onNavigateToSection: (sectionId: string) => void;
+  onNavigateToBooking: () => void;
+};
 
 const socialLinks = [
-  { name: 'Instagram', icon: Instagram, href: 'https://www.instagram.com/' },
-  { name: 'Facebook',  icon: Facebook,  href: 'https://www.facebook.com/' },
-  { name: 'Twitter',   icon: Twitter,   href: 'https://x.com/' },
-]
+  { name: "Instagram", icon: Instagram, href: "https://www.instagram.com/" },
+  { name: "Facebook", icon: Facebook, href: "https://www.facebook.com/" },
+  { name: "Twitter", icon: Twitter, href: "https://x.com/" },
+];
 
-export function Footer({ onNavigateHome, onNavigateToSection, onNavigateToBooking }: FooterProps) {
+export function Footer({
+  onNavigateHome,
+  onNavigateToSection,
+  onNavigateToBooking,
+}: FooterProps) {
+  const [logoError, setLogoError] = useState(false);
+
   return (
     <footer className="bg-foreground text-white">
       <div className="page-shell py-16 md:py-24">
-
         <div className="mb-16 flex flex-col gap-8 border-b border-white/10 pb-16 md:flex-row md:items-end md:justify-between">
           <div>
             <button
               type="button"
               onClick={onNavigateHome}
-              className="font-serif text-3xl tracking-widest transition-opacity duration-300 hover:opacity-60"
+              className="transition-opacity duration-300 hover:opacity-70"
             >
-              UKIYO
+              {logoError ? (
+                <span className="font-serif text-3xl tracking-widest">
+                  UKIYO
+                </span>
+              ) : (
+                <img
+                  src="/logo.jpg"
+                  alt="Ukiyo Resort"
+                  className="h-12 w-12 rounded-full object-cover ring-1 ring-white/20"
+                  onError={() => setLogoError(true)}
+                />
+              )}
             </button>
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/45">
-              A resort built for real rest — rooms, events, and entrance passes in one clear booking flow.
+              A resort built for real rest — rooms, events, and entrance passes
+              in one clear booking flow.
             </p>
           </div>
 
@@ -49,42 +67,135 @@ export function Footer({ onNavigateHome, onNavigateToSection, onNavigateToBookin
 
         <div className="grid gap-10 sm:grid-cols-3">
           <div>
-            <h4 className="mb-5 text-xs font-medium uppercase tracking-[0.28em] text-white/35">Resort</h4>
+            <h4 className="mb-5 text-xs font-medium uppercase tracking-[0.28em] text-white/35">
+              Resort
+            </h4>
             <ul className="space-y-3">
-              <li><button type="button" onClick={() => onNavigateToSection('about')} className="text-sm text-white/60 transition-colors duration-300 hover:text-white">About Us</button></li>
-              <li><button type="button" onClick={() => onNavigateToSection('accommodation')} className="text-sm text-white/60 transition-colors duration-300 hover:text-white">Accommodation</button></li>
-              <li><button type="button" onClick={() => onNavigateToSection('gallery')} className="text-sm text-white/60 transition-colors duration-300 hover:text-white">Gallery</button></li>
-              <li><button type="button" onClick={() => onNavigateToSection('packages')} className="text-sm text-white/60 transition-colors duration-300 hover:text-white">Packages</button></li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => onNavigateToSection("about")}
+                  className="text-sm text-white/60 transition-colors duration-300 hover:text-white"
+                >
+                  About Us
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => onNavigateToSection("accommodation")}
+                  className="text-sm text-white/60 transition-colors duration-300 hover:text-white"
+                >
+                  Accommodation
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => onNavigateToSection("gallery")}
+                  className="text-sm text-white/60 transition-colors duration-300 hover:text-white"
+                >
+                  Gallery
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => onNavigateToSection("packages")}
+                  className="text-sm text-white/60 transition-colors duration-300 hover:text-white"
+                >
+                  Packages
+                </button>
+              </li>
             </ul>
           </div>
 
           <div>
-            <h4 className="mb-5 text-xs font-medium uppercase tracking-[0.28em] text-white/35">Services</h4>
+            <h4 className="mb-5 text-xs font-medium uppercase tracking-[0.28em] text-white/35">
+              Services
+            </h4>
             <ul className="space-y-3">
-              <li><button type="button" onClick={onNavigateToBooking} className="text-sm text-white/60 transition-colors duration-300 hover:text-white">Room Stays</button></li>
-              <li><button type="button" onClick={onNavigateToBooking} className="text-sm text-white/60 transition-colors duration-300 hover:text-white">Entrance Passes</button></li>
-              <li><button type="button" onClick={() => onNavigateToSection('packages')} className="text-sm text-white/60 transition-colors duration-300 hover:text-white">Events</button></li>
-              <li><button type="button" onClick={() => onNavigateToSection('gallery')} className="text-sm text-white/60 transition-colors duration-300 hover:text-white">Activities</button></li>
+              <li>
+                <button
+                  type="button"
+                  onClick={onNavigateToBooking}
+                  className="text-sm text-white/60 transition-colors duration-300 hover:text-white"
+                >
+                  Room Stays
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={onNavigateToBooking}
+                  className="text-sm text-white/60 transition-colors duration-300 hover:text-white"
+                >
+                  Entrance Passes
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => onNavigateToSection("packages")}
+                  className="text-sm text-white/60 transition-colors duration-300 hover:text-white"
+                >
+                  Events
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => onNavigateToSection("gallery")}
+                  className="text-sm text-white/60 transition-colors duration-300 hover:text-white"
+                >
+                  Activities
+                </button>
+              </li>
             </ul>
           </div>
 
           <div>
-            <h4 className="mb-5 text-xs font-medium uppercase tracking-[0.28em] text-white/35">Support</h4>
+            <h4 className="mb-5 text-xs font-medium uppercase tracking-[0.28em] text-white/35">
+              Support
+            </h4>
             <ul className="space-y-3">
-              <li><button type="button" onClick={() => onNavigateToSection('contact')} className="text-sm text-white/60 transition-colors duration-300 hover:text-white">Contact Us</button></li>
-              <li><button type="button" onClick={() => onNavigateToSection('contact')} className="text-sm text-white/60 transition-colors duration-300 hover:text-white">FAQs</button></li>
-              <li><span className="text-sm text-white/30">Privacy Policy</span></li>
-              <li><span className="text-sm text-white/30">Terms of Service</span></li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => onNavigateToSection("contact")}
+                  className="text-sm text-white/60 transition-colors duration-300 hover:text-white"
+                >
+                  Contact Us
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => onNavigateToSection("contact")}
+                  className="text-sm text-white/60 transition-colors duration-300 hover:text-white"
+                >
+                  FAQs
+                </button>
+              </li>
+              <li>
+                <span className="text-sm text-white/30">Privacy Policy</span>
+              </li>
+              <li>
+                <span className="text-sm text-white/30">Terms of Service</span>
+              </li>
             </ul>
           </div>
         </div>
 
         <div className="mt-16 flex flex-col gap-2 border-t border-white/10 pt-8 md:flex-row md:items-center md:justify-between">
-          <p className="text-xs text-white/30">&copy; {new Date().getFullYear()} Ukiyo Resort. All rights reserved.</p>
-          <p className="text-xs text-white/30">Designed for your perfect getaway.</p>
+          <p className="text-xs text-white/30">
+            &copy; {new Date().getFullYear()} Ukiyo Resort. All rights reserved.
+          </p>
+          <p className="text-xs text-white/30">
+            Designed for your perfect getaway.
+          </p>
         </div>
-
       </div>
     </footer>
-  )
+  );
 }
