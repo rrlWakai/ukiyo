@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
 
 const navLinks = [
-  { name: 'About', href: '#about' },
+  { name: 'Experience', href: '#experience' },
   { name: 'Rooms', href: '#accommodation' },
   { name: 'Packages', href: '#packages' },
   { name: 'Gallery', href: '#gallery' },
@@ -20,14 +20,7 @@ type NavbarProps = {
 
 export function Navbar({ isRoomPage, onNavigateHome, onNavigateToSection, onBookNow }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
   const [logoError, setLogoError] = useState(false)
-
-  useEffect(() => {
-    const handler = () => setScrolled(window.scrollY > 40)
-    window.addEventListener('scroll', handler, { passive: true })
-    return () => window.removeEventListener('scroll', handler)
-  }, [])
 
   const handleLinkClick = (href: string) => {
     setIsOpen(false)
@@ -35,114 +28,97 @@ export function Navbar({ isRoomPage, onNavigateHome, onNavigateToSection, onBook
   }
 
   return (
-    <nav
-      className={`fixed left-0 right-0 top-0 z-50 transition-all duration-500 ${
-        scrolled
-          ? 'border-b border-border/60 bg-background/95 backdrop-blur-md'
-          : 'border-b border-white/10 bg-transparent'
-      }`}
-    >
-      <div className="page-shell">
-        <div className="flex min-h-20 items-center justify-between gap-4 py-4">
-          <button
-            type="button"
-            onClick={onNavigateHome}
-            className="transition-opacity duration-300 hover:opacity-70"
-          >
-            {logoError ? (
-              <span className={`font-serif text-xl tracking-widest ${scrolled ? 'text-foreground' : 'text-white'}`}>
-                UKIYO
-              </span>
-            ) : (
-              <img
-                src="/logo.jpg"
-                alt="Ukiyo Resort"
-                className={`h-10 w-10 rounded-full object-cover transition-all duration-500 ${
-                  scrolled ? '' : 'ring-2 ring-white/20'
-                }`}
-                onError={() => setLogoError(true)}
-              />
-            )}
-          </button>
+    <div className="fixed left-0 right-0 top-0 z-50 flex justify-center px-4 pt-4">
+      {/* Floating pill */}
+      <div className="flex w-full max-w-5xl items-center justify-between gap-4 rounded-full bg-[rgba(10,25,60,0.45)] px-4 py-2.5 ring-1 ring-blue-300/20 backdrop-blur-md">
+        {/* Logo */}
+        <button
+          type="button"
+          onClick={onNavigateHome}
+          className="shrink-0 transition-opacity duration-300 hover:opacity-70"
+        >
+          {logoError ? (
+            <span className="font-serif text-lg tracking-widest text-white">
+              UKIYO
+            </span>
+          ) : (
+            <img
+              src="/logo.jpg"
+              alt="Ukiyo Resort"
+              className="h-9 w-9 rounded-full object-cover"
+              onError={() => setLogoError(true)}
+            />
+          )}
+        </button>
 
-          <div className="hidden items-center gap-8 md:flex">
-            {navLinks.map((link) => (
-              <button
-                key={link.name}
-                type="button"
-                onClick={() => handleLinkClick(link.href)}
-                className={`text-xs font-medium uppercase tracking-[0.22em] transition-colors duration-300 ${
-                  scrolled
-                    ? 'text-foreground/50 hover:text-foreground'
-                    : 'text-white/60 hover:text-white'
-                }`}
-              >
-                {link.name}
-              </button>
-            ))}
-          </div>
-
-          <button
-            type="button"
-            onClick={onBookNow}
-            className={`hidden text-xs font-medium uppercase tracking-[0.22em] underline underline-offset-4 transition-all duration-300 md:inline-flex ${
-              scrolled
-                ? 'text-foreground hover:text-foreground/60'
-                : 'text-white/80 hover:text-white'
-            }`}
-          >
-            {isRoomPage ? 'Reserve Room' : 'Reserve a Stay'}
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setIsOpen(!isOpen)}
-            className={`p-2 transition-colors duration-300 md:hidden ${
-              scrolled ? 'text-foreground' : 'text-white'
-            }`}
-            aria-label="Toggle menu"
-          >
-            {isOpen ? <X size={22} /> : <Menu size={22} />}
-          </button>
+        {/* Desktop links */}
+        <div className="hidden items-center gap-6 md:flex">
+          {navLinks.map((link) => (
+            <button
+              key={link.name}
+              type="button"
+              onClick={() => handleLinkClick(link.href)}
+              className="text-xs font-medium uppercase tracking-[0.2em] text-white/65 transition-colors duration-300 hover:text-white"
+            >
+              {link.name}
+            </button>
+          ))}
         </div>
+
+        {/* Desktop CTA */}
+        <button
+          type="button"
+          onClick={onBookNow}
+          className="hidden shrink-0 rounded-full bg-orange-500 px-5 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white transition-all duration-300 hover:bg-orange-600 active:scale-95 md:inline-flex"
+        >
+          {isRoomPage ? 'Reserve Room' : 'Book Now'}
+        </button>
+
+        {/* Mobile hamburger */}
+        <button
+          type="button"
+          onClick={() => setIsOpen(!isOpen)}
+          className="rounded-full p-2 text-white transition-colors duration-300 hover:bg-white/10 md:hidden"
+          aria-label="Toggle menu"
+        >
+          {isOpen ? <X size={20} /> : <Menu size={20} />}
+        </button>
       </div>
 
+      {/* Mobile dropdown */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3, ease: 'easeOut' }}
-            className="border-b border-border bg-background md:hidden"
+            initial={{ opacity: 0, y: -8, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -8, scale: 0.97 }}
+            transition={{ duration: 0.22, ease: 'easeOut' }}
+            className="absolute left-4 right-4 top-18 overflow-hidden rounded-2xl bg-[rgba(10,25,60,0.45)] ring-1 ring-blue-300/20 backdrop-blur-md md:hidden"
           >
-            <div className="page-shell space-y-1 py-6">
+            <div className="space-y-0.5 p-3">
               {navLinks.map((link) => (
                 <button
                   key={link.name}
                   type="button"
                   onClick={() => handleLinkClick(link.href)}
-                  className="flex min-h-11 items-center text-xs font-medium uppercase tracking-[0.22em] text-foreground/50 transition-colors duration-300 hover:text-foreground"
+                  className="flex min-h-11 w-full items-center rounded-xl px-4 text-xs font-medium uppercase tracking-[0.2em] text-white/65 transition-colors duration-200 hover:bg-white/10 hover:text-white"
                 >
                   {link.name}
                 </button>
               ))}
-              <div className="pt-4">
+              <div className="px-1 pt-2 pb-1">
                 <button
                   type="button"
-                  onClick={() => {
-                    setIsOpen(false)
-                    onBookNow()
-                  }}
-                  className="primary-cta w-full"
+                  onClick={() => { setIsOpen(false); onBookNow() }}
+                  className="w-full rounded-full bg-orange-500 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-white transition-all duration-300 hover:bg-orange-600"
                 >
-                  {isRoomPage ? 'Reserve Room' : 'Reserve a Stay'}
+                  {isRoomPage ? 'Reserve Room' : 'Book Now'}
                 </button>
               </div>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
-    </nav>
+    </div>
   )
 }

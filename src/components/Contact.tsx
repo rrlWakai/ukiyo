@@ -35,10 +35,10 @@ export function Contact() {
         >
           <p className="section-kicker">Contact</p>
           <h2 className="section-title">
-            Questions?<br />We&rsquo;re here.
+            Ready to book?<br />Message us now.
           </h2>
           <p className="section-copy text-sm">
-            Reach out before you book, or after — we&rsquo;re happy to help with anything you need.
+            We&rsquo;re minutes away — no long drive, no hassle. Send us a message about group rates, event packages, or day tour promos. We reply fast and slots fill up quickly.
           </p>
         </motion.div>
 

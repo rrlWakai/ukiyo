@@ -36,11 +36,11 @@ export function Hero({ onBookNow, onExploreMore }: HeroProps) {
           </p>
 
           <h1 className="text-5xl font-medium leading-[1.06] text-white md:text-6xl lg:text-7xl">
-            Where stillness<br />finds you.
+            Your group's<br />escape starts here.
           </h1>
 
           <p className="max-w-lg text-base leading-relaxed text-white/65 md:text-lg">
-            A private sanctuary for rest, celebration, and moments you carry home long after you leave.
+            Ukiyo Resort is built for barkadas, families, and company teams. 3 connected pools, water slides, poolfront rooms — and space for 100–200 guests. Minutes away. No long drive. No hassle.
           </p>
 
           <div className="flex flex-col gap-4 pt-2 sm:flex-row sm:items-center">
@@ -49,14 +49,14 @@ export function Hero({ onBookNow, onExploreMore }: HeroProps) {
               onClick={onBookNow}
               className="inline-flex min-h-12 items-center justify-center rounded-xl bg-white px-8 py-3 text-sm font-medium tracking-wide text-foreground transition-all duration-500 ease-out hover:opacity-90 sm:w-auto"
             >
-              Reserve Your Stay
+              Book Your Escape Today
             </button>
             <button
               type="button"
               onClick={onExploreMore}
               className="inline-flex min-h-12 items-center gap-2 text-sm font-medium text-white/60 transition-all duration-300 hover:text-white"
             >
-              Explore the resort
+              See what's included
             </button>
           </div>
         </motion.div>

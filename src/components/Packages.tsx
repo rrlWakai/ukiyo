@@ -25,10 +25,10 @@ export function Packages({ selectedPackage, onSelectPackage }: PackagesProps) {
         >
           <p className="section-kicker">Event Packages</p>
           <h2 className="section-title">
-            Celebrate here.<br />We handle the rest.
+            Team building, outings,<br />and big celebrations.
           </h2>
           <p className="section-copy text-sm">
-            From intimate gatherings to full resort events, our packages are built around what actually matters on the day.
+            We accommodate 100–200 guests — perfect for company outings, team building, reunions, and milestone events. Pick a package and we'll take care of the rest. Slots are limited, book early.
           </p>
         </motion.div>
 

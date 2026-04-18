@@ -8,6 +8,7 @@ import { Gallery } from './components/Gallery'
 import { Accommodation } from './components/Accommodation'
 import { Booking } from './components/Booking'
 import { Reviews } from './components/Reviews'
+import { Occasions } from './components/Occasions'
 import { Contact } from './components/Contact'
 import { Footer } from './components/Footer'
 import { RoomDetailPage } from './components/RoomDetailPage'
@@ -69,6 +70,7 @@ function HomePage(props: {
         onExploreMore={props.onExploreAbout}
       />
       <About />
+      <Occasions />
       <Packages
         selectedPackage={props.bookingState.event.selectedPackage}
         onSelectPackage={props.onSelectPackage}
@@ -103,7 +105,7 @@ function BookingRoutePage(props: {
   onSubmitBooking: () => void
 }) {
   return (
-    <main className="pt-20">
+    <main className="bg-foreground pt-20">
       <Booking
         bookingState={props.bookingState}
         submissionState={props.submissionState}

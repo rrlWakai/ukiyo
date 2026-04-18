@@ -1,7 +1,7 @@
-import { useState } from 'react'
-import { motion } from 'framer-motion'
-import { Calendar, Check, ChevronLeft, Minus, Plus } from 'lucide-react'
-import { GalleryModal } from './GalleryModal'
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { Calendar, Check, ChevronLeft, Minus, Plus } from "lucide-react";
+import { GalleryModal } from "./GalleryModal";
 import {
   addOns,
   calculateRoomTotal,
@@ -13,20 +13,20 @@ import {
   type BookingState,
   type Room,
   type StayType,
-} from '@/lib/resort-data'
+} from "@/lib/resort-data";
 
 type RoomDetailPageProps = {
-  room: Room
-  bookingState: BookingState
-  onBackToRooms: () => void
-  onSetRoomDate: (date: string) => void
-  onSetRoomGuests: (guests: number) => void
-  onSetRoomStayType: (stayType: StayType) => void
-  onToggleRoomAddOn: (addOn: AddOnId) => void
-  onSelectRoom: (roomName: string) => void
-  onViewRoom: (slug: string) => void
-  onReserveRoom: (roomName: string) => void
-}
+  room: Room;
+  bookingState: BookingState;
+  onBackToRooms: () => void;
+  onSetRoomDate: (date: string) => void;
+  onSetRoomGuests: (guests: number) => void;
+  onSetRoomStayType: (stayType: StayType) => void;
+  onToggleRoomAddOn: (addOn: AddOnId) => void;
+  onSelectRoom: (roomName: string) => void;
+  onViewRoom: (slug: string) => void;
+  onReserveRoom: (roomName: string) => void;
+};
 
 export function RoomDetailPage({
   room,
@@ -40,18 +40,17 @@ export function RoomDetailPage({
   onViewRoom,
   onReserveRoom,
 }: RoomDetailPageProps) {
-  const [isGalleryOpen, setIsGalleryOpen] = useState(false)
-  const activeRoom = getRoomByName(room.name)
-  const relatedRooms = rooms.filter((r) => r.slug !== room.slug).slice(0, 2)
-  const roomBooking = bookingState.room
-  const roomTotal = calculateRoomTotal(roomBooking)
+  const [isGalleryOpen, setIsGalleryOpen] = useState(false);
+  const activeRoom = getRoomByName(room.name);
+  const relatedRooms = rooms.filter((r) => r.slug !== room.slug).slice(0, 2);
+  const roomBooking = bookingState.room;
+  const roomTotal = calculateRoomTotal(roomBooking);
 
   return (
     <>
-      <main className="pt-20">
-
+      <main>
         {/* Hero gallery */}
-        <section className="bg-white pt-12 pb-0">
+        <section className="pt-20 pb-0">
           <div className="page-shell">
             <button
               type="button"
@@ -59,13 +58,17 @@ export function RoomDetailPage({
               className="mb-10 inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground transition-colors duration-300 hover:text-foreground"
             >
               <ChevronLeft size={14} />
-              All Rooms
+              Back
             </button>
 
-            <div className="mb-10">
+            <div className="mb-8">
               <p className="section-kicker">Ukiyo Rooms</p>
-              <h1 className="text-5xl font-medium text-foreground md:text-6xl">{room.name}</h1>
-              <p className="mt-3 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">{room.subtitle}</p>
+              <h1 className="text-5xl font-medium text-foreground md:text-6xl">
+                {room.name}
+              </h1>
+              <p className="mt-3 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">
+                {room.subtitle}
+              </p>
             </div>
 
             <div className="grid gap-3 lg:grid-cols-[2fr_1fr]">
@@ -78,7 +81,10 @@ export function RoomDetailPage({
               </div>
               <div className="grid gap-3">
                 {room.gallery.slice(1).map((image, index) => (
-                  <div key={image} className="relative overflow-hidden rounded-2xl">
+                  <div
+                    key={image}
+                    className="relative overflow-hidden rounded-2xl"
+                  >
                     <img
                       src={image}
                       alt={`${room.name} ${index + 2}`}
@@ -106,35 +112,49 @@ export function RoomDetailPage({
         <section className="section-shell bg-white">
           <div className="page-shell">
             <div className="grid gap-12 lg:grid-cols-[1fr_380px] lg:gap-16">
-
               {/* Detail content */}
               <div className="space-y-12">
-
                 <div className="border-b border-border pb-10">
-                  <p className="text-xs font-medium uppercase tracking-[0.28em] text-muted-foreground">Capacity</p>
-                  <h2 className="mt-3 text-3xl font-medium text-foreground">Good for {room.capacity} pax</h2>
+                  <p className="text-xs font-medium uppercase tracking-[0.28em] text-muted-foreground">
+                    Capacity
+                  </p>
+                  <h2 className="mt-3 text-3xl font-medium text-foreground">
+                    Good for {room.capacity} pax
+                  </h2>
                   <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground">
                     {room.description}
                   </p>
                 </div>
 
                 <div className="border-b border-border pb-10">
-                  <p className="mb-5 text-xs font-medium uppercase tracking-[0.28em] text-muted-foreground">Room Features</p>
+                  <p className="mb-5 text-xs font-medium uppercase tracking-[0.28em] text-muted-foreground">
+                    Room Features
+                  </p>
                   <div className="grid gap-3 md:grid-cols-2">
                     {room.features.map((feature) => (
-                      <div key={feature} className="flex items-center gap-3 rounded-xl border border-border bg-background px-4 py-3.5">
+                      <div
+                        key={feature}
+                        className="flex items-center gap-3 rounded-xl border border-border bg-background px-4 py-3.5"
+                      >
                         <Check size={14} className="shrink-0 text-accent" />
-                        <span className="text-sm text-foreground">{feature}</span>
+                        <span className="text-sm text-foreground">
+                          {feature}
+                        </span>
                       </div>
                     ))}
                   </div>
                 </div>
 
                 <div className="border-b border-border pb-10">
-                  <p className="mb-5 text-xs font-medium uppercase tracking-[0.28em] text-muted-foreground">Inclusions</p>
+                  <p className="mb-5 text-xs font-medium uppercase tracking-[0.28em] text-muted-foreground">
+                    Inclusions
+                  </p>
                   <div className="flex flex-wrap gap-2">
                     {room.inclusions.map((item) => (
-                      <span key={item} className="rounded-full border border-border bg-white px-4 py-2 text-sm text-foreground">
+                      <span
+                        key={item}
+                        className="rounded-full border border-border bg-white px-4 py-2 text-sm text-foreground"
+                      >
                         {item}
                       </span>
                     ))}
@@ -142,26 +162,46 @@ export function RoomDetailPage({
                 </div>
 
                 <div className="border-b border-border pb-10">
-                  <p className="mb-5 text-xs font-medium uppercase tracking-[0.28em] text-muted-foreground">Stay Options</p>
+                  <p className="mb-5 text-xs font-medium uppercase tracking-[0.28em] text-muted-foreground">
+                    Stay Options
+                  </p>
                   <div className="grid gap-4 md:grid-cols-3">
                     {stayTypeOptions.map((option) => (
-                      <div key={option.id} className="rounded-xl border border-border bg-white p-5">
-                        <p className="text-lg font-medium text-foreground">{option.label}</p>
-                        <p className="mt-1 text-sm text-muted-foreground">{option.description}</p>
-                        <p className="mt-4 font-serif text-2xl text-accent">{formatPrice(room.rates[option.id])}</p>
+                      <div
+                        key={option.id}
+                        className="rounded-xl border border-border bg-white p-5"
+                      >
+                        <p className="text-lg font-medium text-foreground">
+                          {option.label}
+                        </p>
+                        <p className="mt-1 text-sm text-muted-foreground">
+                          {option.description}
+                        </p>
+                        <p className="mt-4 font-serif text-2xl text-accent">
+                          {formatPrice(room.rates[option.id])}
+                        </p>
                       </div>
                     ))}
                   </div>
                 </div>
 
                 <div className="border-b border-border pb-10">
-                  <p className="mb-5 text-xs font-medium uppercase tracking-[0.28em] text-muted-foreground">Add-ons</p>
+                  <p className="mb-5 text-xs font-medium uppercase tracking-[0.28em] text-muted-foreground">
+                    Add-ons
+                  </p>
                   <div className="grid gap-3 md:grid-cols-2">
                     {addOns.map((addon) => (
-                      <div key={addon.id} className="flex items-center justify-between rounded-xl border border-border bg-white px-4 py-4">
-                        <span className="text-sm text-foreground">{addon.name}</span>
+                      <div
+                        key={addon.id}
+                        className="flex items-center justify-between rounded-xl border border-border bg-white px-4 py-4"
+                      >
+                        <span className="text-sm text-foreground">
+                          {addon.name}
+                        </span>
                         <span className="text-sm text-accent">
-                          {addon.id === 'grill' ? '₱800–₱1,200' : `${formatPrice(addon.price)}${addon.id === 'extension' ? '/hr' : ''}`}
+                          {addon.id === "grill"
+                            ? "₱800–₱1,200"
+                            : `${formatPrice(addon.price)}${addon.id === "extension" ? "/hr" : ""}`}
                         </span>
                       </div>
                     ))}
@@ -169,26 +209,38 @@ export function RoomDetailPage({
                 </div>
 
                 <div>
-                  <p className="mb-5 text-xs font-medium uppercase tracking-[0.28em] text-muted-foreground">Notes</p>
+                  <p className="mb-5 text-xs font-medium uppercase tracking-[0.28em] text-muted-foreground">
+                    Notes
+                  </p>
                   <ul className="space-y-2">
                     {room.notes.map((note) => (
-                      <li key={note} className="flex items-start gap-3 text-sm text-muted-foreground">
+                      <li
+                        key={note}
+                        className="flex items-start gap-3 text-sm text-muted-foreground"
+                      >
                         <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-muted-foreground" />
                         {note}
                       </li>
                     ))}
                   </ul>
                 </div>
-
               </div>
 
               {/* Sticky booking sidebar */}
               <aside className="lg:sticky lg:top-24 lg:self-start">
                 <div className="rounded-2xl border border-border bg-background p-6 md:p-7">
-                  <p className="text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground">Book this room</p>
-                  <h2 className="mt-3 text-2xl font-medium text-foreground">{activeRoom.name}</h2>
-                  <p className="mt-1 text-sm text-muted-foreground">Starting price</p>
-                  <p className="mt-2 font-serif text-5xl text-accent">{formatPrice(activeRoom.rates[roomBooking.stayType])}</p>
+                  <p className="text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground">
+                    Book this room
+                  </p>
+                  <h2 className="mt-3 text-2xl font-medium text-foreground">
+                    {activeRoom.name}
+                  </h2>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    Starting price
+                  </p>
+                  <p className="mt-2 font-serif text-5xl text-accent">
+                    {formatPrice(activeRoom.rates[roomBooking.stayType])}
+                  </p>
                   <span className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-accent/30 px-3 py-1.5 text-xs font-medium text-accent">
                     <Check size={11} /> Free entrance included
                   </span>
@@ -197,19 +249,41 @@ export function RoomDetailPage({
                     <div>
                       <label className="field-label">Date</label>
                       <div className="relative">
-                        <input type="date" value={roomBooking.date} onChange={(e) => onSetRoomDate(e.target.value)} className="form-input" />
-                        <Calendar size={15} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                        <input
+                          type="date"
+                          value={roomBooking.date}
+                          onChange={(e) => onSetRoomDate(e.target.value)}
+                          className="form-input"
+                        />
+                        <Calendar
+                          size={15}
+                          className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+                        />
                       </div>
                     </div>
 
                     <div>
                       <label className="field-label">Guests</label>
                       <div className="flex min-h-13 items-center justify-between rounded-xl border border-border bg-white px-4 py-3">
-                        <button type="button" onClick={() => onSetRoomGuests(roomBooking.guests - 1)} className="surface-button h-9 w-9 px-0">
+                        <button
+                          type="button"
+                          onClick={() =>
+                            onSetRoomGuests(roomBooking.guests - 1)
+                          }
+                          className="surface-button h-9 w-9 px-0"
+                        >
                           <Minus size={14} />
                         </button>
-                        <span className="text-sm font-medium text-foreground">{roomBooking.guests} guests</span>
-                        <button type="button" onClick={() => onSetRoomGuests(roomBooking.guests + 1)} className="surface-button h-9 w-9 px-0">
+                        <span className="text-sm font-medium text-foreground">
+                          {roomBooking.guests} guests
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            onSetRoomGuests(roomBooking.guests + 1)
+                          }
+                          className="surface-button h-9 w-9 px-0"
+                        >
                           <Plus size={14} />
                         </button>
                       </div>
@@ -220,12 +294,13 @@ export function RoomDetailPage({
                       <div className="grid grid-cols-3 gap-2">
                         {stayTypeOptions.map((option) => (
                           <button
-                            key={option.id} type="button"
+                            key={option.id}
+                            type="button"
                             onClick={() => onSetRoomStayType(option.id)}
                             className={`min-h-11 rounded-xl border px-2 py-2.5 text-xs font-medium uppercase tracking-wide transition-all duration-300 ${
                               roomBooking.stayType === option.id
-                                ? 'border-foreground bg-foreground text-white'
-                                : 'border-border bg-white text-foreground hover:border-foreground/30'
+                                ? "border-foreground bg-foreground text-white"
+                                : "border-border bg-white text-foreground hover:border-foreground/30"
                             }`}
                           >
                             {option.label}
@@ -239,17 +314,27 @@ export function RoomDetailPage({
                       <div className="space-y-2">
                         {addOns.map((addon) => (
                           <button
-                            key={addon.id} type="button"
+                            key={addon.id}
+                            type="button"
                             onClick={() => onToggleRoomAddOn(addon.id)}
                             className={`flex min-h-11 w-full items-center justify-between rounded-xl border px-4 py-2.5 text-left text-sm transition-all duration-300 ${
                               roomBooking.addOns.includes(addon.id)
-                                ? 'border-foreground bg-foreground text-white'
-                                : 'border-border bg-white text-foreground hover:border-foreground/30'
+                                ? "border-foreground bg-foreground text-white"
+                                : "border-border bg-white text-foreground hover:border-foreground/30"
                             }`}
                           >
                             <span>{addon.name}</span>
-                            <span className={addon.id !== 'grill' && roomBooking.addOns.includes(addon.id) ? 'text-white/70' : 'text-accent'}>
-                              {addon.id === 'grill' ? '₱800–₱1,200' : formatPrice(addon.price)}
+                            <span
+                              className={
+                                addon.id !== "grill" &&
+                                roomBooking.addOns.includes(addon.id)
+                                  ? "text-white/70"
+                                  : "text-accent"
+                              }
+                            >
+                              {addon.id === "grill"
+                                ? "₱800–₱1,200"
+                                : formatPrice(addon.price)}
                             </span>
                           </button>
                         ))}
@@ -258,8 +343,12 @@ export function RoomDetailPage({
                   </div>
 
                   <div className="mt-7 border-t border-border pt-6">
-                    <p className="text-xs uppercase tracking-[0.22em] text-muted-foreground">Estimated Total</p>
-                    <p className="mt-2 font-serif text-4xl text-accent">{formatPrice(roomTotal)}</p>
+                    <p className="text-xs uppercase tracking-[0.22em] text-muted-foreground">
+                      Estimated Total
+                    </p>
+                    <p className="mt-2 font-serif text-4xl text-accent">
+                      {formatPrice(roomTotal)}
+                    </p>
                     <button
                       type="button"
                       onClick={() => onReserveRoom(room.name)}
@@ -273,7 +362,6 @@ export function RoomDetailPage({
                   </div>
                 </div>
               </aside>
-
             </div>
           </div>
         </section>
@@ -290,8 +378,12 @@ export function RoomDetailPage({
               <div className="absolute inset-0 bg-foreground/50" />
               <div className="absolute inset-0 flex items-end justify-center p-10 text-center text-white">
                 <div className="max-w-2xl">
-                  <p className="text-xs font-medium uppercase tracking-[0.3em] text-white/50">Guest Review</p>
-                  <p className="mt-4 font-serif text-2xl leading-snug md:text-3xl">{room.testimonial}</p>
+                  <p className="text-xs font-medium uppercase tracking-[0.3em] text-white/50">
+                    Guest Review
+                  </p>
+                  <p className="mt-4 font-serif text-2xl leading-snug md:text-3xl">
+                    {room.testimonial}
+                  </p>
                 </div>
               </div>
             </div>
@@ -311,8 +403,12 @@ export function RoomDetailPage({
                   key={related.slug}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-80px' }}
-                  transition={{ duration: 0.5, ease: 'easeOut', delay: index * 0.1 }}
+                  viewport={{ once: true, margin: "-80px" }}
+                  transition={{
+                    duration: 0.5,
+                    ease: "easeOut",
+                    delay: index * 0.1,
+                  }}
                   className="group overflow-hidden rounded-2xl border border-border bg-white transition-all duration-500 hover:shadow-md"
                 >
                   <div className="overflow-hidden">
@@ -325,11 +421,17 @@ export function RoomDetailPage({
                   <div className="p-6 md:p-7">
                     <div className="flex items-start justify-between gap-4">
                       <div>
-                        <h3 className="text-xl font-medium text-foreground">{related.name}</h3>
-                        <p className="mt-1 text-sm text-muted-foreground">{related.subtitle}</p>
+                        <h3 className="text-xl font-medium text-foreground">
+                          {related.name}
+                        </h3>
+                        <p className="mt-1 text-sm text-muted-foreground">
+                          {related.subtitle}
+                        </p>
                       </div>
                       <div className="shrink-0 text-right">
-                        <p className="font-serif text-2xl text-accent">{formatPrice(related.rates.night)}</p>
+                        <p className="font-serif text-2xl text-accent">
+                          {formatPrice(related.rates.night)}
+                        </p>
                         <p className="text-xs text-muted-foreground">/ night</p>
                       </div>
                     </div>
@@ -337,8 +439,8 @@ export function RoomDetailPage({
                       <button
                         type="button"
                         onClick={() => {
-                          onSelectRoom(related.name)
-                          onViewRoom(related.slug)
+                          onSelectRoom(related.name);
+                          onViewRoom(related.slug);
                         }}
                         className="primary-cta w-full"
                       >
@@ -351,7 +453,6 @@ export function RoomDetailPage({
             </div>
           </div>
         </section>
-
       </main>
 
       {isGalleryOpen && (
@@ -362,5 +463,5 @@ export function RoomDetailPage({
         />
       )}
     </>
-  )
+  );
 }

@@ -44,8 +44,7 @@ export function Footer({
               )}
             </button>
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/45">
-              A resort built for real rest — rooms, events, and entrance passes
-              in one clear booking flow.
+              Group-ready resort for barkadas, families, and company events — 3 pools, water slides, and space for up to 200 guests. Just minutes away.
             </p>
           </div>
 
@@ -74,10 +73,10 @@ export function Footer({
               <li>
                 <button
                   type="button"
-                  onClick={() => onNavigateToSection("about")}
+                  onClick={() => onNavigateToSection("experience")}
                   className="text-sm text-white/60 transition-colors duration-300 hover:text-white"
                 >
-                  About Us
+                  Experience
                 </button>
               </li>
               <li>
