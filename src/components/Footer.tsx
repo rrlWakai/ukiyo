@@ -13,11 +13,7 @@ const socialLinks = [
   { name: "Twitter", icon: Twitter, href: "https://x.com/" },
 ];
 
-export function Footer({
-  onNavigateHome,
-  onNavigateToSection,
-  onNavigateToBooking,
-}: FooterProps) {
+export function Footer({ onNavigateHome }: FooterProps) {
   const [logoError, setLogoError] = useState(false);
 
   return (
