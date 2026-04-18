@@ -28,20 +28,19 @@ export function Footer({
             <button
               type="button"
               onClick={onNavigateHome}
-              className="transition-opacity duration-300 hover:opacity-70"
+              className="flex items-center gap-3 transition-opacity duration-300 hover:opacity-70"
             >
-              {logoError ? (
-                <span className="font-serif text-3xl tracking-widest">
-                  UKIYO
-                </span>
-              ) : (
+              {!logoError && (
                 <img
-                  src="/logo.jpg"
+                  src="/images/logoo.jpg"
                   alt="Ukiyo Resort"
                   className="h-12 w-12 rounded-full object-cover ring-1 ring-white/20"
                   onError={() => setLogoError(true)}
                 />
               )}
+              <span className="font-serif text-2xl tracking-widest text-white">
+                Ukiyo Resort
+              </span>
             </button>
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/45">
               Group-ready resort for barkadas, families, and company events — 3

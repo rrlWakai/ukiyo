@@ -1,31 +1,36 @@
-import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X } from 'lucide-react'
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Menu, X } from "lucide-react";
 
 const navLinks = [
-  { name: 'Experience', href: '#experience' },
-  { name: 'Rooms', href: '#accommodation' },
-  { name: 'Packages', href: '#packages' },
-  { name: 'Gallery', href: '#gallery' },
-  { name: 'Reviews', href: '#reviews' },
-  { name: 'Contact', href: '#contact' },
-]
+  { name: "Experience", href: "#experience" },
+  { name: "Rooms", href: "#accommodation" },
+  { name: "Packages", href: "#packages" },
+  { name: "Gallery", href: "#gallery" },
+  { name: "Reviews", href: "#reviews" },
+  { name: "Contact", href: "#contact" },
+];
 
 type NavbarProps = {
-  isRoomPage: boolean
-  onNavigateHome: () => void
-  onNavigateToSection: (sectionId: string) => void
-  onBookNow: () => void
-}
+  isRoomPage: boolean;
+  onNavigateHome: () => void;
+  onNavigateToSection: (sectionId: string) => void;
+  onBookNow: () => void;
+};
 
-export function Navbar({ isRoomPage, onNavigateHome, onNavigateToSection, onBookNow }: NavbarProps) {
-  const [isOpen, setIsOpen] = useState(false)
-  const [logoError, setLogoError] = useState(false)
+export function Navbar({
+  isRoomPage,
+  onNavigateHome,
+  onNavigateToSection,
+  onBookNow,
+}: NavbarProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [logoError, setLogoError] = useState(false);
 
   const handleLinkClick = (href: string) => {
-    setIsOpen(false)
-    onNavigateToSection(href.replace('#', ''))
-  }
+    setIsOpen(false);
+    onNavigateToSection(href.replace("#", ""));
+  };
 
   return (
     <div className="fixed left-0 right-0 top-0 z-50 flex justify-center px-4 pt-4">
@@ -35,20 +40,19 @@ export function Navbar({ isRoomPage, onNavigateHome, onNavigateToSection, onBook
         <button
           type="button"
           onClick={onNavigateHome}
-          className="shrink-0 transition-opacity duration-300 hover:opacity-70"
+          className="flex shrink-0 items-center gap-2.5 transition-opacity duration-300 hover:opacity-70"
         >
-          {logoError ? (
-            <span className="font-serif text-lg tracking-widest text-white">
-              UKIYO
-            </span>
-          ) : (
+          {!logoError && (
             <img
-              src="/logo.jpg"
+              src="/images/logoo.jpg"
               alt="Ukiyo Resort"
               className="h-9 w-9 rounded-full object-cover"
               onError={() => setLogoError(true)}
             />
           )}
+          <span className="font-serif text-base tracking-widest text-white">
+            Ukiyo Resort
+          </span>
         </button>
 
         {/* Desktop links */}
@@ -71,7 +75,7 @@ export function Navbar({ isRoomPage, onNavigateHome, onNavigateToSection, onBook
           onClick={onBookNow}
           className="hidden shrink-0 rounded-full bg-orange-500 px-5 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white transition-all duration-300 hover:bg-orange-600 active:scale-95 md:inline-flex"
         >
-          {isRoomPage ? 'Reserve Room' : 'Book Now'}
+          {isRoomPage ? "Reserve Room" : "Book Now"}
         </button>
 
         {/* Mobile hamburger */}
@@ -92,7 +96,7 @@ export function Navbar({ isRoomPage, onNavigateHome, onNavigateToSection, onBook
             initial={{ opacity: 0, y: -8, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -8, scale: 0.97 }}
-            transition={{ duration: 0.22, ease: 'easeOut' }}
+            transition={{ duration: 0.22, ease: "easeOut" }}
             className="absolute left-4 right-4 top-18 overflow-hidden rounded-2xl bg-[rgba(10,25,60,0.45)] ring-1 ring-blue-300/20 backdrop-blur-md md:hidden"
           >
             <div className="space-y-0.5 p-3">
@@ -109,10 +113,13 @@ export function Navbar({ isRoomPage, onNavigateHome, onNavigateToSection, onBook
               <div className="px-1 pt-2 pb-1">
                 <button
                   type="button"
-                  onClick={() => { setIsOpen(false); onBookNow() }}
+                  onClick={() => {
+                    setIsOpen(false);
+                    onBookNow();
+                  }}
                   className="w-full rounded-full bg-orange-500 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-white transition-all duration-300 hover:bg-orange-600"
                 >
-                  {isRoomPage ? 'Reserve Room' : 'Book Now'}
+                  {isRoomPage ? "Reserve Room" : "Book Now"}
                 </button>
               </div>
             </div>
@@ -120,5 +127,5 @@ export function Navbar({ isRoomPage, onNavigateHome, onNavigateToSection, onBook
         )}
       </AnimatePresence>
     </div>
-  )
+  );
 }
