@@ -44,7 +44,9 @@ export function Footer({
               )}
             </button>
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/45">
-              Group-ready resort for barkadas, families, and company events — 3 pools, water slides, and space for up to 200 guests. Just minutes away.
+              Group-ready resort for barkadas, families, and company events — 3
+              pools, water slides, and space for up to 200 guests. Just minutes
+              away.
             </p>
           </div>
 
@@ -64,129 +66,7 @@ export function Footer({
           </div>
         </div>
 
-        <div className="grid gap-10 sm:grid-cols-3">
-          <div>
-            <h4 className="mb-5 text-xs font-medium uppercase tracking-[0.28em] text-white/35">
-              Resort
-            </h4>
-            <ul className="space-y-3">
-              <li>
-                <button
-                  type="button"
-                  onClick={() => onNavigateToSection("experience")}
-                  className="text-sm text-white/60 transition-colors duration-300 hover:text-white"
-                >
-                  Experience
-                </button>
-              </li>
-              <li>
-                <button
-                  type="button"
-                  onClick={() => onNavigateToSection("accommodation")}
-                  className="text-sm text-white/60 transition-colors duration-300 hover:text-white"
-                >
-                  Accommodation
-                </button>
-              </li>
-              <li>
-                <button
-                  type="button"
-                  onClick={() => onNavigateToSection("gallery")}
-                  className="text-sm text-white/60 transition-colors duration-300 hover:text-white"
-                >
-                  Gallery
-                </button>
-              </li>
-              <li>
-                <button
-                  type="button"
-                  onClick={() => onNavigateToSection("packages")}
-                  className="text-sm text-white/60 transition-colors duration-300 hover:text-white"
-                >
-                  Packages
-                </button>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="mb-5 text-xs font-medium uppercase tracking-[0.28em] text-white/35">
-              Services
-            </h4>
-            <ul className="space-y-3">
-              <li>
-                <button
-                  type="button"
-                  onClick={onNavigateToBooking}
-                  className="text-sm text-white/60 transition-colors duration-300 hover:text-white"
-                >
-                  Room Stays
-                </button>
-              </li>
-              <li>
-                <button
-                  type="button"
-                  onClick={onNavigateToBooking}
-                  className="text-sm text-white/60 transition-colors duration-300 hover:text-white"
-                >
-                  Entrance Passes
-                </button>
-              </li>
-              <li>
-                <button
-                  type="button"
-                  onClick={() => onNavigateToSection("packages")}
-                  className="text-sm text-white/60 transition-colors duration-300 hover:text-white"
-                >
-                  Events
-                </button>
-              </li>
-              <li>
-                <button
-                  type="button"
-                  onClick={() => onNavigateToSection("gallery")}
-                  className="text-sm text-white/60 transition-colors duration-300 hover:text-white"
-                >
-                  Activities
-                </button>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="mb-5 text-xs font-medium uppercase tracking-[0.28em] text-white/35">
-              Support
-            </h4>
-            <ul className="space-y-3">
-              <li>
-                <button
-                  type="button"
-                  onClick={() => onNavigateToSection("contact")}
-                  className="text-sm text-white/60 transition-colors duration-300 hover:text-white"
-                >
-                  Contact Us
-                </button>
-              </li>
-              <li>
-                <button
-                  type="button"
-                  onClick={() => onNavigateToSection("contact")}
-                  className="text-sm text-white/60 transition-colors duration-300 hover:text-white"
-                >
-                  FAQs
-                </button>
-              </li>
-              <li>
-                <span className="text-sm text-white/30">Privacy Policy</span>
-              </li>
-              <li>
-                <span className="text-sm text-white/30">Terms of Service</span>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        <div className="mt-16 flex flex-col gap-2 border-t border-white/10 pt-8 md:flex-row md:items-center md:justify-between">
+        <div className="mt-16 flex flex-col gap-2 pt-6 md:flex-row md:items-center md:justify-between">
           <p className="text-xs text-white/30">
             &copy; {new Date().getFullYear()} Ukiyo Resort. All rights reserved.
           </p>
