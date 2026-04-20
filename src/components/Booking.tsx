@@ -255,8 +255,8 @@ export function Booking({
                             <Minus size={16} />
                           </button>
                           <span className="text-sm font-medium text-foreground">
-                            {bookingState.room.guests} / {selectedRoom.capacity}{" "}
-                            pax
+                            {bookingState.room.guests} /{" "}
+                            {selectedRoom.maxPax ?? selectedRoom.capacity} pax
                           </span>
                           <button
                             type="button"
@@ -317,7 +317,7 @@ export function Booking({
                           </p>
                           <p className="mt-1.5 font-serif text-3xl text-accent">
                             {formatPrice(
-                              selectedRoom.rates[bookingState.room.stayType],
+                              selectedRoom.rates[bookingState.room.stayType].weekday,
                             )}
                           </p>
                           <span className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-background px-3 py-1.5 text-xs font-medium text-foreground">

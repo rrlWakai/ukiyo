@@ -1,5 +1,6 @@
 export type BookingType = 'room' | 'event' | 'entrance'
 export type StayType = 'day' | 'night' | '22hrs'
+export type SeasonType = 'weekday' | 'weekend' | 'peak'
 export type EntranceTime = 'day' | 'night'
 
 export type AddOnId = 'towel' | 'breakfast' | 'grill' | 'extension'
@@ -8,15 +9,20 @@ export type Room = {
   slug: string
   name: string
   subtitle: string
+  tagline?: string
+  badge?: string
   description: string
   image: string
   gallery: string[]
   capacity: number
+  minPax?: number
+  maxPax?: number
   features: string[]
   inclusions: string[]
+  valuePoints?: string[]
   notes: string[]
   testimonial: string
-  rates: Record<StayType, number>
+  rates: Record<StayType, Record<SeasonType, number>>
 }
 
 export type EventPackage = {
@@ -93,78 +99,137 @@ export const rooms: Room[] = [
   {
     slug: 'lanai-suite',
     name: 'Lanai Suite',
-    subtitle: 'Poolfront suite for small groups — perfect for a quick day or night escape.',
+    badge: 'Affordable Stay',
+    subtitle: 'Cozy air-conditioned room for 2–3 persons with free entrance included.',
     description:
-      'Lanai Suite puts your group steps away from the pool. Great for small barkadas or families who want their own space with direct pool access.',
+      'Lanai Suite is a comfortable, fully air-conditioned room perfect for small groups. Steps away from the pool with everything you need for a relaxing stay.',
     image: '/images/room-1.jpg',
     gallery: ['/images/room-1.jpg', '/images/gallery-2.jpg', '/images/gallery-1.jpg'],
     capacity: 3,
-    features: ['Fully airconditioned', 'With TV', 'With mini refrigerator', 'Comfortable beds', 'Private CR'],
-    inclusions: ['Free entrance for guests', 'Pool access', 'Private space'],
+    minPax: 2,
+    features: [
+      'Fully airconditioned',
+      'With mini refrigerator',
+      'With television',
+      'With 1 bed',
+      'With own CR',
+    ],
+    inclusions: ['Free entrance for 3 pax', 'Pool access', 'Private room'],
     notes: [
-      'Free entrance included',
+      'Free entrance for up to 3 pax included',
       '50% downpayment required for peak dates',
       'Extra guest charges apply beyond 3 pax',
     ],
     testimonial: 'Super convenient — pool is literally outside our door. Perfect for the group.',
-    rates: { day: 2200, night: 3200, '22hrs': 4200 },
+    rates: {
+      day:    { weekday: 1700, weekend: 1900, peak: 2100 },
+      night:  { weekday: 1900, weekend: 2200, peak: 2400 },
+      '22hrs':{ weekday: 2800, weekend: 3200, peak: 3500 },
+    },
   },
   {
     slug: 'veranda-suite',
     name: 'Veranda Suite',
-    subtitle: 'More space for families and friend groups — poolfront with a bigger lounge area.',
+    badge: 'Best for Small Groups',
+    subtitle: 'Spacious air-conditioned room for 3–4 persons with sofa, 2 beds, and free entrance.',
     description:
-      'Veranda Suite fits up to 4 guests and gives your group a wider indoor space to chill, eat, and rest after a big day in the pools.',
+      'Veranda Suite gives your group more space to relax — a sofa, 2 beds, and a private CR make it the perfect base for a comfortable stay.',
     image: '/images/room-2.jpg',
     gallery: ['/images/room-2.jpg', '/images/gallery-3.jpg', '/images/gallery-5.jpg'],
     capacity: 4,
-    features: ['Fully airconditioned', 'With TV', 'With mini refrigerator', 'Comfortable beds', 'Private CR'],
-    inclusions: ['Free entrance for guests', 'Pool access', 'Private space'],
+    minPax: 3,
+    features: [
+      'Fully airconditioned',
+      'With mini refrigerator',
+      'With television',
+      'With sofa & cabinet',
+      'With 2 beds',
+      'With own CR',
+    ],
+    inclusions: ['Free entrance for 4 pax', 'Pool access', 'Private room'],
     notes: [
-      'Free entrance included',
+      'Free entrance for up to 4 pax included',
       '50% downpayment required for peak dates',
       'Extra guest charges apply beyond 4 pax',
     ],
-    testimonial: 'Enough room for the whole barkada to chill inside and outside. Loved it.',
-    rates: { day: 3000, night: 4300, '22hrs': 5600 },
+    testimonial: 'Enough room for the whole group to chill inside and outside. Loved it.',
+    rates: {
+      day:    { weekday: 2200, weekend: 2500, peak: 2800 },
+      night:  { weekday: 2600, weekend: 2900, peak: 3200 },
+      '22hrs':{ weekday: 3800, weekend: 4200, peak: 4800 },
+    },
   },
   {
     slug: 'executive-villa',
-    name: 'Executive Villa',
-    subtitle: 'Upgraded villa for groups of 5 who want more privacy and poolfront comfort.',
+    name: 'Executive Villa & Pool Option',
+    tagline: 'Spacious. Ideal for Groups',
+    badge: 'Best for Large Groups',
+    subtitle: '1 villa & 3 cottages — ideal for 30–50 pax in a fully private setting.',
     description:
-      'Executive Villa is ideal for groups who want a step up — more space, more privacy, and the same direct pool access, great for overnight stays.',
+      'Executive villa and pool access with 1 villa & 3 cottages. Fits 30–50 pax comfortably. Perfect for large families, barkadas, and company gatherings. 100% private setting with exclusive use.',
     image: '/images/room-3.jpg',
     gallery: ['/images/room-3.jpg', '/images/gallery-4.jpg', '/images/gallery-6.jpg'],
-    capacity: 5,
-    features: ['Fully airconditioned', 'With TV', 'With mini refrigerator', 'Comfortable beds', 'Private CR'],
-    inclusions: ['Free entrance for guests', 'Pool access', 'Private space'],
-    notes: [
-      'Free entrance included',
-      '50% downpayment required for peak dates',
-      'Extra guest charges apply beyond 5 pax',
+    capacity: 30,
+    maxPax: 50,
+    features: [
+      'Executive villa included',
+      '3 cottages included',
+      'Pool access',
+      '100% private setting',
+      'Fits 30–50 pax',
+      'Exclusive use',
     ],
-    testimonial: 'Great choice for a group that wants more space and a bit more privacy from the crowds.',
-    rates: { day: 4500, night: 6200, '22hrs': 7800 },
+    inclusions: ['Executive villa', '3 cottages', 'Pool access', 'Exclusive use'],
+    notes: [
+      '50% downpayment required for peak dates',
+      'Extra guest charges apply beyond 50 pax',
+      'Fully exclusive — private to your group',
+    ],
+    testimonial: 'Perfect for our company outing. The whole group had the place to themselves — no crowds, just good vibes.',
+    rates: {
+      day:    { weekday: 10000, weekend: 10000, peak: 10000 },
+      night:  { weekday: 12000, weekend: 12000, peak: 12000 },
+      '22hrs':{ weekday: 18000, weekend: 18000, peak: 18000 },
+    },
   },
   {
     slug: 'exclusive-villa',
-    name: 'Exclusive Villa',
-    subtitle: 'Our biggest villa — fits 12 pax, perfect for reunions, barkada overnights, and big celebrations.',
+    name: 'Exclusive Main Pool Experience',
+    tagline: 'Private. Spacious. Effortless.',
+    badge: 'Premium Experience',
+    subtitle: 'Full private resort — 6 poolfront rooms, 3 pools, and 5 cottages for big groups.',
     description:
-      'Exclusive Villa is the go-to for large groups. Fits up to 12 guests, with full poolfront access and enough room for your whole crew to eat, sleep, and hang out together.',
+      'Full private resort experience. 6 poolfront rooms, 3 connected pools, 5 spacious cottages. Premium, aesthetic environment. Ideal for big groups who want the whole place to themselves.',
     image: '/images/room-4.jpg',
     gallery: ['/images/room-4.jpg', '/images/gallery-1.jpg', '/images/gallery-5.jpg'],
-    capacity: 12,
-    features: ['Fully airconditioned', 'With TV', 'With mini refrigerator', 'Comfortable beds', 'Private CR'],
-    inclusions: ['Free entrance for guests', 'Pool access', 'Private space'],
-    notes: [
-      'Free entrance included',
-      '50% downpayment required for peak dates',
-      'Extra guest charges apply beyond 12 pax',
+    capacity: 50,
+    maxPax: 200,
+    features: [
+      '6 poolfront rooms',
+      '3 connected pools',
+      '5 spacious cottages',
+      'Full private resort',
+      'Premium aesthetic environment',
+      'Ideal for big groups',
     ],
-    testimonial: 'Booked this for our barkada of 10. So much space — we barely had to leave the villa.',
-    rates: { day: 7500, night: 10800, '22hrs': 13200 },
+    inclusions: ['6 poolfront rooms', '3 connected pools', '5 cottages', 'Full exclusive use'],
+    valuePoints: [
+      'Privacy without isolation',
+      'Comfortable space for everyone',
+      'Instagram-worthy environment',
+      'Smooth, no-stress experience',
+    ],
+    notes: [
+      '50% downpayment required',
+      'Full resort exclusive use',
+      'Contact us for custom arrangements',
+    ],
+    testimonial: 'Booked the full experience for our company event. Smooth, private, premium — exactly what we needed.',
+    rates: {
+      day:    { weekday: 14999, weekend: 14999, peak: 14999 },
+      night:  { weekday: 17999, weekend: 17999, peak: 17999 },
+      '22hrs':{ weekday: 26999, weekend: 26999, peak: 26999 },
+    },
   },
 ]
 
@@ -228,9 +293,15 @@ export const entranceOptions: EntranceOption[] = [
 ]
 
 export const stayTypeOptions: Array<{ id: StayType; label: string; description: string }> = [
-  { id: 'day', label: 'Day', description: '9AM-5PM' },
-  { id: 'night', label: 'Night', description: '7PM-7AM' },
-  { id: '22hrs', label: '22 Hours', description: 'Extended stay' },
+  { id: 'day', label: 'Day Tour', description: '9AM–5PM' },
+  { id: 'night', label: 'Night Swim', description: '7PM–7AM' },
+  { id: '22hrs', label: '22 Hours', description: '9AM–7AM next day' },
+]
+
+export const seasonOptions: Array<{ id: SeasonType; label: string }> = [
+  { id: 'weekday', label: 'Weekday' },
+  { id: 'weekend', label: 'Weekend / Holiday' },
+  { id: 'peak', label: 'Peak Season' },
 ]
 
 export const addOns: AddOn[] = [
@@ -290,13 +361,22 @@ export function formatPrice(value: number) {
   return `₱${value.toLocaleString()}`
 }
 
+export function roomHasSeasonalPricing(room: Room): boolean {
+  return Object.values(room.rates).some(
+    ({ weekday, weekend, peak }) => weekday !== weekend || weekend !== peak,
+  )
+}
+
+const DEFAULT_SEASON = 'weekday' as const
+
 export function calculateRoomTotal(roomBooking: RoomBookingState) {
   const room = getRoomByName(roomBooking.selectedRoom)
+  const baseRate = room.rates[roomBooking.stayType][DEFAULT_SEASON]
   const addOnTotal = roomBooking.addOns.reduce((sum, id) => {
     const addOn = addOns.find((item) => item.id === id)
     return sum + (addOn?.price ?? 0)
   }, 0)
-  return room.rates[roomBooking.stayType] + addOnTotal
+  return baseRate + addOnTotal
 }
 
 export function calculateEventTotal(eventBooking: EventBookingState) {
@@ -350,5 +430,6 @@ export function buildBookingPayload(state: BookingState): BookingPayload {
 }
 
 export function clampGuestsForRoom(roomName: string, guestCount: number) {
-  return Math.min(Math.max(1, guestCount), getRoomByName(roomName).capacity)
+  const room = getRoomByName(roomName)
+  return Math.min(Math.max(1, guestCount), room.maxPax ?? room.capacity)
 }

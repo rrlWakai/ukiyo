@@ -3,8 +3,8 @@ import { useRef, useState } from 'react'
 import { MapPin, Phone, Mail, Clock } from 'lucide-react'
 
 const contactInfo = [
-  { icon: MapPin,  title: 'Address',          content: '123 Paradise Road, Tropical Island, 12345' },
-  { icon: Phone,   title: 'Phone',             content: '+63 (2) 8123-4567' },
+  { icon: MapPin,  title: 'Address',          content: 'Mabuhay Homes 2E, Santa Rosa, Philippines, 4026' },
+  { icon: Phone,   title: 'Phone',             content: '0919 999 7740' },
   { icon: Mail,    title: 'Email',             content: 'hello@ukiyoresort.com' },
   { icon: Clock,   title: 'Reception Hours',   content: '24 / 7 Available' },
 ]
@@ -65,11 +65,11 @@ export function Contact() {
             </div>
 
             <div className="overflow-hidden rounded-2xl border border-border">
-              <img
-                src="https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=1200&auto=format&fit=crop"
-                alt="Resort location"
-                className="h-64 w-full object-cover"
-                crossOrigin="anonymous"
+              <iframe
+                title="Resort location"
+                src="https://maps.google.com/maps?q=Mabuhay+Homes+2E+Santa+Rosa+Philippines+4026&output=embed&z=16"
+                className="h-64 w-full"
+                referrerPolicy="no-referrer-when-downgrade"
               />
             </div>
           </motion.div>

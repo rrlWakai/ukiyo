@@ -7,7 +7,9 @@ import {
   calculateRoomTotal,
   formatPrice,
   getRoomByName,
+  roomHasSeasonalPricing,
   rooms,
+  seasonOptions,
   stayTypeOptions,
   type AddOnId,
   type BookingState,
@@ -63,9 +65,21 @@ export function RoomDetailPage({
 
             <div className="mb-8">
               <p className="section-kicker">Ukiyo Rooms</p>
-              <h1 className="text-5xl font-medium text-foreground md:text-6xl">
-                {room.name}
-              </h1>
+              <div className="flex flex-wrap items-center gap-3">
+                <h1 className="text-5xl font-medium text-foreground md:text-6xl">
+                  {room.name}
+                </h1>
+                {room.badge && (
+                  <span className="rounded-full bg-accent/10 px-3 py-1.5 text-xs font-medium text-accent">
+                    {room.badge}
+                  </span>
+                )}
+              </div>
+              {room.tagline && (
+                <p className="mt-2 text-sm font-medium uppercase tracking-[0.2em] text-accent">
+                  {room.tagline}
+                </p>
+              )}
               <p className="mt-3 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">
                 {room.subtitle}
               </p>
@@ -119,11 +133,28 @@ export function RoomDetailPage({
                     Capacity
                   </p>
                   <h2 className="mt-3 text-3xl font-medium text-foreground">
-                    Good for {room.capacity} pax
+                    {room.maxPax
+                      ? `${room.capacity}–${room.maxPax} pax`
+                      : room.minPax
+                        ? `Good for ${room.minPax}–${room.capacity} pax`
+                        : `Good for ${room.capacity} pax`}
                   </h2>
                   <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground">
                     {room.description}
                   </p>
+                  {room.valuePoints && (
+                    <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                      {room.valuePoints.map((point) => (
+                        <div
+                          key={point}
+                          className="flex items-center gap-3 rounded-xl border border-accent/20 bg-accent/5 px-4 py-3"
+                        >
+                          <Check size={14} className="shrink-0 text-accent" />
+                          <span className="text-sm font-medium text-foreground">{point}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
                 <div className="border-b border-border pb-10">
@@ -163,26 +194,49 @@ export function RoomDetailPage({
 
                 <div className="border-b border-border pb-10">
                   <p className="mb-5 text-xs font-medium uppercase tracking-[0.28em] text-muted-foreground">
-                    Stay Options
+                    Rates
                   </p>
-                  <div className="grid gap-4 md:grid-cols-3">
-                    {stayTypeOptions.map((option) => (
-                      <div
-                        key={option.id}
-                        className="rounded-xl border border-border bg-white p-5"
-                      >
-                        <p className="text-lg font-medium text-foreground">
-                          {option.label}
-                        </p>
-                        <p className="mt-1 text-sm text-muted-foreground">
-                          {option.description}
-                        </p>
-                        <p className="mt-4 font-serif text-2xl text-accent">
-                          {formatPrice(room.rates[option.id])}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
+                  {roomHasSeasonalPricing(room) ? (
+                    <div className="overflow-hidden rounded-xl border border-border">
+                      <table className="w-full text-sm">
+                        <thead>
+                          <tr className="border-b border-border bg-background">
+                            <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">Stay</th>
+                            {seasonOptions.map((s) => (
+                              <th key={s.id} className="px-3 py-3 text-center text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">{s.label}</th>
+                            ))}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {stayTypeOptions.map((opt) => (
+                            <tr key={opt.id} className="border-b border-border last:border-0">
+                              <td className="px-4 py-4">
+                                <p className="font-medium text-foreground">{opt.label}</p>
+                                <p className="text-xs text-muted-foreground">{opt.description}</p>
+                              </td>
+                              {seasonOptions.map((s) => (
+                                <td key={s.id} className="px-3 py-4 text-center font-serif text-lg text-accent">
+                                  {formatPrice(room.rates[opt.id][s.id])}
+                                </td>
+                              ))}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  ) : (
+                    <div className="grid gap-4 md:grid-cols-3">
+                      {stayTypeOptions.map((option) => (
+                        <div key={option.id} className="rounded-xl border border-border bg-white p-5">
+                          <p className="text-lg font-medium text-foreground">{option.label}</p>
+                          <p className="mt-1 text-sm text-muted-foreground">{option.description}</p>
+                          <p className="mt-4 font-serif text-2xl text-accent">
+                            {formatPrice(room.rates[option.id].weekday)}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
                 <div className="border-b border-border pb-10">
@@ -239,7 +293,7 @@ export function RoomDetailPage({
                     Starting price
                   </p>
                   <p className="mt-2 font-serif text-5xl text-accent">
-                    {formatPrice(activeRoom.rates[roomBooking.stayType])}
+                    {formatPrice(activeRoom.rates[roomBooking.stayType].weekday)}
                   </p>
                   <span className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-accent/30 px-3 py-1.5 text-xs font-medium text-accent">
                     <Check size={11} /> Free entrance included
@@ -430,9 +484,11 @@ export function RoomDetailPage({
                       </div>
                       <div className="shrink-0 text-right">
                         <p className="font-serif text-2xl text-accent">
-                          {formatPrice(related.rates.night)}
+                          {formatPrice(related.maxPax ? related.rates.day.weekday : related.rates.night.weekday)}
                         </p>
-                        <p className="text-xs text-muted-foreground">/ night</p>
+                        <p className="text-xs text-muted-foreground">
+                          {related.maxPax ? 'day tour' : '/ night'}
+                        </p>
                       </div>
                     </div>
                     <div className="mt-5 border-t border-border pt-5">

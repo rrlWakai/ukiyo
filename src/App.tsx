@@ -340,8 +340,9 @@ function App() {
       if (!bookingState.room.date) return 'Please choose your preferred room date.'
       if (bookingState.room.date < today) return 'Room bookings cannot be set in the past.'
       if (bookingState.room.guests < 1) return 'Please add at least one guest.'
-      if (bookingState.room.guests > room.capacity) {
-        return `${room.name} only allows up to ${room.capacity} guests.`
+      const guestMax = room.maxPax ?? room.capacity
+      if (bookingState.room.guests > guestMax) {
+        return `${room.name} only allows up to ${guestMax} guests.`
       }
       return null
     }

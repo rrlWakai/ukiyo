@@ -1,7 +1,7 @@
 import { motion, useInView } from 'framer-motion'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { Users } from 'lucide-react'
-import { formatPrice, rooms } from '@/lib/resort-data'
+import { formatPrice, rooms, type StayType } from '@/lib/resort-data'
 
 type AccommodationProps = {
   selectedRoom: string
@@ -9,11 +9,22 @@ type AccommodationProps = {
   onViewDetails: (slug: string) => void
 }
 
+const stayLabels: Array<{ id: StayType; label: string }> = [
+  { id: 'day', label: 'Day Tour' },
+  { id: 'night', label: 'Night Swim' },
+  { id: '22hrs', label: '22-Hr Stay' },
+]
+
 export function Accommodation({ onSelectRoom, onViewDetails }: AccommodationProps) {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-80px' })
   const sliderRef = useRef<HTMLDivElement>(null)
   const drag = useRef({ active: false, startX: 0, scrollLeft: 0, moved: false })
+  const [cardStayTypes, setCardStayTypes] = useState<Record<string, StayType>>({})
+
+  const getCardStayType = (slug: string): StayType => cardStayTypes[slug] ?? 'day'
+  const setCardStayType = (slug: string, type: StayType) =>
+    setCardStayTypes((prev) => ({ ...prev, [slug]: type }))
 
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     const el = sliderRef.current
@@ -94,21 +105,48 @@ export function Accommodation({ onSelectRoom, onViewDetails }: AccommodationProp
             </div>
 
             <div className="p-6 md:p-7">
+              {room.badge && (
+                <span className="mb-3 inline-block rounded-full bg-accent/10 px-3 py-1 text-xs font-medium text-accent">
+                  {room.badge}
+                </span>
+              )}
               <div className="flex items-start justify-between gap-4">
                 <div className="min-w-0">
                   <h3 className="text-lg font-medium text-foreground">{room.name}</h3>
-                  <p className="mt-1 truncate text-sm text-muted-foreground">{room.subtitle}</p>
+                  <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{room.subtitle}</p>
                 </div>
-                <div className="shrink-0 text-right">
-                  <p className="font-serif text-2xl text-accent">{formatPrice(room.rates.night)}</p>
-                  <p className="text-xs text-muted-foreground">/ night</p>
+              </div>
+
+              <div className="mt-4">
+                <div className="flex gap-1 rounded-xl border border-border bg-background p-1">
+                  {stayLabels.map((opt) => (
+                    <button
+                      key={opt.id}
+                      type="button"
+                      onClick={(e) => { e.stopPropagation(); setCardStayType(room.slug, opt.id) }}
+                      className={`flex-1 rounded-lg py-1.5 text-xs font-medium transition-all duration-200 ${
+                        getCardStayType(room.slug) === opt.id
+                          ? 'bg-foreground text-white shadow-sm'
+                          : 'text-muted-foreground hover:text-foreground'
+                      }`}
+                    >
+                      {opt.label}
+                    </button>
+                  ))}
                 </div>
+                <p className="mt-3 font-serif text-2xl text-accent">
+                  {formatPrice(room.rates[getCardStayType(room.slug)].weekday)}
+                </p>
               </div>
 
               <div className="mt-5 flex items-center justify-between border-t border-border pt-5">
                 <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
                   <Users size={13} />
-                  Good for {room.capacity} pax
+                  {room.maxPax
+                    ? `${room.capacity}–${room.maxPax} pax`
+                    : room.minPax
+                      ? `Good for ${room.minPax}–${room.capacity} pax`
+                      : `Good for ${room.capacity} pax`}
                 </span>
                 <div className="flex items-center gap-4">
                   <button
