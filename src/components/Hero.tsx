@@ -55,24 +55,24 @@ export function Hero({ onBookNow, onExploreMore }: HeroProps) {
 
       {/* ── Hero text — single column, bottom-left ── */}
       <div className="relative z-10 mt-auto">
-        <div className="page-shell pb-20">
+        <div className="page-shell pb-14 sm:pb-20">
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease: "easeOut", delay: 0.1 }}
-            className="max-w-xl space-y-6"
+            className="max-w-xl space-y-4 sm:space-y-6"
           >
             <p className="text-xs font-medium uppercase tracking-[0.38em] text-white/50">
               Ukiyo Resort
             </p>
 
-            <h1 className="text-5xl font-medium leading-[1.06] text-white md:text-6xl lg:text-7xl">
+            <h1 className="text-[2.5rem] font-medium leading-[1.06] text-white sm:text-5xl md:text-6xl lg:text-7xl">
               Your group's
               <br />
               escape starts here.
             </h1>
 
-            <p className="max-w-lg text-base leading-relaxed text-white/65 md:text-lg">
+            <p className="max-w-lg text-sm leading-relaxed text-white/65 sm:text-base md:text-lg">
               Ukiyo Resort is built for barkadas, families, and company teams.
               3 connected pools, water slides, poolfront rooms — and space for
               100–200 guests. Minutes away. No long drive. No hassle.
@@ -96,7 +96,7 @@ export function Hero({ onBookNow, onExploreMore }: HeroProps) {
             </div>
 
             {/* Mobile card carousel — hidden on lg+ where LayeredCards takes over */}
-            <div className="pt-8 lg:hidden">
+            <div className="pt-4 lg:hidden">
               <div
                 className="relative select-none touch-pan-y overflow-hidden rounded-2xl shadow-2xl"
                 onPointerDown={handlePointerDown}
@@ -106,7 +106,7 @@ export function Hero({ onBookNow, onExploreMore }: HeroProps) {
                   src={MOBILE_CARDS[mobileCardIndex].src}
                   alt={MOBILE_CARDS[mobileCardIndex].alt}
                   draggable={false}
-                  className="w-full max-h-72 object-cover"
+                  className="w-full max-h-52 object-cover"
                 />
               </div>
               {/* Dot indicators */}
