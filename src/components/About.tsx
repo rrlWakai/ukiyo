@@ -14,14 +14,14 @@ export function About() {
             initial={{ opacity: 0, x: -30 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.9, ease: 'easeOut' }}
-            className="relative pb-14 pr-14"
+            className="relative pb-10 pr-10 sm:pb-14 sm:pr-14"
           >
             <img
               src="/images/about-1.jpg"
               alt="Resort interior"
-              className="h-125 w-full rounded-2xl object-cover"
+              className="h-80 w-full rounded-2xl object-cover sm:h-100 lg:h-125"
             />
-            <div className="absolute bottom-0 right-0 h-56 w-48 overflow-hidden rounded-2xl border-4 border-white shadow-sm">
+            <div className="absolute bottom-0 right-0 h-40 w-32 overflow-hidden rounded-2xl border-4 border-white shadow-sm sm:h-56 sm:w-48">
               <img
                 src="/images/about-2.jpg"
                 alt="Resort pool"

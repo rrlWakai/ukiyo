@@ -5,6 +5,7 @@ import { Hero } from './components/Hero'
 import { About } from './components/About'
 import { Packages } from './components/Packages'
 import { Gallery } from './components/Gallery'
+import { GalleryPreview } from './components/GalleryPreview'
 import { Accommodation } from './components/Accommodation'
 import { Booking } from './components/Booking'
 import { Reviews } from './components/Reviews'
@@ -75,7 +76,7 @@ function HomePage(props: {
         selectedPackage={props.bookingState.event.selectedPackage}
         onSelectPackage={props.onSelectPackage}
       />
-      <Gallery />
+      <GalleryPreview />
       <Accommodation
         selectedRoom={props.bookingState.room.selectedRoom}
         onSelectRoom={props.onSelectRoom}
@@ -477,6 +478,15 @@ function App() {
                 onSetEntranceGuests={setEntranceGuests}
                 onSubmitBooking={handleSubmitBooking}
               />
+              {footer}
+            </>
+          }
+        />
+        <Route
+          path="/gallery"
+          element={
+            <>
+              <Gallery />
               {footer}
             </>
           }

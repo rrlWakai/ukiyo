@@ -85,32 +85,34 @@ export function RoomDetailPage({
               </p>
             </div>
 
-            <div className="grid gap-3 lg:grid-cols-[2fr_1fr]">
-              <div className="overflow-hidden rounded-2xl">
+            <div className="grid gap-2 lg:h-120 lg:grid-cols-[2fr_1fr]">
+              {/* Main image */}
+              <div className="overflow-hidden">
                 <img
                   src={room.gallery[0]}
                   alt={room.name}
-                  className="h-full min-h-105 w-full object-cover"
+                  className="h-75 w-full object-cover lg:h-full"
                 />
               </div>
-              <div className="grid gap-3">
-                {room.gallery.slice(1).map((image, index) => (
+              {/* Right column — always exactly 2 thumbnails */}
+              <div className="grid grid-cols-2 gap-2 lg:grid-cols-1 lg:grid-rows-2">
+                {room.gallery.slice(1, 3).map((image, index) => (
                   <div
                     key={image}
-                    className="relative overflow-hidden rounded-2xl"
+                    className="relative overflow-hidden"
                   >
                     <img
                       src={image}
-                      alt={`${room.name} ${index + 2}`}
-                      className="h-52 w-full object-cover"
+                      alt={`${room.name} view ${index + 2}`}
+                      className="h-36 w-full object-cover lg:h-full"
                     />
-                    {index === room.gallery.slice(1).length - 1 && (
+                    {index === 1 && (
                       <button
                         type="button"
                         onClick={() => setIsGalleryOpen(true)}
-                        className="absolute inset-0 flex items-center justify-center bg-foreground/30 transition-colors duration-300 hover:bg-foreground/45"
+                        className="absolute inset-0 flex items-center justify-center bg-foreground/40 transition-colors duration-300 hover:bg-foreground/55"
                       >
-                        <span className="rounded-xl border border-white bg-white/90 px-6 py-3 text-xs font-medium uppercase tracking-[0.2em] text-foreground backdrop-blur-sm">
+                        <span className="border border-white/80 bg-white/15 px-5 py-2.5 text-xs font-medium uppercase tracking-[0.2em] text-white backdrop-blur-sm">
                           View All Photos
                         </span>
                       </button>
@@ -150,7 +152,9 @@ export function RoomDetailPage({
                           className="flex items-center gap-3 rounded-xl border border-accent/20 bg-accent/5 px-4 py-3"
                         >
                           <Check size={14} className="shrink-0 text-accent" />
-                          <span className="text-sm font-medium text-foreground">{point}</span>
+                          <span className="text-sm font-medium text-foreground">
+                            {point}
+                          </span>
                         </div>
                       ))}
                     </div>
@@ -201,21 +205,38 @@ export function RoomDetailPage({
                       <table className="w-full text-sm">
                         <thead>
                           <tr className="border-b border-border bg-background">
-                            <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">Stay</th>
+                            <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
+                              Stay
+                            </th>
                             {seasonOptions.map((s) => (
-                              <th key={s.id} className="px-3 py-3 text-center text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">{s.label}</th>
+                              <th
+                                key={s.id}
+                                className="px-3 py-3 text-center text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground"
+                              >
+                                {s.label}
+                              </th>
                             ))}
                           </tr>
                         </thead>
                         <tbody>
                           {stayTypeOptions.map((opt) => (
-                            <tr key={opt.id} className="border-b border-border last:border-0">
+                            <tr
+                              key={opt.id}
+                              className="border-b border-border last:border-0"
+                            >
                               <td className="px-4 py-4">
-                                <p className="font-medium text-foreground">{opt.label}</p>
-                                <p className="text-xs text-muted-foreground">{opt.description}</p>
+                                <p className="font-medium text-foreground">
+                                  {opt.label}
+                                </p>
+                                <p className="text-xs text-muted-foreground">
+                                  {opt.description}
+                                </p>
                               </td>
                               {seasonOptions.map((s) => (
-                                <td key={s.id} className="px-3 py-4 text-center font-serif text-lg text-accent">
+                                <td
+                                  key={s.id}
+                                  className="px-3 py-4 text-center font-serif text-lg text-accent"
+                                >
                                   {formatPrice(room.rates[opt.id][s.id])}
                                 </td>
                               ))}
@@ -227,9 +248,16 @@ export function RoomDetailPage({
                   ) : (
                     <div className="grid gap-4 md:grid-cols-3">
                       {stayTypeOptions.map((option) => (
-                        <div key={option.id} className="rounded-xl border border-border bg-white p-5">
-                          <p className="text-lg font-medium text-foreground">{option.label}</p>
-                          <p className="mt-1 text-sm text-muted-foreground">{option.description}</p>
+                        <div
+                          key={option.id}
+                          className="rounded-xl border border-border bg-white p-5"
+                        >
+                          <p className="text-lg font-medium text-foreground">
+                            {option.label}
+                          </p>
+                          <p className="mt-1 text-sm text-muted-foreground">
+                            {option.description}
+                          </p>
                           <p className="mt-4 font-serif text-2xl text-accent">
                             {formatPrice(room.rates[option.id].weekday)}
                           </p>
@@ -293,7 +321,9 @@ export function RoomDetailPage({
                     Starting price
                   </p>
                   <p className="mt-2 font-serif text-5xl text-accent">
-                    {formatPrice(activeRoom.rates[roomBooking.stayType].weekday)}
+                    {formatPrice(
+                      activeRoom.rates[roomBooking.stayType].weekday,
+                    )}
                   </p>
                   <span className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-accent/30 px-3 py-1.5 text-xs font-medium text-accent">
                     <Check size={11} /> Free entrance included
@@ -420,30 +450,6 @@ export function RoomDetailPage({
           </div>
         </section>
 
-        {/* Testimonial */}
-        <section className="section-shell bg-background">
-          <div className="page-shell">
-            <div className="relative overflow-hidden rounded-2xl">
-              <img
-                src="/images/gallery-6.jpg"
-                alt="Resort atmosphere"
-                className="h-96 w-full object-cover"
-              />
-              <div className="absolute inset-0 bg-foreground/50" />
-              <div className="absolute inset-0 flex items-end justify-center p-10 text-center text-white">
-                <div className="max-w-2xl">
-                  <p className="text-xs font-medium uppercase tracking-[0.3em] text-white/50">
-                    Guest Review
-                  </p>
-                  <p className="mt-4 font-serif text-2xl leading-snug md:text-3xl">
-                    {room.testimonial}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
         {/* Related rooms */}
         <section className="section-shell bg-white">
           <div className="page-shell">
@@ -484,10 +490,14 @@ export function RoomDetailPage({
                       </div>
                       <div className="shrink-0 text-right">
                         <p className="font-serif text-2xl text-accent">
-                          {formatPrice(related.maxPax ? related.rates.day.weekday : related.rates.night.weekday)}
+                          {formatPrice(
+                            related.maxPax
+                              ? related.rates.day.weekday
+                              : related.rates.night.weekday,
+                          )}
                         </p>
                         <p className="text-xs text-muted-foreground">
-                          {related.maxPax ? 'day tour' : '/ night'}
+                          {related.maxPax ? "day tour" : "/ night"}
                         </p>
                       </div>
                     </div>

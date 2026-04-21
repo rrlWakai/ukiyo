@@ -1,46 +1,44 @@
-import { motion, useInView } from 'framer-motion'
-import { useRef } from 'react'
-import { Star } from 'lucide-react'
+import { motion, useInView } from "framer-motion";
+import { useRef } from "react";
+import { Star } from "lucide-react";
 
 const reviews = [
   {
-    name: 'Maria Santos',
-    location: 'Quezon City',
+    name: "Salvadorr Luminarios",
     rating: 5,
-    text: 'Clean room, smooth check-in, and the pool stayed enjoyable all day. Exactly what we needed.',
+    text: "its a good place for leisure and relaxation.",
   },
   {
-    name: 'John Reyes',
-    location: 'Makati',
+    name: "Gabriel DelaCruz",
     rating: 5,
-    text: 'The booking flow was simple and the staff handled our family stay thoughtfully from start to finish.',
+    text: "Nice",
   },
   {
-    name: 'Angela Cruz',
-    location: 'Pasig City',
+    name: "Bryan Advincula",
     rating: 5,
-    text: "Our event package felt organized from arrival to wrap-up. We didn't have to think about a thing.",
+    text: "The place is very spacious and the pool is very big, there's also a lot of space to hang out inside, and the parking area is also big, solid!",
   },
-]
+];
 
 export function Reviews() {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: '-80px' })
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
     <section id="reviews" className="section-shell bg-background">
       <div className="page-shell">
-
         <motion.div
           ref={ref}
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7, ease: 'easeOut' }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
           className="section-header text-center"
         >
           <p className="section-kicker">Guest Reviews</p>
           <h2 className="section-title mx-auto max-w-xl">
-            Told in their<br />own words.
+            Told in their
+            <br />
+            own words.
           </h2>
         </motion.div>
 
@@ -50,7 +48,11 @@ export function Reviews() {
               key={review.name}
               initial={{ opacity: 0, y: 24 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, ease: 'easeOut', delay: index * 0.1 }}
+              transition={{
+                duration: 0.6,
+                ease: "easeOut",
+                delay: index * 0.1,
+              }}
               className="space-y-5"
             >
               <div className="flex gap-1">
@@ -64,14 +66,14 @@ export function Reviews() {
               </p>
 
               <div className="border-t border-border pt-5">
-                <p className="text-sm font-medium text-foreground">{review.name}</p>
-                <p className="mt-0.5 text-xs text-muted-foreground">{review.location}</p>
+                <p className="text-sm font-medium text-foreground">
+                  {review.name}
+                </p>
               </div>
             </motion.div>
           ))}
         </div>
-
       </div>
     </section>
-  )
+  );
 }

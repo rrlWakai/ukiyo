@@ -103,8 +103,8 @@ export const rooms: Room[] = [
     subtitle: 'Cozy air-conditioned room for 2–3 persons with free entrance included.',
     description:
       'Lanai Suite is a comfortable, fully air-conditioned room perfect for small groups. Steps away from the pool with everything you need for a relaxing stay.',
-    image: '/images/room-1.jpg',
-    gallery: ['/images/room-1.jpg', '/images/gallery-2.jpg', '/images/gallery-1.jpg'],
+    image: '/images/lanai-1.jpg',
+    gallery: ['/images/lanai-1.jpg', '/images/lanai-2.jpg', '/images/lanai-3.jpg', '/images/lanai-4.jpg'],
     capacity: 3,
     minPax: 2,
     features: [
@@ -134,8 +134,8 @@ export const rooms: Room[] = [
     subtitle: 'Spacious air-conditioned room for 3–4 persons with sofa, 2 beds, and free entrance.',
     description:
       'Veranda Suite gives your group more space to relax — a sofa, 2 beds, and a private CR make it the perfect base for a comfortable stay.',
-    image: '/images/room-2.jpg',
-    gallery: ['/images/room-2.jpg', '/images/gallery-3.jpg', '/images/gallery-5.jpg'],
+    image: '/images/veranda-1.jpg',
+    gallery: ['/images/veranda-1.jpg', '/images/veranda-2.jpg', '/images/veranda-3.jpg', '/images/veranda-4.jpg'],
     capacity: 4,
     minPax: 3,
     features: [
@@ -167,8 +167,8 @@ export const rooms: Room[] = [
     subtitle: '1 villa & 3 cottages — ideal for 30–50 pax in a fully private setting.',
     description:
       'Executive villa and pool access with 1 villa & 3 cottages. Fits 30–50 pax comfortably. Perfect for large families, barkadas, and company gatherings. 100% private setting with exclusive use.',
-    image: '/images/room-3.jpg',
-    gallery: ['/images/room-3.jpg', '/images/gallery-4.jpg', '/images/gallery-6.jpg'],
+    image: '/images/executive-1.jpg',
+    gallery: ['/images/executive-1.jpg', '/images/executive-2.jpg', '/images/executive-3.jpg', '/images/executive-4.mp4'],
     capacity: 30,
     maxPax: 50,
     features: [
@@ -200,8 +200,8 @@ export const rooms: Room[] = [
     subtitle: 'Full private resort — 6 poolfront rooms, 3 pools, and 5 cottages for big groups.',
     description:
       'Full private resort experience. 6 poolfront rooms, 3 connected pools, 5 spacious cottages. Premium, aesthetic environment. Ideal for big groups who want the whole place to themselves.',
-    image: '/images/room-4.jpg',
-    gallery: ['/images/room-4.jpg', '/images/gallery-1.jpg', '/images/gallery-5.jpg'],
+    image: '/images/exclusive-1.jpg',
+    gallery: ['/images/exclusive-1.jpg', '/images/exclusive-2.jpg', '/images/exclusive-3.jpg', '/images/exclusive-4.mp4'],
     capacity: 50,
     maxPax: 200,
     features: [
