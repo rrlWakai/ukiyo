@@ -27,6 +27,7 @@ export function Accommodation({ onSelectRoom, onViewDetails }: AccommodationProp
     setCardStayTypes((prev) => ({ ...prev, [slug]: type }))
 
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.pointerType === 'touch') return
     const el = sliderRef.current
     if (!el) return
     if ((e.target as HTMLElement).closest('button, a')) return
@@ -77,7 +78,7 @@ export function Accommodation({ onSelectRoom, onViewDetails }: AccommodationProp
       {/* Drag slider — breaks out of page-shell padding intentionally */}
       <div
         ref={sliderRef}
-        className="flex gap-5 overflow-x-auto px-6 pb-8 md:px-10 [scrollbar-width:none] [touch-action:pan-x_pinch-zoom] [&::-webkit-scrollbar]:hidden cursor-grab active:cursor-grabbing select-none"
+        className="flex snap-x snap-mandatory gap-5 overflow-x-auto px-6 pb-8 md:px-10 [scrollbar-width:none] [touch-action:pan-x_pinch-zoom] [&::-webkit-scrollbar]:hidden cursor-grab active:cursor-grabbing select-none"
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
@@ -90,13 +91,15 @@ export function Accommodation({ onSelectRoom, onViewDetails }: AccommodationProp
             initial={{ opacity: 0, y: 24 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, ease: 'easeOut', delay: index * 0.08 }}
-            className="group w-[80vw] shrink-0 overflow-hidden rounded-2xl border border-black/5 bg-white transition-all duration-500 hover:shadow-md sm:w-[55vw] md:w-[42vw] lg:w-96"
+            className="group w-[80vw] shrink-0 snap-center overflow-hidden rounded-2xl border border-black/5 bg-white transition-all duration-500 hover:shadow-md sm:w-[55vw] md:w-[42vw] lg:w-96"
           >
             <div className="relative h-72 overflow-hidden">
               <img
                 src={room.image}
                 alt={room.name}
                 draggable={false}
+                loading="lazy"
+                decoding="async"
                 className="pointer-events-none h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
               />
               <div className="absolute left-4 top-4 rounded-full bg-black/60 px-3 py-1 text-xs font-medium text-white backdrop-blur-sm">
