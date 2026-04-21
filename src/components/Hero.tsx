@@ -32,13 +32,15 @@ export function Hero({ onBookNow, onExploreMore }: HeroProps) {
     const dx = e.clientX - pointerStartX.current;
     if (Math.abs(dx) > 40) {
       if (dx < 0) setMobileCardIndex((i) => (i + 1) % MOBILE_CARDS.length);
-      else setMobileCardIndex((i) => (i - 1 + MOBILE_CARDS.length) % MOBILE_CARDS.length);
+      else
+        setMobileCardIndex(
+          (i) => (i - 1 + MOBILE_CARDS.length) % MOBILE_CARDS.length,
+        );
     }
   }
 
   return (
     <section className="relative flex min-h-screen flex-col overflow-hidden">
-
       {/* ── Parallax background ── */}
       <motion.div className="absolute inset-0 z-0" style={{ y: bgY }}>
         <img
@@ -71,12 +73,6 @@ export function Hero({ onBookNow, onExploreMore }: HeroProps) {
               <br />
               escape starts here.
             </h1>
-
-            <p className="max-w-lg text-sm leading-relaxed text-white/65 sm:text-base md:text-lg">
-              Ukiyo Resort is built for barkadas, families, and company teams.
-              3 connected pools, water slides, poolfront rooms — and space for
-              100–200 guests. Minutes away. No long drive. No hassle.
-            </p>
 
             <div className="flex flex-col gap-4 pt-2 sm:flex-row sm:items-center">
               <button
@@ -117,7 +113,9 @@ export function Hero({ onBookNow, onExploreMore }: HeroProps) {
                     type="button"
                     onClick={() => setMobileCardIndex(i)}
                     className={`h-1 rounded-full transition-all duration-300 ${
-                      i === mobileCardIndex ? "w-6 bg-white" : "w-1.5 bg-white/35"
+                      i === mobileCardIndex
+                        ? "w-6 bg-white"
+                        : "w-1.5 bg-white/35"
                     }`}
                     aria-label={`Card ${i + 1}`}
                   />
@@ -145,7 +143,6 @@ export function Hero({ onBookNow, onExploreMore }: HeroProps) {
           <ArrowDown size={20} />
         </motion.div>
       </button>
-
     </section>
   );
 }
