@@ -74,6 +74,10 @@ export function Hero({ onBookNow, onExploreMore }: HeroProps) {
               escape starts here.
             </h1>
 
+            <p className="max-w-lg text-sm leading-relaxed text-white/65 sm:text-base md:text-lg">
+              Ukiyo Resort is built for barkadas, families, and company teams
+            </p>
+
             <div className="flex flex-col gap-4 pt-2 sm:flex-row sm:items-center">
               <button
                 type="button"
