@@ -1,5 +1,5 @@
 import { motion, useScroll, useTransform } from "framer-motion";
-import { ArrowDown } from "lucide-react";
+
 import type { BookingType } from "@/lib/resort-data";
 
 type HeroProps = {
@@ -9,7 +9,7 @@ type HeroProps = {
   onExploreMore: () => void;
 };
 
-export function Hero({ onBookNow, onExploreMore }: HeroProps) {
+export function Hero({ onBookNow }: HeroProps) {
   const { scrollY } = useScroll();
   const bgY = useTransform(scrollY, [0, 600], [0, 160]);
 
