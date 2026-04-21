@@ -14,6 +14,7 @@ import { Contact } from './components/Contact'
 import { Footer } from './components/Footer'
 import { RoomDetailPage } from './components/RoomDetailPage'
 import { NotFoundPage } from './components/NotFoundPage'
+import { FloatingPosterStrip } from './components/FloatingPosterStrip'
 import {
   buildBookingPayload,
   calculateActiveTotal,
@@ -70,6 +71,7 @@ function HomePage(props: {
         onBookNow={props.onHeroBookNow}
         onExploreMore={props.onExploreAbout}
       />
+      <FloatingPosterStrip />
       <About />
       <Occasions />
       <Packages
