@@ -9,7 +9,7 @@ import {
   Minus,
   Plus,
 } from "lucide-react";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import {
   addOns,
   calculateEntranceTotal,
@@ -17,9 +17,11 @@ import {
   calculateRoomTotal,
   entranceOptions,
   eventPackages,
+  extensionRates,
   formatPrice,
   getEventPackageByName,
   getEntranceOptionById,
+  getExtensionPrice,
   getRoomByName,
   rooms,
   stayTypeOptions,
@@ -28,6 +30,7 @@ import {
   type BookingSubmissionState,
   type BookingType,
   type EntranceTime,
+  type ExtensionHours,
   type StayType,
 } from "@/lib/resort-data";
 
@@ -77,6 +80,7 @@ export function Booking({
 }: BookingProps) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-80px" });
+  const [extensionHours, setExtensionHours] = useState<ExtensionHours | null>(null);
 
   const selectedRoom = getRoomByName(bookingState.room.selectedRoom);
   const selectedPackage = getEventPackageByName(
@@ -85,7 +89,11 @@ export function Booking({
   const selectedEntrance = getEntranceOptionById(
     bookingState.entrance.entranceTime,
   );
-  const roomTotal = calculateRoomTotal(bookingState.room);
+  const currentExtensionRates = extensionRates[selectedRoom.slug];
+  const extensionPrice = extensionHours
+    ? getExtensionPrice(selectedRoom.slug, extensionHours)
+    : 0;
+  const roomTotal = calculateRoomTotal(bookingState.room) + extensionPrice;
   const eventTotal = calculateEventTotal(bookingState.event);
   const entranceTotal = calculateEntranceTotal(bookingState.entrance);
   const total =
@@ -347,11 +355,68 @@ export function Booking({
                           >
                             {addon.id === "grill"
                               ? "₱800–₱1,200"
-                              : `${formatPrice(addon.price)}${addon.id === "extension" ? "/hr" : ""}`}
+                              : formatPrice(addon.price)}
                           </span>
                         </button>
                       ))}
                     </div>
+
+                    {currentExtensionRates && (
+                      <div>
+                        <div className="mb-2 flex items-center justify-between">
+                          <p className="field-label">Extend Your Stay</p>
+                          <span className="text-[11px] text-muted-foreground">
+                            Subject to availability
+                          </span>
+                        </div>
+                        <div className="flex gap-3">
+                          {([1, 2] as const).map((hrs) => {
+                            const isSelected = extensionHours === hrs;
+                            return (
+                              <button
+                                key={hrs}
+                                type="button"
+                                onClick={() =>
+                                  setExtensionHours(isSelected ? null : hrs)
+                                }
+                                className={`relative flex-1 rounded-xl border px-4 py-3 text-left transition-all duration-300 ${
+                                  isSelected
+                                    ? "border-foreground bg-foreground text-white"
+                                    : "border-border bg-white text-foreground hover:border-foreground/25"
+                                }`}
+                              >
+                                {hrs === 2 && (
+                                  <span
+                                    className={`absolute right-2 top-2 rounded-full px-1.5 py-0.5 text-[10px] font-medium ${
+                                      isSelected
+                                        ? "bg-white/20 text-white"
+                                        : "bg-accent/10 text-accent"
+                                    }`}
+                                  >
+                                    Best Value
+                                  </span>
+                                )}
+                                <p className="text-xs font-medium">
+                                  +{hrs} Hour{hrs > 1 ? "s" : ""}
+                                </p>
+                                <p
+                                  className={`mt-0.5 font-serif text-lg ${
+                                    isSelected ? "text-white/90" : "text-accent"
+                                  }`}
+                                >
+                                  {formatPrice(currentExtensionRates[hrs])}
+                                </p>
+                              </button>
+                            );
+                          })}
+                        </div>
+                        {!extensionHours && (
+                          <p className="mt-2 text-xs text-muted-foreground">
+                            Extend your stay for more time
+                          </p>
+                        )}
+                      </div>
+                    )}
                   </div>
                 </>
               )}
@@ -583,11 +648,15 @@ export function Booking({
                           Add-ons
                         </p>
                         <p className="mt-2 text-sm text-muted-foreground">
-                          {bookingState.room.addOns.length > 0
-                            ? bookingState.room.addOns
-                                .map(
+                          {bookingState.room.addOns.length > 0 || extensionHours
+                            ? [
+                                ...bookingState.room.addOns.map(
                                   (id) => addOns.find((a) => a.id === id)?.name,
-                                )
+                                ),
+                                extensionHours
+                                  ? `Extension +${extensionHours}hr`
+                                  : null,
+                              ]
                                 .filter(Boolean)
                                 .join(", ")
                             : "None selected"}
