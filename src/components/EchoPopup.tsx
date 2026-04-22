@@ -49,7 +49,8 @@ export function EchoPopup() {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="relative h-[80vh] w-full max-w-md overflow-hidden rounded-2xl"
+            className="relative h-[80vh] w-full max-w-md cursor-pointer overflow-hidden rounded-2xl"
+            onClick={handleCTA}
           >
             {/* Image — fills entire card */}
             <img
@@ -59,32 +60,15 @@ export function EchoPopup() {
               draggable={false}
             />
 
-            {/* Gradient overlay — improves CTA readability */}
-            <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/30 to-transparent" />
-
             {/* Close button — floating top-right */}
             <button
               type="button"
-              onClick={dismiss}
+              onClick={(e) => { e.stopPropagation(); dismiss(); }}
               aria-label="Close promotion"
               className="absolute right-4 top-4 rounded-full bg-black/50 p-2 text-white/80 backdrop-blur-sm transition-colors hover:text-white"
             >
               <X size={18} />
             </button>
-
-            {/* CTA — overlaid at bottom, always visible */}
-            <div className="absolute bottom-0 left-0 right-0 p-4">
-              <button
-                type="button"
-                onClick={handleCTA}
-                className="w-full rounded-xl bg-linear-to-r from-orange-500 to-orange-600 py-4 font-semibold text-white shadow-lg shadow-orange-500/30 transition-transform duration-200 hover:scale-[1.02] active:scale-[0.98]"
-              >
-                Reserve Echo Experience →
-              </button>
-              <p className="mt-2 text-center text-xs text-white/50">
-                Limited slots daily
-              </p>
-            </div>
           </motion.div>
         </motion.div>
       )}
