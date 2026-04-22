@@ -4,8 +4,9 @@ import { Calendar, Check, ChevronLeft, Minus, Plus } from "lucide-react";
 import { GalleryModal } from "./GalleryModal";
 import {
   addOns,
-  calculateRoomTotal,
+  extensionRates,
   formatPrice,
+  getExtensionPrice,
   getRoomByName,
   roomHasSeasonalPricing,
   rooms,
@@ -13,6 +14,7 @@ import {
   stayTypeOptions,
   type AddOnId,
   type BookingState,
+  type ExtensionHours,
   type Room,
   type StayType,
 } from "@/lib/resort-data";
@@ -43,10 +45,22 @@ export function RoomDetailPage({
   onReserveRoom,
 }: RoomDetailPageProps) {
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
+  const [extensionHours, setExtensionHours] = useState<ExtensionHours | null>(null);
   const activeRoom = getRoomByName(room.name);
   const relatedRooms = rooms.filter((r) => r.slug !== room.slug).slice(0, 2);
   const roomBooking = bookingState.room;
-  const roomTotal = calculateRoomTotal(roomBooking);
+  const baseRate = activeRoom.rates[roomBooking.stayType].weekday;
+  const addOnTotal = roomBooking.addOns.reduce((sum, id) => {
+    const addon = addOns.find((a) => a.id === id);
+    return sum + (addon?.price ?? 0);
+  }, 0);
+  const extensionPrice = extensionHours
+    ? getExtensionPrice(room.slug, extensionHours)
+    : 0;
+  const total = baseRate + addOnTotal + extensionPrice;
+  const stayLabel =
+    stayTypeOptions.find((o) => o.id === roomBooking.stayType)?.label ?? "";
+  const currentExtensionRates = extensionRates[room.slug];
 
   return (
     <>
@@ -97,10 +111,7 @@ export function RoomDetailPage({
               {/* Right column — always exactly 2 thumbnails */}
               <div className="grid grid-cols-2 gap-2 lg:grid-cols-1 lg:grid-rows-2">
                 {room.gallery.slice(1, 3).map((image, index) => (
-                  <div
-                    key={image}
-                    className="relative overflow-hidden"
-                  >
+                  <div key={image} className="relative overflow-hidden">
                     <img
                       src={image}
                       alt={`${room.name} view ${index + 2}`}
@@ -267,29 +278,6 @@ export function RoomDetailPage({
                   )}
                 </div>
 
-                <div className="border-b border-border pb-10">
-                  <p className="mb-5 text-xs font-medium uppercase tracking-[0.28em] text-muted-foreground">
-                    Add-ons
-                  </p>
-                  <div className="grid gap-3 md:grid-cols-2">
-                    {addOns.map((addon) => (
-                      <div
-                        key={addon.id}
-                        className="flex items-center justify-between rounded-xl border border-border bg-white px-4 py-4"
-                      >
-                        <span className="text-sm text-foreground">
-                          {addon.name}
-                        </span>
-                        <span className="text-sm text-accent">
-                          {addon.id === "grill"
-                            ? "₱800–₱1,200"
-                            : `${formatPrice(addon.price)}${addon.id === "extension" ? "/hr" : ""}`}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
                 <div>
                   <p className="mb-5 text-xs font-medium uppercase tracking-[0.28em] text-muted-foreground">
                     Notes
@@ -424,15 +412,106 @@ export function RoomDetailPage({
                         ))}
                       </div>
                     </div>
+
+                    {currentExtensionRates && (
+                      <div>
+                        <div className="flex items-center justify-between">
+                          <label className="field-label">Extend Your Stay</label>
+                          <span className="text-[11px] text-muted-foreground">
+                            Subject to availability
+                          </span>
+                        </div>
+                        <div className="mt-2 flex gap-2">
+                          {([1, 2] as const).map((hrs) => {
+                            const isSelected = extensionHours === hrs;
+                            return (
+                              <button
+                                key={hrs}
+                                type="button"
+                                onClick={() =>
+                                  setExtensionHours(isSelected ? null : hrs)
+                                }
+                                className={`relative flex-1 rounded-xl border px-3 py-3 text-left transition-all duration-300 ${
+                                  isSelected
+                                    ? "border-foreground bg-foreground text-white"
+                                    : "border-border bg-white text-foreground hover:border-foreground/30"
+                                }`}
+                              >
+                                {hrs === 2 && (
+                                  <span
+                                    className={`absolute right-2 top-2 rounded-full px-1.5 py-0.5 text-[10px] font-medium ${
+                                      isSelected
+                                        ? "bg-white/20 text-white"
+                                        : "bg-accent/10 text-accent"
+                                    }`}
+                                  >
+                                    Best Value
+                                  </span>
+                                )}
+                                <p className="text-xs font-medium">
+                                  +{hrs} Hour{hrs > 1 ? "s" : ""}
+                                </p>
+                                <p
+                                  className={`mt-0.5 font-serif text-base ${
+                                    isSelected ? "text-white/90" : "text-accent"
+                                  }`}
+                                >
+                                  {formatPrice(currentExtensionRates[hrs])}
+                                </p>
+                              </button>
+                            );
+                          })}
+                        </div>
+                        {!extensionHours && (
+                          <p className="mt-2 text-xs text-muted-foreground">
+                            Extend your stay for more time
+                          </p>
+                        )}
+                      </div>
+                    )}
                   </div>
 
                   <div className="mt-7 border-t border-border pt-6">
-                    <p className="text-xs uppercase tracking-[0.22em] text-muted-foreground">
-                      Estimated Total
+                    <p className="mb-3 text-xs uppercase tracking-[0.22em] text-muted-foreground">
+                      Price Breakdown
                     </p>
-                    <p className="mt-2 font-serif text-4xl text-accent">
-                      {formatPrice(roomTotal)}
-                    </p>
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-muted-foreground">
+                          Stay ({stayLabel})
+                        </span>
+                        <span className="font-medium text-foreground">
+                          {formatPrice(baseRate)}
+                        </span>
+                      </div>
+                      {extensionHours && (
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-muted-foreground">
+                            Extension ({extensionHours} hr
+                            {extensionHours > 1 ? "s" : ""})
+                          </span>
+                          <span className="font-medium text-foreground">
+                            {formatPrice(extensionPrice)}
+                          </span>
+                        </div>
+                      )}
+                      {addOnTotal > 0 && (
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-muted-foreground">Add-ons</span>
+                          <span className="font-medium text-foreground">
+                            {formatPrice(addOnTotal)}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                    <div className="mt-3 flex items-baseline justify-between border-t border-border pt-3">
+                      <p className="text-xs uppercase tracking-[0.22em] text-muted-foreground">
+                        Estimated Total
+                      </p>
+                      <p className="font-serif text-4xl text-accent">
+                        {formatPrice(total)}
+                      </p>
+                    </div>
                     <button
                       type="button"
                       onClick={() => onReserveRoom(room.name)}

@@ -78,7 +78,7 @@ export function Accommodation({ onSelectRoom, onViewDetails }: AccommodationProp
       {/* Drag slider — breaks out of page-shell padding intentionally */}
       <div
         ref={sliderRef}
-        className="flex snap-x snap-mandatory gap-5 overflow-x-auto px-6 pb-8 md:px-10 [scrollbar-width:none] [touch-action:pan-x_pinch-zoom] [&::-webkit-scrollbar]:hidden cursor-grab active:cursor-grabbing select-none"
+        className="flex snap-x snap-mandatory gap-5 overflow-x-auto px-6 pb-8 md:px-10 [scrollbar-width:none] [touch-action:pan-x_pan-y_pinch-zoom] [&::-webkit-scrollbar]:hidden cursor-grab active:cursor-grabbing select-none"
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
@@ -91,7 +91,7 @@ export function Accommodation({ onSelectRoom, onViewDetails }: AccommodationProp
             initial={{ opacity: 0, y: 24 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, ease: 'easeOut', delay: index * 0.08 }}
-            className="group w-[80vw] shrink-0 snap-center overflow-hidden rounded-2xl border border-black/5 bg-white transition-all duration-500 hover:shadow-md sm:w-[55vw] md:w-[42vw] lg:w-96"
+            className="group w-[80vw] shrink-0 snap-center overflow-hidden rounded-2xl border border-black/5 bg-white transition-all duration-500 hover:shadow-md sm:w-[55vw] md:w-[42vw] lg:w-96 [touch-action:pan-x_pan-y_pinch-zoom]"
           >
             <div className="relative h-72 overflow-hidden">
               <img

@@ -3,7 +3,8 @@ export type StayType = 'day' | 'night' | '22hrs'
 export type SeasonType = 'weekday' | 'weekend' | 'peak'
 export type EntranceTime = 'day' | 'night'
 
-export type AddOnId = 'towel' | 'breakfast' | 'grill' | 'extension'
+export type AddOnId = 'towel' | 'breakfast' | 'grill'
+export type ExtensionHours = 1 | 2
 
 export type Room = {
   slug: string
@@ -308,8 +309,19 @@ export const addOns: AddOn[] = [
   { id: 'towel', name: 'Towel', price: 100 },
   { id: 'breakfast', name: 'Breakfast', price: 250 },
   { id: 'grill', name: 'Grill / KTV', price: 1000 },
-  { id: 'extension', name: 'Extension', price: 500 },
 ]
+
+export const extensionRates: Record<string, Record<ExtensionHours, number>> = {
+  'lanai-suite':     { 1: 300,  2: 500  },
+  'veranda-suite':   { 1: 400,  2: 700  },
+  'executive-villa': { 1: 500,  2: 850  },
+  'exclusive-villa': { 1: 700,  2: 1200 },
+  'cottage':         { 1: 200,  2: 300  },
+}
+
+export function getExtensionPrice(slug: string, hours: ExtensionHours): number {
+  return extensionRates[slug]?.[hours] ?? 0
+}
 
 export const defaultSubmissionState: BookingSubmissionState = {
   status: 'idle',
