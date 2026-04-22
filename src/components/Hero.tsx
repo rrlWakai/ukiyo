@@ -14,7 +14,7 @@ export function Hero({ onBookNow }: HeroProps) {
   const bgY = useTransform(scrollY, [0, 600], [0, 160]);
 
   return (
-    <section className="relative flex min-h-[100vh] flex-col overflow-hidden">
+    <section className="relative flex min-h-screen flex-col overflow-hidden">
       {/* ── Parallax background ── */}
       <motion.div className="absolute inset-0 z-0" style={{ y: bgY }}>
         <img
