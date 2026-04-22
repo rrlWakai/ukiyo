@@ -30,10 +30,9 @@ import {
   eventPackages,
   extensionRates,
   formatPrice,
-  getEventPackageByName,
-  getEntranceOptionById,
   getExtensionPrice,
   getRoomByName,
+  getSeasonFromDate,
   rooms,
   stayTypeOptions,
   type AddOnId,
@@ -197,7 +196,7 @@ export function Booking({
   const isInView = useInView(ref, { once: true, margin: "-60px" });
   const [searchParams] = useSearchParams();
   const echoRef = useRef<HTMLDivElement>(null);
-  const [echoMode, setEchoMode] = useState(false);
+  const [echoMode, setEchoMode] = useState(() => sessionStorage.getItem('echo-mode') === '1');
   const [echoHighlight, setEchoHighlight] = useState(false);
   const [extensionHours, setExtensionHours] = useState<ExtensionHours | null>(
     null,
@@ -244,10 +243,12 @@ export function Booking({
     onSelectRoom(echoExperience.compatibleRoom);
     onSetRoomStayType("22hrs");
     onSetRoomGuests(echoExperience.defaultGuests);
+    sessionStorage.setItem('echo-mode', '1');
     setEchoMode(true);
   };
 
   const cancelEchoMode = () => {
+    sessionStorage.removeItem('echo-mode');
     setEchoMode(false);
   };
 
@@ -485,6 +486,16 @@ export function Booking({
                           className="w-full rounded-xl border border-gray-200 bg-white py-3 pl-8 pr-3 text-sm text-gray-900 focus:border-gray-400 focus:outline-none"
                         />
                       </div>
+                      {bookingState.room.date && (() => {
+                        const season = getSeasonFromDate(bookingState.room.date)
+                        const rate = selectedRoom.rates[bookingState.room.stayType][season]
+                        const label = season === 'peak' ? '🔴 Peak Season' : season === 'weekend' ? '🟡 Weekend' : '🟢 Weekday'
+                        return (
+                          <p className="mt-1 text-[10px] text-gray-400">
+                            {label} · base {formatPrice(rate)}
+                          </p>
+                        )
+                      })()}
                     </div>
                     <div>
                       <label className="mb-2 block text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400">

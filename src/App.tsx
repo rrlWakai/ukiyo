@@ -17,12 +17,14 @@ import { NotFoundPage } from './components/NotFoundPage'
 import { EchoPopup } from './components/EchoPopup'
 import {
   buildBookingPayload,
+  buildWhatsAppMessage,
   calculateActiveTotal,
   clampGuestsForRoom,
   defaultSubmissionState,
   getDefaultBookingState,
   getRoomByName,
   getRoomBySlug,
+  RESORT_WHATSAPP,
   type AddOnId,
   type BookingState,
   type BookingSubmissionState,
@@ -359,39 +361,24 @@ function App() {
     return null
   }
 
-  const handleSubmitBooking = async () => {
+  const handleSubmitBooking = () => {
     const error = validateBooking()
     if (error) {
-      setSubmissionState({
-        status: 'error',
-        message: error,
-        payload: null,
-      })
+      setSubmissionState({ status: 'error', message: error, payload: null })
       return
     }
 
     const payload = buildBookingPayload(bookingState)
+    const message = buildWhatsAppMessage(bookingState)
+    const url = `https://wa.me/${RESORT_WHATSAPP}?text=${encodeURIComponent(message)}`
+
+    window.open(url, '_blank', 'noopener,noreferrer')
+
     setSubmissionState({
-      status: 'submitting',
-      message: 'Sending your reservation details...',
+      status: 'success',
+      message: 'WhatsApp opened — complete your booking with our team.',
       payload,
     })
-
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 900))
-      console.log('BOOKING_SUBMISSION', payload)
-      setSubmissionState({
-        status: 'success',
-        message: `Reservation request received for ${payload.type}. Our team will contact you shortly.`,
-        payload,
-      })
-    } catch {
-      setSubmissionState({
-        status: 'error',
-        message: 'Something went wrong while sending your reservation. Please try again.',
-        payload: null,
-      })
-    }
   }
 
   const footer = (

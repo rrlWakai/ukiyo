@@ -404,11 +404,27 @@ export function roomHasSeasonalPricing(room: Room): boolean {
   )
 }
 
-const DEFAULT_SEASON = 'weekday' as const
+// Holy Week dates (Maundy Thursday – Easter Sunday) for upcoming years
+const PEAK_DATES = new Set([
+  '2025-04-17', '2025-04-18', '2025-04-19', '2025-04-20',
+  '2026-04-02', '2026-04-03', '2026-04-04', '2026-04-05',
+  '2027-03-25', '2027-03-26', '2027-03-27', '2027-03-28',
+])
+
+export function getSeasonFromDate(dateStr: string): SeasonType {
+  if (!dateStr) return 'weekday'
+  if (PEAK_DATES.has(dateStr)) return 'peak'
+  // Christmas–New Year peak window (Dec 22 – Jan 5)
+  const mmdd = dateStr.slice(5)
+  if (mmdd >= '12-22' || mmdd <= '01-05') return 'peak'
+  const day = new Date(dateStr + 'T12:00:00').getDay()
+  return day === 0 || day === 6 ? 'weekend' : 'weekday'
+}
 
 export function calculateRoomTotal(roomBooking: RoomBookingState) {
   const room = getRoomByName(roomBooking.selectedRoom)
-  const baseRate = room.rates[roomBooking.stayType][DEFAULT_SEASON]
+  const season = getSeasonFromDate(roomBooking.date)
+  const baseRate = room.rates[roomBooking.stayType][season]
   const addOnTotal = roomBooking.addOns.reduce((sum, id) => {
     const addOn = addOns.find((item) => item.id === id)
     return sum + (addOn?.price ?? 0)
@@ -469,4 +485,43 @@ export function buildBookingPayload(state: BookingState): BookingPayload {
 export function clampGuestsForRoom(roomName: string, guestCount: number) {
   const room = getRoomByName(roomName)
   return Math.min(Math.max(1, guestCount), room.maxPax ?? room.capacity)
+}
+
+export const RESORT_WHATSAPP = '639199997740'
+
+export function buildWhatsAppMessage(state: BookingState): string {
+  const lines: string[] = ['🏖️ *Ukiyo Resort – Booking Inquiry*', '']
+
+  if (state.activeType === 'room') {
+    const room = getRoomByName(state.room.selectedRoom)
+    const stayOpt = stayTypeOptions.find((s) => s.id === state.room.stayType)!
+    const addOnNames = state.room.addOns
+      .map((id) => addOns.find((a) => a.id === id)?.name ?? id)
+      .join(', ')
+    lines.push(`📋 *Booking Type:* Room Stay`)
+    lines.push(`🏠 *Room:* ${room.name}`)
+    lines.push(`📅 *Date:* ${state.room.date}`)
+    lines.push(`⏰ *Stay Type:* ${stayOpt.label} (${stayOpt.description})`)
+    lines.push(`👥 *Guests:* ${state.room.guests}`)
+    if (addOnNames) lines.push(`➕ *Add-ons:* ${addOnNames}`)
+    lines.push(`💰 *Estimated Total:* ${formatPrice(calculateRoomTotal(state.room))}`)
+  } else if (state.activeType === 'event') {
+    const pkg = getEventPackageByName(state.event.selectedPackage)
+    lines.push(`📋 *Booking Type:* Event Package`)
+    lines.push(`🎉 *Package:* ${pkg.name} (${pkg.pax})`)
+    lines.push(`📅 *Date:* ${state.event.date}`)
+    lines.push(`👥 *Expected Guests:* ${state.event.guests}`)
+    lines.push(`💰 *Package Price:* ${formatPrice(pkg.price)}`)
+  } else {
+    const opt = getEntranceOptionById(state.entrance.entranceTime)
+    lines.push(`📋 *Booking Type:* Entrance`)
+    lines.push(`🏊 *Slot:* ${opt.label} (${opt.schedule})`)
+    lines.push(`📅 *Date:* ${state.entrance.date}`)
+    lines.push(`👥 *Adults:* ${state.entrance.adults}  |  *Kids:* ${state.entrance.kids}`)
+    lines.push(`💰 *Estimated Total:* ${formatPrice(calculateEntranceTotal(state.entrance))}`)
+  }
+
+  lines.push('')
+  lines.push('Hi! I would like to inquire about availability. Thank you! 🙏')
+  return lines.join('\n')
 }
