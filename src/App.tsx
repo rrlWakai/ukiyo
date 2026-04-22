@@ -14,7 +14,7 @@ import { Contact } from './components/Contact'
 import { Footer } from './components/Footer'
 import { RoomDetailPage } from './components/RoomDetailPage'
 import { NotFoundPage } from './components/NotFoundPage'
-import { FloatingPosterStrip } from './components/FloatingPosterStrip'
+import { EchoPopup } from './components/EchoPopup'
 import {
   buildBookingPayload,
   calculateActiveTotal,
@@ -71,8 +71,7 @@ function HomePage(props: {
         onBookNow={props.onHeroBookNow}
         onExploreMore={props.onExploreAbout}
       />
-      <FloatingPosterStrip />
-      <About />
+<About />
       <Occasions />
       <Packages
         selectedPackage={props.bookingState.event.selectedPackage}
@@ -162,15 +161,9 @@ function RoomRoutePage(props: {
   return (
     <RoomDetailPage
       room={room}
-      bookingState={props.bookingState}
       onBackToRooms={props.onBackToRooms}
-      onSetRoomDate={props.onSetRoomDate}
-      onSetRoomGuests={props.onSetRoomGuests}
-      onSetRoomStayType={props.onSetRoomStayType}
-      onToggleRoomAddOn={props.onToggleRoomAddOn}
       onSelectRoom={props.onSelectRoom}
       onViewRoom={props.onViewRoom}
-      onReserveRoom={props.onReserveRoom}
     />
   )
 }
@@ -513,6 +506,7 @@ function App() {
         />
       </Routes>
       <div className="sr-only">Current total {activeTotal}</div>
+      <EchoPopup />
     </div>
   )
 }

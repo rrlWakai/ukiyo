@@ -1,9 +1,33 @@
 export type BookingType = 'room' | 'event' | 'entrance'
+
+export type EchoExperience = {
+  karaokePrice: number
+  karaokePax: string
+  overnightPrice: number
+  overnightDescription: string
+  totalPrice: number
+  promoLabel: string
+  promoExpiry: string
+  compatibleRoom: string
+  defaultGuests: number
+}
+
+export const echoExperience: EchoExperience = {
+  karaokePrice: 2999,
+  karaokePax: '6–12 pax',
+  overnightPrice: 3999,
+  overnightDescription: 'Loft Bed & Sofa Bed',
+  totalPrice: 6998,
+  promoLabel: 'Free Pool Access',
+  promoExpiry: 'Until April 30 only',
+  compatibleRoom: 'Veranda Suite',
+  defaultGuests: 6,
+}
 export type StayType = 'day' | 'night' | '22hrs'
 export type SeasonType = 'weekday' | 'weekend' | 'peak'
 export type EntranceTime = 'day' | 'night'
 
-export type AddOnId = 'towel' | 'breakfast' | 'grill'
+export type AddOnId = 'towel' | 'breakfast' | 'grill' | 'ktv'
 export type ExtensionHours = 1 | 2
 
 export type Room = {
@@ -308,7 +332,8 @@ export const seasonOptions: Array<{ id: SeasonType; label: string }> = [
 export const addOns: AddOn[] = [
   { id: 'towel', name: 'Towel', price: 100 },
   { id: 'breakfast', name: 'Breakfast', price: 250 },
-  { id: 'grill', name: 'Grill / KTV', price: 1000 },
+  { id: 'grill', name: 'Grill', price: 800 },
+  { id: 'ktv', name: 'Echo Rooms', price: 2999 },
 ]
 
 export const extensionRates: Record<string, Record<ExtensionHours, number>> = {

@@ -21,7 +21,7 @@ export function FloatingPoster() {
     >
       {/* scroll-parallax wrapper — separate from entry animation to avoid y conflict */}
       <motion.div style={{ y: posterY }}>
-        <Link to="/booking" aria-label="Book Echo Rooms">
+        <Link to="/booking?promo=echo" aria-label="Book Echo Rooms">
           <div className="poster-shadow w-50 scale-[0.97] cursor-pointer transition-[transform,box-shadow] duration-500 ease-out hover:scale-100 sm:w-50 md:w-60">
             <img
               src="/images/echo-rooms-promo.jpg"

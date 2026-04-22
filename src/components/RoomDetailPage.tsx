@@ -1,66 +1,33 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Calendar, Check, ChevronLeft, Minus, Plus } from "lucide-react";
+import { ArrowRight, BedDouble, Check, ChevronLeft, Flame, Mic, Waves } from "lucide-react";
+import { Link } from "react-router-dom";
 import { GalleryModal } from "./GalleryModal";
 import {
-  addOns,
-  extensionRates,
+  echoExperience,
   formatPrice,
-  getExtensionPrice,
-  getRoomByName,
   roomHasSeasonalPricing,
   rooms,
   seasonOptions,
   stayTypeOptions,
-  type AddOnId,
-  type BookingState,
-  type ExtensionHours,
   type Room,
-  type StayType,
 } from "@/lib/resort-data";
 
 type RoomDetailPageProps = {
   room: Room;
-  bookingState: BookingState;
   onBackToRooms: () => void;
-  onSetRoomDate: (date: string) => void;
-  onSetRoomGuests: (guests: number) => void;
-  onSetRoomStayType: (stayType: StayType) => void;
-  onToggleRoomAddOn: (addOn: AddOnId) => void;
   onSelectRoom: (roomName: string) => void;
   onViewRoom: (slug: string) => void;
-  onReserveRoom: (roomName: string) => void;
 };
 
 export function RoomDetailPage({
   room,
-  bookingState,
   onBackToRooms,
-  onSetRoomDate,
-  onSetRoomGuests,
-  onSetRoomStayType,
-  onToggleRoomAddOn,
   onSelectRoom,
   onViewRoom,
-  onReserveRoom,
 }: RoomDetailPageProps) {
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
-  const [extensionHours, setExtensionHours] = useState<ExtensionHours | null>(null);
-  const activeRoom = getRoomByName(room.name);
   const relatedRooms = rooms.filter((r) => r.slug !== room.slug).slice(0, 2);
-  const roomBooking = bookingState.room;
-  const baseRate = activeRoom.rates[roomBooking.stayType].weekday;
-  const addOnTotal = roomBooking.addOns.reduce((sum, id) => {
-    const addon = addOns.find((a) => a.id === id);
-    return sum + (addon?.price ?? 0);
-  }, 0);
-  const extensionPrice = extensionHours
-    ? getExtensionPrice(room.slug, extensionHours)
-    : 0;
-  const total = baseRate + addOnTotal + extensionPrice;
-  const stayLabel =
-    stayTypeOptions.find((o) => o.id === roomBooking.stayType)?.label ?? "";
-  const currentExtensionRates = extensionRates[room.slug];
 
   return (
     <>
@@ -138,8 +105,7 @@ export function RoomDetailPage({
         {/* Details + Sidebar */}
         <section className="section-shell bg-white">
           <div className="page-shell">
-            <div className="grid gap-12 lg:grid-cols-[1fr_380px] lg:gap-16">
-              {/* Detail content */}
+            <div className="max-w-3xl">
               <div className="space-y-12">
                 <div className="border-b border-border pb-10">
                   <p className="text-xs font-medium uppercase tracking-[0.28em] text-muted-foreground">
@@ -295,236 +261,142 @@ export function RoomDetailPage({
                   </ul>
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
 
-              {/* Sticky booking sidebar */}
-              <aside className="lg:sticky lg:top-24 lg:self-start">
-                <div className="rounded-2xl border border-border bg-background p-6 md:p-7">
-                  <p className="text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground">
-                    Book this room
-                  </p>
-                  <h2 className="mt-3 text-2xl font-medium text-foreground">
-                    {activeRoom.name}
-                  </h2>
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    Starting price
-                  </p>
-                  <p className="mt-2 font-serif text-5xl text-accent">
-                    {formatPrice(
-                      activeRoom.rates[roomBooking.stayType].weekday,
-                    )}
-                  </p>
-                  <span className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-accent/30 px-3 py-1.5 text-xs font-medium text-accent">
-                    <Check size={11} /> Free entrance included
-                  </span>
+        {/* Echo Rooms promo */}
+        <section className="section-shell bg-[#080f1e] overflow-hidden">
+          <div className="page-shell">
+            <div className="relative overflow-hidden rounded-2xl">
+              {/* Gradient canvas */}
+              <div className="relative bg-linear-to-br from-[#1a053a] via-[#180f60] to-[#0c1a2e] px-6 py-10 md:px-12 md:py-14">
+                {/* Glow orbs */}
+                <div className="pointer-events-none absolute -right-20 -top-20 h-72 w-72 rounded-full bg-purple-600/15 blur-3xl" />
+                <div className="pointer-events-none absolute -bottom-16 -left-16 h-56 w-56 rounded-full bg-sky-500/10 blur-3xl" />
 
-                  <div className="mt-7 space-y-5">
-                    <div>
-                      <label className="field-label">Date</label>
-                      <div className="relative">
-                        <input
-                          type="date"
-                          value={roomBooking.date}
-                          onChange={(e) => onSetRoomDate(e.target.value)}
-                          className="form-input"
-                        />
-                        <Calendar
-                          size={15}
-                          className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
-                        />
-                      </div>
-                    </div>
+                <div className="relative grid gap-10 md:grid-cols-[1fr_auto]">
+                  {/* Left: content */}
+                  <div>
+                    <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.3em] text-purple-400/70">
+                      Featured Experience
+                    </p>
+                    <h2 className="mb-1 text-4xl font-black text-white md:text-5xl">
+                      Echo{" "}
+                      <span className="bg-linear-to-r from-sky-400 via-indigo-400 to-fuchsia-500 bg-clip-text text-transparent">
+                        Rooms
+                      </span>
+                    </h2>
+                    <p className="mb-8 text-lg font-semibold text-white/50">
+                      Sing. Stay. Repeat.
+                    </p>
 
-                    <div>
-                      <label className="field-label">Guests</label>
-                      <div className="flex min-h-13 items-center justify-between rounded-xl border border-border bg-white px-4 py-3">
-                        <button
-                          type="button"
-                          onClick={() =>
-                            onSetRoomGuests(roomBooking.guests - 1)
-                          }
-                          className="surface-button h-9 w-9 px-0"
-                        >
-                          <Minus size={14} />
-                        </button>
-                        <span className="text-sm font-medium text-foreground">
-                          {roomBooking.guests} guests
-                        </span>
-                        <button
-                          type="button"
-                          onClick={() =>
-                            onSetRoomGuests(roomBooking.guests + 1)
-                          }
-                          className="surface-button h-9 w-9 px-0"
-                        >
-                          <Plus size={14} />
-                        </button>
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="field-label">Stay Type</label>
-                      <div className="grid grid-cols-3 gap-2">
-                        {stayTypeOptions.map((option) => (
-                          <button
-                            key={option.id}
-                            type="button"
-                            onClick={() => onSetRoomStayType(option.id)}
-                            className={`min-h-11 rounded-xl border px-2 py-2.5 text-xs font-medium uppercase tracking-wide transition-all duration-300 ${
-                              roomBooking.stayType === option.id
-                                ? "border-foreground bg-foreground text-white"
-                                : "border-border bg-white text-foreground hover:border-foreground/30"
-                            }`}
-                          >
-                            {option.label}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="field-label">Add-ons</label>
-                      <div className="space-y-2">
-                        {addOns.map((addon) => (
-                          <button
-                            key={addon.id}
-                            type="button"
-                            onClick={() => onToggleRoomAddOn(addon.id)}
-                            className={`flex min-h-11 w-full items-center justify-between rounded-xl border px-4 py-2.5 text-left text-sm transition-all duration-300 ${
-                              roomBooking.addOns.includes(addon.id)
-                                ? "border-foreground bg-foreground text-white"
-                                : "border-border bg-white text-foreground hover:border-foreground/30"
-                            }`}
-                          >
-                            <span>{addon.name}</span>
-                            <span
-                              className={
-                                addon.id !== "grill" &&
-                                roomBooking.addOns.includes(addon.id)
-                                  ? "text-white/70"
-                                  : "text-accent"
-                              }
-                            >
-                              {addon.id === "grill"
-                                ? "₱800–₱1,200"
-                                : formatPrice(addon.price)}
-                            </span>
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-
-                    {currentExtensionRates && (
-                      <div>
-                        <div className="flex items-center justify-between">
-                          <label className="field-label">Extend Your Stay</label>
-                          <span className="text-[11px] text-muted-foreground">
-                            Subject to availability
-                          </span>
+                    {/* Feature grid */}
+                    <div className="mb-8 grid gap-3 sm:grid-cols-3">
+                      {/* Karaoke */}
+                      <div className="rounded-xl border border-sky-400/20 bg-white/5 p-4 backdrop-blur-sm">
+                        <div className="mb-3 flex h-8 w-8 items-center justify-center rounded-lg bg-sky-400/15">
+                          <Mic size={15} className="text-sky-400" />
                         </div>
-                        <div className="mt-2 flex gap-2">
-                          {([1, 2] as const).map((hrs) => {
-                            const isSelected = extensionHours === hrs;
-                            return (
-                              <button
-                                key={hrs}
-                                type="button"
-                                onClick={() =>
-                                  setExtensionHours(isSelected ? null : hrs)
-                                }
-                                className={`relative flex-1 rounded-xl border px-3 py-3 text-left transition-all duration-300 ${
-                                  isSelected
-                                    ? "border-foreground bg-foreground text-white"
-                                    : "border-border bg-white text-foreground hover:border-foreground/30"
-                                }`}
-                              >
-                                {hrs === 2 && (
-                                  <span
-                                    className={`absolute right-2 top-2 rounded-full px-1.5 py-0.5 text-[10px] font-medium ${
-                                      isSelected
-                                        ? "bg-white/20 text-white"
-                                        : "bg-accent/10 text-accent"
-                                    }`}
-                                  >
-                                    Best Value
-                                  </span>
-                                )}
-                                <p className="text-xs font-medium">
-                                  +{hrs} Hour{hrs > 1 ? "s" : ""}
-                                </p>
-                                <p
-                                  className={`mt-0.5 font-serif text-base ${
-                                    isSelected ? "text-white/90" : "text-accent"
-                                  }`}
-                                >
-                                  {formatPrice(currentExtensionRates[hrs])}
-                                </p>
-                              </button>
-                            );
-                          })}
-                        </div>
-                        {!extensionHours && (
-                          <p className="mt-2 text-xs text-muted-foreground">
-                            Extend your stay for more time
-                          </p>
-                        )}
+                        <p className="mb-0.5 text-xs font-bold uppercase tracking-widest text-white">
+                          Private Karaoke Room
+                        </p>
+                        <p className="mb-3 text-xs text-white/40">
+                          For {echoExperience.karaokePax}
+                        </p>
+                        <p className="text-[10px] text-white/30">Starting at</p>
+                        <p className="text-xl font-black text-white">
+                          {formatPrice(echoExperience.karaokePrice)}
+                        </p>
                       </div>
-                    )}
+
+                      {/* Overnight */}
+                      <div className="rounded-xl border border-purple-400/20 bg-white/5 p-4 backdrop-blur-sm">
+                        <div className="mb-3 flex h-8 w-8 items-center justify-center rounded-lg bg-purple-400/15">
+                          <BedDouble size={15} className="text-purple-400" />
+                        </div>
+                        <p className="mb-0.5 text-xs font-bold uppercase tracking-widest text-white">
+                          Overnight Stay
+                        </p>
+                        <p className="mb-3 text-xs text-white/40">
+                          {echoExperience.overnightDescription}
+                        </p>
+                        <p className="text-xl font-black text-white">
+                          {formatPrice(echoExperience.overnightPrice)}
+                        </p>
+                      </div>
+
+                      {/* Pool promo */}
+                      <div className="flex flex-col justify-between rounded-xl border border-amber-400/20 bg-amber-500/8 p-4 backdrop-blur-sm">
+                        <div className="mb-3 flex h-8 w-8 items-center justify-center rounded-lg bg-amber-400/15">
+                          <Flame size={15} className="text-amber-400" />
+                        </div>
+                        <p className="mb-0.5 text-xs font-bold uppercase tracking-widest text-amber-300">
+                          Free Pool Access
+                        </p>
+                        <p className="text-xs text-white/40">
+                          {echoExperience.promoExpiry}
+                          <br />
+                          Day use included
+                        </p>
+                        <div className="mt-3 flex items-center gap-1 text-xs font-bold text-emerald-400">
+                          <Waves size={12} />
+                          Included free
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* CTA */}
+                    <Link
+                      to="/booking?promo=echo"
+                      className="inline-flex items-center gap-2.5 rounded-xl bg-linear-to-r from-sky-500 via-indigo-500 to-purple-600 px-7 py-4 text-sm font-bold uppercase tracking-widest text-white shadow-lg shadow-purple-700/25 transition-all duration-300 hover:scale-[1.02] hover:shadow-purple-600/35"
+                    >
+                      Reserve Echo Experience
+                      <ArrowRight size={15} />
+                    </Link>
+                    <p className="mt-3 text-xs text-white/30">
+                      Limited slots daily · Bundle total{" "}
+                      {formatPrice(echoExperience.totalPrice)}
+                    </p>
                   </div>
 
-                  <div className="mt-7 border-t border-border pt-6">
-                    <p className="mb-3 text-xs uppercase tracking-[0.22em] text-muted-foreground">
-                      Price Breakdown
-                    </p>
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-muted-foreground">
-                          Stay ({stayLabel})
-                        </span>
-                        <span className="font-medium text-foreground">
-                          {formatPrice(baseRate)}
-                        </span>
-                      </div>
-                      {extensionHours && (
-                        <div className="flex items-center justify-between text-sm">
-                          <span className="text-muted-foreground">
-                            Extension ({extensionHours} hr
-                            {extensionHours > 1 ? "s" : ""})
-                          </span>
-                          <span className="font-medium text-foreground">
-                            {formatPrice(extensionPrice)}
-                          </span>
-                        </div>
-                      )}
-                      {addOnTotal > 0 && (
-                        <div className="flex items-center justify-between text-sm">
-                          <span className="text-muted-foreground">Add-ons</span>
-                          <span className="font-medium text-foreground">
-                            {formatPrice(addOnTotal)}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                    <div className="mt-3 flex items-baseline justify-between border-t border-border pt-3">
-                      <p className="text-xs uppercase tracking-[0.22em] text-muted-foreground">
-                        Estimated Total
-                      </p>
-                      <p className="font-serif text-4xl text-accent">
-                        {formatPrice(total)}
-                      </p>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => onReserveRoom(room.name)}
-                      className="primary-cta mt-5 w-full"
+                  {/* Right: decorative waveform */}
+                  <div className="hidden md:flex items-center">
+                    <svg
+                      viewBox="0 0 64 120"
+                      fill="none"
+                      className="h-32 w-16 opacity-30"
                     >
-                      Reserve Now
-                    </button>
-                    <p className="mt-3 text-center text-xs text-muted-foreground">
-                      Continue to the booking page to confirm.
-                    </p>
+                      {[
+                        [28, 64],
+                        [16, 90],
+                        [24, 74],
+                        [10, 100],
+                        [20, 80],
+                        [30, 60],
+                        [18, 84],
+                        [26, 70],
+                      ].map(([y, h], i) => (
+                        <rect
+                          key={i}
+                          x={i * 8}
+                          y={y}
+                          width="5"
+                          height={h}
+                          rx="2.5"
+                          fill="url(#rdEchoGrad)"
+                        />
+                      ))}
+                      <defs>
+                        <linearGradient id="rdEchoGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                          <stop offset="0%" stopColor="#38bdf8" />
+                          <stop offset="100%" stopColor="#c026d3" />
+                        </linearGradient>
+                      </defs>
+                    </svg>
                   </div>
                 </div>
-              </aside>
+              </div>
             </div>
           </div>
         </section>
