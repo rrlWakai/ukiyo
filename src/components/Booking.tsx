@@ -82,7 +82,12 @@ type BookingProps = {
 // Inline Echo Rooms SVG logo (house outline + equalizer bars)
 function EchoLogo({ className }: { className?: string }) {
   return (
-    <svg viewBox="0 0 64 60" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+    <svg
+      viewBox="0 0 64 60"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+    >
       <polyline
         points="2,28 32,5 62,28"
         stroke="url(#eg)"
@@ -90,14 +95,70 @@ function EchoLogo({ className }: { className?: string }) {
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-      <line x1="8" y1="28" x2="8" y2="57" stroke="url(#eg)" strokeWidth="3" strokeLinecap="round" />
-      <line x1="56" y1="28" x2="56" y2="57" stroke="url(#eg)" strokeWidth="3" strokeLinecap="round" />
-      <line x1="8" y1="57" x2="56" y2="57" stroke="url(#eg)" strokeWidth="3" strokeLinecap="round" />
-      <rect x="15" y="36" width="6" height="16" rx="2" fill="url(#eg)" opacity="0.8" />
+      <line
+        x1="8"
+        y1="28"
+        x2="8"
+        y2="57"
+        stroke="url(#eg)"
+        strokeWidth="3"
+        strokeLinecap="round"
+      />
+      <line
+        x1="56"
+        y1="28"
+        x2="56"
+        y2="57"
+        stroke="url(#eg)"
+        strokeWidth="3"
+        strokeLinecap="round"
+      />
+      <line
+        x1="8"
+        y1="57"
+        x2="56"
+        y2="57"
+        stroke="url(#eg)"
+        strokeWidth="3"
+        strokeLinecap="round"
+      />
+      <rect
+        x="15"
+        y="36"
+        width="6"
+        height="16"
+        rx="2"
+        fill="url(#eg)"
+        opacity="0.8"
+      />
       <rect x="23" y="29" width="6" height="23" rx="2" fill="url(#eg)" />
-      <rect x="31" y="40" width="6" height="12" rx="2" fill="url(#eg)" opacity="0.65" />
-      <rect x="39" y="32" width="6" height="20" rx="2" fill="url(#eg)" opacity="0.9" />
-      <rect x="47" y="37" width="5" height="15" rx="2" fill="url(#eg)" opacity="0.75" />
+      <rect
+        x="31"
+        y="40"
+        width="6"
+        height="12"
+        rx="2"
+        fill="url(#eg)"
+        opacity="0.65"
+      />
+      <rect
+        x="39"
+        y="32"
+        width="6"
+        height="20"
+        rx="2"
+        fill="url(#eg)"
+        opacity="0.9"
+      />
+      <rect
+        x="47"
+        y="37"
+        width="5"
+        height="15"
+        rx="2"
+        fill="url(#eg)"
+        opacity="0.75"
+      />
       <defs>
         <linearGradient id="eg" x1="0%" y1="0%" x2="100%" y2="0%">
           <stop offset="0%" stopColor="#38bdf8" />
@@ -138,14 +199,16 @@ export function Booking({
   const echoRef = useRef<HTMLDivElement>(null);
   const [echoMode, setEchoMode] = useState(false);
   const [echoHighlight, setEchoHighlight] = useState(false);
-  const [extensionHours, setExtensionHours] = useState<ExtensionHours | null>(null);
+  const [extensionHours, setExtensionHours] = useState<ExtensionHours | null>(
+    null,
+  );
   const [roomDropdownOpen, setRoomDropdownOpen] = useState(false);
 
   const selectedRoom = getRoomByName(bookingState.room.selectedRoom);
-  const selectedPackage = getEventPackageByName(bookingState.event.selectedPackage);
-  const selectedEntrance = getEntranceOptionById(bookingState.entrance.entranceTime);
   const currentExtensionRates = extensionRates[selectedRoom.slug];
-  const extensionPrice = extensionHours ? getExtensionPrice(selectedRoom.slug, extensionHours) : 0;
+  const extensionPrice = extensionHours
+    ? getExtensionPrice(selectedRoom.slug, extensionHours)
+    : 0;
   const roomTotal = calculateRoomTotal(bookingState.room) + extensionPrice;
   const eventTotal = calculateEventTotal(bookingState.event);
   const entranceTotal = calculateEntranceTotal(bookingState.entrance);
@@ -162,8 +225,8 @@ export function Booking({
       ? echoExperience.totalPrice
       : baseTotal;
 
-  const standardAddOns = STANDARD_ADDON_ORDER.map((id) =>
-    addOns.find((a) => a.id === id)!,
+  const standardAddOns = STANDARD_ADDON_ORDER.map(
+    (id) => addOns.find((a) => a.id === id)!,
   ).filter(Boolean);
 
   const triggerEchoHighlight = () => {
@@ -244,7 +307,10 @@ export function Booking({
                 <CircleAlert size={15} className="mt-0.5 shrink-0" />
               )}
               {submissionState.status === "submitting" && (
-                <LoaderCircle size={15} className="mt-0.5 shrink-0 animate-spin" />
+                <LoaderCircle
+                  size={15}
+                  className="mt-0.5 shrink-0 animate-spin"
+                />
               )}
               <div>
                 <p className="text-[10px] font-bold uppercase tracking-[0.2em]">
@@ -254,7 +320,9 @@ export function Booking({
                       ? "Reservation Error"
                       : "Submitting…"}
                 </p>
-                <p className="mt-0.5 text-sm leading-relaxed">{submissionState.message}</p>
+                <p className="mt-0.5 text-sm leading-relaxed">
+                  {submissionState.message}
+                </p>
               </div>
             </div>
           </motion.div>
@@ -362,7 +430,8 @@ export function Booking({
                       {roomDropdownOpen && (
                         <div className="absolute left-0 right-0 top-full z-30 mt-1.5 overflow-hidden rounded-xl border border-gray-100 bg-white shadow-2xl">
                           {rooms.map((room) => {
-                            const active = bookingState.room.selectedRoom === room.name;
+                            const active =
+                              bookingState.room.selectedRoom === room.name;
                             return (
                               <button
                                 key={room.slug}
@@ -424,7 +493,9 @@ export function Booking({
                       <div className="flex h-12 items-center justify-between gap-1 rounded-xl border border-gray-200 px-2">
                         <button
                           type="button"
-                          onClick={() => onSetRoomGuests(bookingState.room.guests - 1)}
+                          onClick={() =>
+                            onSetRoomGuests(bookingState.room.guests - 1)
+                          }
                           className={ctrBtn}
                         >
                           <Minus size={13} />
@@ -435,7 +506,9 @@ export function Booking({
                         </span>
                         <button
                           type="button"
-                          onClick={() => onSetRoomGuests(bookingState.room.guests + 1)}
+                          onClick={() =>
+                            onSetRoomGuests(bookingState.room.guests + 1)
+                          }
                           className={ctrBtn}
                         >
                           <Plus size={13} />
@@ -511,7 +584,9 @@ export function Booking({
                             <p className="text-[9px] font-bold uppercase tracking-[0.28em] text-purple-400/70">
                               Featured Experience
                             </p>
-                            <h3 className={`text-2xl font-black leading-none tracking-tight ${echoTitleCls}`}>
+                            <h3
+                              className={`text-2xl font-black leading-none tracking-tight ${echoTitleCls}`}
+                            >
                               Echo Rooms
                             </h3>
                           </div>
@@ -550,8 +625,12 @@ export function Booking({
                               Private Karaoke Room
                             </p>
                           </div>
-                          <p className="mb-3 text-xs text-white/45">For {echoExperience.karaokePax}</p>
-                          <p className="text-[10px] text-white/35">Starting at</p>
+                          <p className="mb-3 text-xs text-white/45">
+                            For {echoExperience.karaokePax}
+                          </p>
+                          <p className="text-[10px] text-white/35">
+                            Starting at
+                          </p>
                           <p className="text-2xl font-black text-white">
                             ₱{echoExperience.karaokePrice.toLocaleString()}
                           </p>
@@ -566,17 +645,24 @@ export function Booking({
                         <div className="rounded-xl border border-purple-400/20 bg-white/5 p-4 backdrop-blur-sm">
                           <div className="mb-2.5 flex items-center gap-2">
                             <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-purple-400/15">
-                              <BedDouble size={14} className="text-purple-400" />
+                              <BedDouble
+                                size={14}
+                                className="text-purple-400"
+                              />
                             </div>
                             <p className="text-[10px] font-bold uppercase leading-tight tracking-[0.12em] text-white">
                               Overnight Stay
                             </p>
                           </div>
-                          <p className="mb-3 text-xs text-white/45">{echoExperience.overnightDescription}</p>
+                          <p className="mb-3 text-xs text-white/45">
+                            {echoExperience.overnightDescription}
+                          </p>
                           <p className="text-2xl font-black text-white">
                             ₱{echoExperience.overnightPrice.toLocaleString()}
                           </p>
-                          <p className="text-[10px] text-purple-300/50">Overnight Stay</p>
+                          <p className="text-[10px] text-purple-300/50">
+                            Overnight Stay
+                          </p>
                         </div>
                       </div>
 
@@ -588,7 +674,8 @@ export function Booking({
                             Free Pool Access
                           </p>
                           <p className="text-xs text-white/45">
-                            {echoExperience.promoExpiry}&nbsp;·&nbsp;Day use included
+                            {echoExperience.promoExpiry}&nbsp;·&nbsp;Day use
+                            included
                           </p>
                         </div>
                         <Waves size={18} className="shrink-0 text-sky-400/40" />
@@ -668,9 +755,7 @@ export function Booking({
                         </div>
                         <div className="mt-1 flex items-center justify-between border-t border-purple-200 pt-2 font-bold text-purple-800">
                           <span>Bundle Total</span>
-                          <span>
-                            {formatPrice(echoExperience.totalPrice)}
-                          </span>
+                          <span>{formatPrice(echoExperience.totalPrice)}</span>
                         </div>
                       </div>
                     </div>
@@ -697,7 +782,9 @@ export function Booking({
                               : "border-gray-100 bg-gray-50 hover:border-gray-200"
                           }`}
                         >
-                          <span className="mb-2 text-xl">{addonEmojis[addon.id]}</span>
+                          <span className="mb-2 text-xl">
+                            {addonEmojis[addon.id]}
+                          </span>
                           <p
                             className={`text-[11px] font-semibold leading-tight ${sel ? "text-white" : "text-gray-800"}`}
                           >
@@ -706,11 +793,15 @@ export function Booking({
                           <p
                             className={`mt-1.5 text-[10px] font-bold ${sel ? "text-orange-300" : "text-orange-500"}`}
                           >
-                            {addon.id === "grill" ? "₱800+" : formatPrice(addon.price)}
+                            {addon.id === "grill"
+                              ? "₱800+"
+                              : formatPrice(addon.price)}
                           </p>
                           <div
                             className={`absolute bottom-2 right-2 flex h-4 w-4 items-center justify-center rounded border transition-all ${
-                              sel ? "border-orange-400 bg-orange-400" : "border-gray-300 bg-white"
+                              sel
+                                ? "border-orange-400 bg-orange-400"
+                                : "border-gray-300 bg-white"
                             }`}
                           >
                             {sel && (
@@ -752,7 +843,9 @@ export function Booking({
                             <button
                               key={hrs}
                               type="button"
-                              onClick={() => setExtensionHours(sel ? null : hrs)}
+                              onClick={() =>
+                                setExtensionHours(sel ? null : hrs)
+                              }
                               className={`relative flex-1 rounded-xl border px-4 py-3 text-left transition-all duration-200 ${
                                 sel
                                   ? "border-[#080f1e] bg-[#080f1e]"
@@ -889,7 +982,9 @@ export function Booking({
                       <div className="flex h-12 items-center justify-between gap-1 rounded-xl border border-gray-200 px-2">
                         <button
                           type="button"
-                          onClick={() => onSetEventGuests(bookingState.event.guests - 1)}
+                          onClick={() =>
+                            onSetEventGuests(bookingState.event.guests - 1)
+                          }
                           className={ctrBtn}
                         >
                           <Minus size={13} />
@@ -899,7 +994,9 @@ export function Booking({
                         </span>
                         <button
                           type="button"
-                          onClick={() => onSetEventGuests(bookingState.event.guests + 1)}
+                          onClick={() =>
+                            onSetEventGuests(bookingState.event.guests + 1)
+                          }
                           className={ctrBtn}
                         >
                           <Plus size={13} />
@@ -953,7 +1050,9 @@ export function Booking({
                             {opt.id === "day" ? "☀️" : "🌙"}
                           </span>
                         </div>
-                        <p className={`text-xs ${sel ? "text-white/55" : "text-gray-500"}`}>
+                        <p
+                          className={`text-xs ${sel ? "text-white/55" : "text-gray-500"}`}
+                        >
                           {opt.schedule}
                         </p>
                         <p
@@ -1131,7 +1230,9 @@ export function Booking({
                           {opt.id === "day" ? "☀️" : "🌙"}
                         </span>
                       </div>
-                      <p className="mb-3 text-xs text-white/40">{opt.schedule}</p>
+                      <p className="mb-3 text-xs text-white/40">
+                        {opt.schedule}
+                      </p>
                       <div className="flex gap-5">
                         <div>
                           <p className="text-[10px] text-white/30">Adults</p>
@@ -1154,9 +1255,13 @@ export function Booking({
               <div className="rounded-2xl border border-white/8 bg-white/5 p-4 backdrop-blur-sm">
                 <div className="mb-1 flex items-center gap-2">
                   <Shield size={13} className="text-white/30" />
-                  <p className="text-xs font-semibold text-white">Secure Booking</p>
+                  <p className="text-xs font-semibold text-white">
+                    Secure Booking
+                  </p>
                 </div>
-                <p className="text-xs text-white/40">Your data is safe with us.</p>
+                <p className="text-xs text-white/40">
+                  Your data is safe with us.
+                </p>
               </div>
             </div>
           </motion.aside>
