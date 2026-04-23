@@ -18,12 +18,15 @@ export function Hero({ onBookNow }: HeroProps) {
       {/* ── Parallax background ── */}
       <motion.div className="absolute inset-0 z-0" style={{ y: bgY }}>
         <img
-          src="/images/hero.webp"
+          src="/images/herou.png"
           alt="Ukiyo Resort"
           className="h-full w-full scale-110 object-cover"
         />
+        {/* soft black base */}
+        <div className="absolute inset-0 bg-black/40" />
         {/* vignette for text legibility */}
-        <div className="absolute inset-0 bg-linear-to-t from-[#08162d]/90 via-[#08162d]/40 to-[#08162d]/20" />
+        <div className="absolute inset-0 bg-linear-to-t from-[#08162d]/80 via-[#08162d]/30 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-b from-[#08162d]/30 via-transparent to-transparent" />
       </motion.div>
 
       {/* ── Hero text — centered, below navbar ── */}
@@ -39,13 +42,13 @@ export function Hero({ onBookNow }: HeroProps) {
               Ukiyo Resort
             </p>
 
-            <h1 className="text-[2.5rem] font-medium leading-[1.06] text-white sm:text-5xl md:text-6xl lg:text-7xl">
+            <h1 className="font-serif text-[2.5rem] font-medium leading-[1.06] text-white sm:text-5xl md:text-6xl lg:text-7xl">
               Your group's
               <br />
               escape starts here.
             </h1>
 
-            <p className="mx-auto max-w-lg text-sm leading-relaxed text-white/65 sm:text-base md:text-lg">
+            <p className="font-serif mx-auto max-w-lg text-sm leading-relaxed text-white/65 sm:text-base md:text-lg">
               Ukiyo Resort is built for barkadas, families, and company teams.
             </p>
 
