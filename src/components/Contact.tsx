@@ -17,7 +17,7 @@ export function Contact() {
     firstName: '', lastName: '', email: '', phone: '', message: '',
   })
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: { preventDefault(): void }) => {
     e.preventDefault()
     console.log('Form submitted:', formData)
   }
@@ -33,12 +33,12 @@ export function Contact() {
           transition={{ duration: 0.7, ease: 'easeOut' }}
           className="section-header max-w-xl"
         >
-          <p className="section-kicker">Contact</p>
+          <p className="section-kicker">Get in Touch</p>
           <h2 className="section-title">
-            Ready to book?<br />Message us now.
+            Have questions?<br />We&rsquo;re happy to help.
           </h2>
           <p className="section-copy text-sm">
-            We&rsquo;re minutes away — no long drive, no hassle. Send us a message about group rates, event packages, or day tour promos. We reply fast and slots fill up quickly.
+            Whether it&rsquo;s about availability, group pricing, event setup, or anything else about the resort — just send us a message and we&rsquo;ll get back to you as soon as we can.
           </p>
         </motion.div>
 
