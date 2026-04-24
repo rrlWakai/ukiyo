@@ -29,6 +29,10 @@ export function RoomDetailPage({
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const relatedRooms = rooms.filter((r) => r.slug !== room.slug).slice(0, 2);
 
+  const isVideo = (src: string) => /\.(mp4|webm|ogg)$/i.test(src);
+  const videoSrc = room.gallery.slice(1).find(isVideo);
+  const rightItems = videoSrc ? [videoSrc] : room.gallery.slice(1, 3);
+
   return (
     <>
       <main>
@@ -75,25 +79,38 @@ export function RoomDetailPage({
                   className="h-75 w-full object-cover lg:h-full"
                 />
               </div>
-              {/* Right column — always exactly 2 thumbnails */}
-              <div className="grid grid-cols-2 gap-2 lg:grid-cols-1 lg:grid-rows-2">
-                {room.gallery.slice(1, 3).map((image, index) => (
-                  <div key={image} className="relative overflow-hidden">
-                    <img
-                      src={image}
-                      alt={`${room.name} view ${index + 2}`}
-                      className="h-36 w-full object-cover lg:h-full"
-                    />
-                    {index === 1 && (
-                      <button
-                        type="button"
-                        onClick={() => setIsGalleryOpen(true)}
-                        className="absolute inset-0 flex items-center justify-center bg-foreground/40 transition-colors duration-300 hover:bg-foreground/55"
-                      >
-                        <span className="border border-white/80 bg-white/15 px-5 py-2.5 text-xs font-medium uppercase tracking-[0.2em] text-white backdrop-blur-sm">
-                          View All Photos
-                        </span>
-                      </button>
+              {/* Right column */}
+              <div className={`grid gap-2 ${rightItems.length === 2 ? 'grid-cols-2 lg:grid-cols-1 lg:grid-rows-2' : ''}`}>
+                {rightItems.map((src, index) => (
+                  <div key={src} className="relative overflow-hidden">
+                    {isVideo(src) ? (
+                      <video
+                        src={src}
+                        className="h-60 w-full object-cover lg:h-full"
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                      />
+                    ) : (
+                      <>
+                        <img
+                          src={src}
+                          alt={`${room.name} view ${index + 2}`}
+                          className="h-36 w-full object-cover lg:h-full"
+                        />
+                        {index === 1 && (
+                          <button
+                            type="button"
+                            onClick={() => setIsGalleryOpen(true)}
+                            className="absolute inset-0 flex items-center justify-center bg-foreground/40 transition-colors duration-300 hover:bg-foreground/55"
+                          >
+                            <span className="border border-white/80 bg-white/15 px-5 py-2.5 text-xs font-medium uppercase tracking-[0.2em] text-white backdrop-blur-sm">
+                              View All Photos
+                            </span>
+                          </button>
+                        )}
+                      </>
                     )}
                   </div>
                 ))}
