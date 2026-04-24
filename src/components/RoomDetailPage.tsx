@@ -80,9 +80,9 @@ export function RoomDetailPage({
                 />
               </div>
               {/* Right column */}
-              <div className={`grid gap-2 ${rightItems.length === 2 ? 'grid-cols-2 lg:grid-cols-1 lg:grid-rows-2' : ''}`}>
+              <div className={`grid gap-2 ${rightItems.length >= 2 ? 'grid-cols-2 lg:grid-cols-1 lg:grid-rows-2' : ''}`}>
                 {rightItems.map((src, index) => (
-                  <div key={src} className="relative overflow-hidden">
+                  <div key={src} className="relative h-full overflow-hidden">
                     {isVideo(src) ? (
                       <video
                         src={src}
@@ -97,7 +97,7 @@ export function RoomDetailPage({
                         <img
                           src={src}
                           alt={`${room.name} view ${index + 2}`}
-                          className="h-36 w-full object-cover lg:h-full"
+                          className={`w-full object-cover ${rightItems.length === 1 ? 'h-full' : 'h-36 lg:h-full'}`}
                         />
                         {index === 1 && (
                           <button

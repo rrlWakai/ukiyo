@@ -129,7 +129,7 @@ export const rooms: Room[] = [
     description:
       'Lanai Suite is a comfortable, fully air-conditioned room perfect for small groups. Steps away from the pool with everything you need for a relaxing stay.',
     image: '/images/lanai-1.jpg',
-    gallery: ['/images/lanai-1.jpg', '/images/lanai-2.jpg', '/images/lanai-4.mp4'],
+    gallery: ['/images/lanai-1.jpg', '/images/lanai-2.jpg'],
     capacity: 3,
     minPax: 2,
     features: [
